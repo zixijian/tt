@@ -328,10 +328,6 @@
         #if {$step==$stepmax} {set brief 0};
         #if {$step<=$stepmax} {
 	   #switch {"$cmd"}{
-              #case {"stop"} {
-	        #var stepaccu 1;
-		#var cmd {};
-	      };
 	      #case {"wait%s%d"} {
                   #local time {$cmd};
 		  #replace time {wait} {};
@@ -365,24 +361,30 @@
                     #class xiaoyao-walk-tmp close;
                   };
                   $cmd
-	      };
-	      #case {"busy1"}{
-                  #var stepaccu 1;
-		  #var cmd {};
-                  #delay {2} {walk};
               };
               #default {
 	         #var cmd @item{Route_list;$step};
-		 $cmd;
-                 #math stepaccu {$stepaccu+1};
-                 #math step {$step+1};
-                 #if {$stepaccu>=${xiaoyao.accu}} {
-                    #delay {${xiaoyao.delay_long}} {walk};
-                    #var stepaccu 1;
-                 };
-                 #else {
-                   #delay {${xiaoyao.delay_short}} {walk};
-                 };
+	         #if {"$cmd"=="stop"}{
+		    #math step {$step+1};
+		    #var stepaccu 1;
+		 };
+                 #elseif {"$cmd"=="busy1"}{
+		    #math step {$step+1};
+		    #var stepaccu 1;
+		    #delay {2} {walk};
+		 };
+		 #else {
+		   $cmd;
+                   #math stepaccu {$stepaccu+1};
+                   #math step {$step+1};
+                   #if {$stepaccu>=${xiaoyao.accu}} {
+                      #delay {${xiaoyao.delay_long}} {walk};
+                      #var stepaccu 1;
+                   };
+                   #else {
+                      #delay {${xiaoyao.delay_short}} {walk};
+                   };
+		 };
 	      };
            };
         };
