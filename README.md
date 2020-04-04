@@ -8,7 +8,7 @@
 |[北侠官网](http://pkuxkx.net/)
 |[北侠Wiki](http://pkuxkx.net/wiki/)
 |[北侠论坛](http://pkuxkx.net/forum/)
-|[紫溪涧](http://zixijian.xyz)|
+|[紫溪涧](http://zixijian.github.io)|
 
 ### 这是做什么的？
 
@@ -81,13 +81,13 @@ Termux需要安装 MUDs 客户端，比如：TinTin++ 、Go-Mud ，
 
 ### 安装vim git screen tintin++
 
-打开Termux输入如下指令安装 __必须__ 软件：
+打开Termux输入如下指令安装「必须」软件：
 > pkg up -y
 <br>pkg install vim git screen tintin++ -y
 
 __按行复制命令后按回车执行！！！__
 
-安装完毕后，可跳转到screen转码部分。
+安装完毕后，可跳转到screen转码部分。  
 
 注：Linux deploy是一款能在安卓手机上利用chroot部署任意linux发行版的app（需要root权限、比Termux更强大），使用linuxdeploy在手机上部署的chroot环境，比如Debian，使用apt(相当于pkg)指令安装完 tintin++ 的路径在`/usr/games/tt++`。
 
@@ -196,7 +196,7 @@ alias ck='vim ~/.termux/termux.properties'
 
 __Tintin++ 老版本不支持GBK编码，  
 新版本2.02以后添加了对中文的支持，  
-新版本使用 #config chaset 设置编码，  
+新版本使用 #config charset 设置编码，  
 旧版本使用 screen 进行转码。__
 
 ### 利用screen给tt++转码
@@ -230,16 +230,34 @@ __只玩游戏做到这一步即可。__
 添加如下内容后保存：
 
 ```
+syntax on
+set t_Co=256
+set bg=dark
+set autoindent
+"set number
+set hlsearch
+colorscheme murphy
 set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936
 set termencoding=utf-8
 set encoding=utf-8
 ```
 
-### 手写脚本中文乱码转换编码
+### 脚本中文乱码转换编码
 
-按ESC键退出编辑模式后输入下列命令：
+1.vim按ESC键退出编辑模式后输入下列命令：
 
-> :set fileencoding=gb18030
+:set fileencoding=gb18030
+
+2.批量转换脚本编码
+
+使用 [gbktoutf8](https://github.com/fluffos/gbk2utf8) 工具进行转换。
+
+### vim语法高亮
+
+输入指令：  
+```
+cd ~ && git clone https://github.com/LokiChaos/vim-tintin.git .vim
+```
 
 ## 3。初始init.tt脚本
 

@@ -1,7 +1,7 @@
 #class sda open;
 
 #var saodigt 1;
-#var xiaoyao.accu 5;
+#var xiaoyao.delay_short 0.75;
 
 #tic {sd.start} {#show <afa>¿ªÊ¼É¨µØ¡£<099>;#untic sd.start;sd.start;} {2};
 

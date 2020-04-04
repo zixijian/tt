@@ -30,7 +30,7 @@
 201305   原作者 by Alucar@pkuxkx ;
 };
 
-#nop 走路速度控制;
+#nop 走路速度控制,分别为每秒上限步数、超限等待时间、正常行走间隔时间;
 #var xiaoyao.accu 10;
 #var xiaoyao.delay_long 1;
 #var xiaoyao.delay_short 0.2;
@@ -48,7 +48,7 @@
 		#echo {%c%+8sgt：显示本说明} {light yellow};
 		#echo {%c%+8s查询各地区地标房间请使用inquire命令} {light yellow};
 		#echo ;
-		#echo {%c%h} {light green}{【最后修改20200404】};
+		#echo {%c%h} {light green} {【最后修改20200404】};
 	};
     #else {
         #if {"%1"=="here"} {
