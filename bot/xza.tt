@@ -1,0 +1,69 @@
+#class xza open;
+
+#tic {xzaa} {#show <afa>开始准备洗澡。<099>;#untic xzaa;xzaa} {2};
+
+#var xzaa 1;
+
+#alias {xzaa}  {
+  #delay 5 {look;
+    #if {$xzaa == 1} {gt yz};
+    #elseif {$xzaa == 2} {gt lz};
+    #elseif {$xzaa == 3} {gt zp};
+    #elseif {$xzaa == 4} {gt xiny};
+    #elseif {$xzaa == 5} {gt jy};
+    #elseif {$xzaa == 6} {gt bs};
+}};
+
+#act {^  抵达目的地 ...$} {
+  look;
+  #if {$xzaa == 1} {
+      #delay 1 {#var xzaa 2;
+      #delay 1 {e;s;buy pot;
+      #delay 3 {n;w;s;e;
+      #delay 2 {buy im_333;
+      #delay 2 {buy im_333;
+      #delay 3 {xzaa;
+  }}}}}}};
+  #elseif {$xzaa == 2} {
+     #delay 1 {#var xzaa 3;
+     #delay 3 {s;s;s;w;buy gouqi;e;
+     #delay 2 {xiao gouqi;n;n;n;
+     #delay 2 {xzaa;
+  }}}}};
+  #elseif {$xzaa == 3} {
+     #delay 1 {#var xzaa 4;
+     #delay 1 {w;w;w;nw;ne;n;
+     #delay 5 {zhai gancao;bo gancao;
+     #delay 2 {s;sw;se;e;e;e;
+     #delay 5 {xzaa;
+   }}}}}};
+   #elseif {$xzaa == 4} {
+      #delay 1 {#var xzaa 5;
+      #delay 1 {s;e;e;e;e;se;sd;guan;
+      #delay 5 {nu;nw;w;w;w;w;n;
+      #delay 5 {xzaa;
+   }}}}};
+  #elseif {$xzaa == 5} {
+     #delay 1 {#var xzaa 6;
+      #delay 1 {
+        #showme ↓第一次找到晋阳药铺，按下面的流程;
+        #showme ↓ask hao about 帮助;
+       #showme ↓give hao zi;ask hao about 交个朋友;
+        #showme ↓ask hao about 独门秘方;
+       #showme ↓ask hao ba about 木桶;
+       #showme ↓后面只需要要木桶,交朋友1gold;
+      #delay 5 {e;s;s;e;e;s;ask hao ba about 木桶;
+      #delay 5 {n;w;w;n;n;w;
+      #delay 5 {xzaa;
+    }}}}}};
+  #elseif {$xzaa == 6} {
+      #delay 2 {
+         #showme {进入家里后执行下列指令};
+         #showme {add zi;add pi;add gancao;do 3 add re shui};
+        #showme {bath};xzx;
+  }};
+};
+
+#class xza close;
+
+

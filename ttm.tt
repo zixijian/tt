@@ -1,0 +1,69 @@
+#nop {转化tin格式地图数据到map格式;
+rooms-v2.0-4339-20191227;
+};
+
+#class ttm open;
+#showme <118>loading...;
+
+#nop {
+#pathdir {out} {enter} {61};
+#pathdir {enter} {out} {62};
+#pathdir {north}  {south}  {1};
+#pathdir {east}  {west}  {2};
+#pathdir {south}  {north}  {4};
+#pathdir {west}  {east}  {8};
+#pathdir {up}  {down}  {16};
+#pathdir {down}  {up}  {32};
+#pathdir {southeast} {northwest} {6};
+#pathdir {northwest} {southest} {9};
+#pathdir {southwest} {northeast} {12};
+#pathdir {northeast} {southwest} {3};
+#pathdir {northup} {southdown} {17};
+#pathdir {eastup} {westdown} {18};
+#pathdir {southup} {northdown} {20};
+#pathdir {westup} {eastdown} {24};
+#pathdir {northdown} {southup} {33};
+#pathdir {eastdown} {westup} {34};
+#pathdir {southdown} {northup} {36};
+#pathdir {westdown} {eastup} {40};
+};
+
+#re rooms.tt;
+
+#delay {3} {
+    #showme <118>this may take a few seconds...;
+    ttm;
+};
+
+#alias {ttm} {
+    #nop #map destroy;
+    #map create;
+    #map flag asciigraphics;
+    #foreach {*{JMapData-rooms[]}} {id} {
+        #map goto {$id} dig;
+        #var room {${JMapData-rooms[$id]}};
+        #map set roomarea {$room[area]} {$id};
+        #map set roomname {$room[name]} {$id};
+        #map set roomdesc {$room[desc]} {$id};
+        #map set roomterrain {$room[map]} {$id};
+        #foreach {*{room[links][]}} {key} {
+	    #map dig {${room[links][$key]}} {$key};
+	};
+        #map set roomdata {
+	    {objs}{$room[objs]}
+	    {links}{$room[links]}
+	    {exits}{$room[exits]}
+	    {center}{$room[center]}
+	    {cost}{$room[cost]}} {$id};
+        #map set roomweight {1.000} {$id};
+        #nop #map set roomcolor;
+        #nop #map set roomflags;
+        #nop #map set roomnote;
+        #nop #map set roomsymbol;
+   };
+   #map write pku.map;
+   #showme <118>...done,map writed to pku.map.;
+   #class ttm kill;
+};
+
+#class ttm close;

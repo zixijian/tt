@@ -1,0 +1,24 @@
+#class dea open;
+
+#nop 有定位的地方开始;
+#alias {buyjiudai} {buy jiudai 5};
+#alias {buyliang} {buy liang 6}
+
+#tic {dea} {#untic dea;deaa} {1};
+#alias {deaa} {look;gt bk};
+
+#act {^  抵达目的地 ...$} {
+#delay 2 {qu 88 silver;
+#delay 2 {e;n;
+#delay 2 {e;buyjiudai;w;
+#delay 2 {e;buyliang;w;
+#delay 2 {s;s;s;s;w;fillall;
+#delay 2 {e;n;n;
+#delay 2 {#10 eat liang;
+#delay 2 {#10 drink jiudai;
+#class dea kill;
+}}}}}}}}};
+
+#class dea close;
+
+

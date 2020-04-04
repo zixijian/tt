@@ -1,0 +1,39 @@
+#nop 调色板;
+#class colorpad open;
+
+#alias {colorpad} {
+  #echo @color_radom{====调色板====};
+  #echo @color_radom{『大慈大悲入凡尘，普度苍生怜世人』};
+  #var color_dic {A;B;C;D;E;F};
+  #var color_bg {};
+  #var color_str {};
+  #math i 0;
+  #foreach {$color_dic} c1 {
+    #foreach {$color_dic} c2 {
+      #foreach {$color_dic} c3 {
+	#var color_bg {$color_bg<$c1$c2$c3>\<$c1$c2$c3\> };
+	#var color_str {$color_str<@lower{$c1$c2$c3}>\<@lower{$c1$c2$c3}\> };
+	#math i {$i+1};
+	#if {$i==6} {
+	  #math i 0;
+	  #echo {$color_bg <000> $color_str};
+	  #var color_bg {};
+	  #var color_str {};
+	};
+      };
+    };
+  };
+};
+
+#nop 随机上色;
+#function color_radom {
+   #list color_dic2 create {a;b;c;d;e;f};
+   #local color_radom {};
+   #parse %1 char {
+     #local ccolor {<$color_dic2[+1d6]$color_dic2[+1d6]$color_dic2[+1d6]>};
+     #local color_radom {$color_radom$ccolor$char};
+   };
+  #return $color_radom;
+};
+
+#class colorpad close;

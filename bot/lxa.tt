@@ -1,0 +1,60 @@
+#class lxa open;
+
+#tic {lxa} {lxaa} {77};
+#tic {lxaa} {
+  #echo {%c%h} {light yellow}{【指令格式:lxa [技能]进行练习】};
+   #untic lxaa;
+   lxaa;
+}{1};
+#alias {lxaa} {do 2 lian $skname 50;yun recover};
+
+#act {你必须空手才能练习%*}{unwield all;lxaa};
+#act {你要装备%1类武器才能%*} {wield @trim{%1}};
+#act {你装备%*作武器} {lxaa};
+#act {你身上没有这样东西。}{lxx};
+#act {{你的%*的级别还没有%*的级别高|你需要提高基本功}} {skills;lxx};
+
+#act {你一觉醒来，精神抖擞地活动了几下手脚。}
+{
+  eat liang;
+	#delay 1 {drink jiudai;
+	#delay 1 {dazuo max;
+}};
+#act {你刚在三分钟内睡过一觉}{#delay 15 {sleep}};
+
+#act {{你运功完毕，深深吸了口气，站了起来。|你只觉神元归一，全身精力弥漫，无以复加，忍不住长啸一声，徐徐站了起来。|你将内息走了个小周天，流回丹田，收功站了起来。|你将真气在体内沿脉络运行了一圈}}
+{
+	lxaa;
+};
+#act {你精血不足，翻来覆去无法入眠}
+{
+	dazuo max;
+};
+#gag {^> $};
+#gag {^$};
+#gag {你反复练习%*获得了不少进步！};
+#gag {{你已经喝太多了，再也灌不下一滴水了。|你已经吃太饱了，再也塞不下任何东西了。}};
+
+#nop #act {你太累了，没有办法练习%*} {sleep};
+
+#nop #act {你的体力太} {exert recover};
+
+#act {你的内力{太低了|不够。}}{eat liang;
+	#delay 1 {drink jiudai;#delay 1 {sleep}}};
+
+#nop #act {你的{体力|气}不够} {exert recover};
+
+#nop #act {你现在手足酸软，休息一下再练吧。} {exert recover};
+
+#nop #act {你现在气血虚浮，练习不了%*} {yun recover};
+
+#act {你的内功还没有达到那个境界你至少需要十点的气来打坐} {#delay 10 {dazuo max}}；
+
+#nop #act {你太累了，还是先休息一下吧。} {exert recover};
+
+#act {你深深吸了几口气}{lxaa};
+#act {你现在气力充沛。} {lxaa};
+#act {你现在精不够，无法控制内息的流动} {exert regenerate};
+#act {你现在的气太少了，无法产生内息运行全身经脉。} {exert recover};
+
+#class lxa close;

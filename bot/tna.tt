@@ -1,0 +1,32 @@
+#class tna open;
+
+#tic {tna} {tunaa} {77};
+#alias {tunaa} {tuna max};
+
+#act {你现在精力接近圆满状态。}{hpbrief;tuna 10};
+
+#act {你的精力上限增加了！！}{hpbrief};
+
+#act {你的精力修为已经达到了瓶颈，精力最大值为基本内功技能的15倍。} {#untic tna;tnx;};
+
+#act {你吐纳完毕} {tunaa};
+
+#act {你现在精不足，无法修行精力！} {exert regenerate;#delay 2 {tunaa}};
+
+#act {你的内力不够} {sleep};
+
+#act {你刚在三分钟内睡过} {
+#delay 15 {sleep};
+};
+
+#act {你一觉醒来，精神抖擞地活动了几下手脚。} {
+#delay 1 {eat liang;
+#delay 1 {drink jiudai;
+#delay 1 {tunaa};
+}}};
+
+#act {你现在精严重不足，无法满足吐纳最小要求。}{exert regenerate;#delay 2 {tunaa}};
+
+#act {你现在身体状况太差了，无法集中精神！} {sleep};
+
+#class tna close;

@@ -1,0 +1,100 @@
+#class sda open;
+
+#var saodigt 1;
+#var xiaoyao.delay_short 0.75;
+
+#tic {sd.start} {#show <afa>开始扫地。<099>;#untic sd.start;sd.start;} {2};
+
+#alias {sd.start}  {
+  #delay 5 {look;
+    #if {$saodigt == 1} {gt gy};
+    #elseif {$saodigt == 2} {gt wd};
+    #elseif {$saodigt == 3} {gt cll};
+    #elseif {$saodigt == 4} {gt ll};
+    #elseif {$saodigt == 5} {gt ry};
+    #elseif {$saodigt == 6} {gt qiu};
+    #elseif {$saodigt == 7} {gt wm};
+    #elseif {$saodigt == 8} {gt dp};
+    #elseif {$saodigt == 9} {gt bk};    
+}};
+
+
+#act {^  抵达目的地 ...$} {
+  look;
+  #if {$saodigt == 1} {#delay 2 {#var saodigt 2;sd.start}};
+  #elseif {$saodigt == 2} {#delay 2 {#var saodigt 3;sd.start}};
+  #elseif {$saodigt == 3} {#delay 2 {#var saodigt 4;sd.start}};
+  #elseif {$saodigt == 4} {#delay 2 {#var saodigt 5;sd.start}};
+  #elseif {$saodigt == 5} {#delay 2 {#var saodigt 6;sd.start}};
+  #elseif {$saodigt == 6} {#delay 2 {#var saodigt 7;sd.start}};
+  #elseif {$saodigt == 7} {#delay 2 {#var saodigt 8;sd.donate}};
+  #elseif {$saodigt == 8} {#delay 2 {#var saodigt 9;sd.sell}};
+  #elseif {$saodigt == 9} {#delay 2 {#var saodigt 1;sd.cunq}};
+};
+
+#alias {sd.pause} {wait};
+
+#alias {sd.donate} {
+dor;
+#delay 1 {put shenghuo ling in box;
+#delay 1 {put ruanwei jia in box;
+#delay 1 {put jinshen baojia in box;
+#delay 1 {put fumo blade in box;
+#delay 1 {put jin hua in box;
+#delay 1 {put shi zi in box;
+#delay 5 {sd.start};
+}}}}}}};
+
+#alias {sd.sell} {
+#delay 1 {sell zhang;
+#delay 1 {sell armor;
+#delay 1 {sell armor;
+#delay 1 {sell armor;
+#delay 1 {sell jia;
+#delay 1 {sell sword;
+#delay 1 {sell xiao;
+#delay 1 {buy im_195;
+#delay 1 {buy im_138;
+#delay 1 {do 5 eat liang;
+#delay 2 {do 5 drink jiudai;
+#delay 5 {sd.start};
+}}}}}}}}}}}};
+
+#alias {sd.cunq} {
+#delay 1 {cun all coin;
+#delay 1 {cun all silver;
+#delay 1 {cun all gold;
+#delay 1 {cun all cash;
+#delay 1 {qu 66 silver;
+#delay 5 {sd.start};
+}}}}}};
+
+#act {^%s%*功德箱(Gongde xiang)$}{sd.pause;get coin from box;get silver from box;get gold from box};
+#act {^%*丢下%*{文铜板。|两白银。|黄金。|银票。}} {sd.pause;get coin;get silver;get gold;get cash};
+#act {^ %*文铜板(Coin)$} {sd.pause;get coin};
+#act {^ %*两白银(Silver)$} {sd.pause;get silver};
+#act {^ %*两黄金(Gold)$} {sd.pause;get gold};
+#act {^ %*银票(Cash)$} {sd.pause;get cash};
+#act {^ %*金花(Jin hua)$} {sd.pause;get jin hua};
+#act {^ %*玉石子(Shi zi)$} {sd.pause;get shi zi};
+#act {^ %*金叶子(} {sd.pause;get leaf};
+#act {^ %*碧水剑(} {sd.pause;get bishui};
+#act {^ %*伏魔刀(} {sd.pause;get blade};
+#act {^ %*紧身宝甲(} {sd.pause;get baojia};
+#act {^ %*真丝宝甲(} {sd.pause;get baojia};
+#act {^ %*软猬甲(} {sd.pause;get jia};
+#act {^ %*游侠宝剑(} {sd.pause;get paladin};
+#act {^ %*铁甲(Armor)$} {sd.pause;get armor};
+#act {^ %*圣火令(Shenghuo ling)$} {sd.pause;get ling};
+#act {^ %*蝙蝠血甲(Bianfuxue jia)$} {sd.pause;get jia};
+#act {^ %*玉竹杖(Yuzhu zhang)$} {sd.pause;get zhang};
+#act {^ %*玉箫(Yu xiao)$} {sd.pause;get xiao};
+#act {^ %*冰魄杖(Bingpo zhang)$} {sd.pause;get zhang};
+#act {^ %*之%*(%w)$} {sd.pause;get @lower{%3}};
+#nop #act {^%s%*$} {sd.pause;get };
+#act {^ %*◎玉髓(Shan sui)$} {sd.pause;get sui};
+
+
+#class sda close;
+
+

@@ -1,0 +1,60 @@
+#class fska open;
+
+#tic {fskaa} {
+    #show <afa>开始fsk...;
+    #untic fskaa;
+    fskaa;
+} {2};
+
+#tic {fskaaa} {fskaa} {77};
+
+#alias {csk %0}  {#var skill %0};
+
+#alias {gosleep} {
+    eat liang;
+    #delay 1 {drink jiudai;
+    #delay 1 {sleep;
+}}};
+#alias {gofsk} {
+     eat liang;
+    #delay 1 {drink jiudai;
+    #delay 1 {fskaa;
+}}};
+
+#var {skill} {parry};
+#var {lw-or-lx} {lw};
+#var {wait-for-sleep} {false};
+
+#alias {fskaa} {
+    #if {"${lw-or-lx}"=="lw"} {lw};
+     #elseif {"${lw-or-lx}"=="lx"} {lx};
+};
+
+#alias lw {do 2 lingwu $skill 100;yun regenerate};
+#alias lx {do 2 lian $skill 50;yun recover};
+
+#var END {%s$};
+#action {你略一凝神，精神看起来好多了。$END}        {lw};
+#action {你深深吸了几口气，脸色看起来好多了。$END}  {lx};
+
+#action {你现在精力充沛。$END}  {${lw-or-lx}};
+#action {你现在气力充沛。$END}  {${lw-or-lx}};
+
+#action {你的内力不够。$END}    {#if { "${wait-for-sleep}" == "false" } {gosleep}};
+
+#action {{^你刚在三分钟内睡过一觉|^你精血不足}}   {#delay 15 sleep; #if { "${lw-or-lx}" == "lx" } {#var wait-for-sleep {true}; lian $skill 50}};
+#action {你一觉醒来，精神抖擞地活动了几下手脚。$END}        {gofsk; #var wait-for-sleep {false}};
+
+#action {^你需要提高基本功，不然练得再多也没有用。$END}  {#var lw-or-lx {lw}};
+#action {^你的基本%*的级别还没有%*的级别高} {#var lw-or-lx {lw}};
+#action {^你已经达到你的技能等级极限！}{fskx;dza};
+#action {^你的基本功夫比你的高级功夫还高！$END}          {#var lw-or-lx {lx}};
+
+#nop #action {~^%*你的「%1」进步了！%*$END} {};
+#gag {走了过来};
+#gag {往%*离开};
+#gag {略一凝神，精神看起来好多了。};
+#gag {你现在过于疲倦,无法静下心来领悟功夫！};
+#gag {^> $};
+#gag {^$};
+#class fska close;

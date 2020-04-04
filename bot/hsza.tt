@@ -1,0 +1,19 @@
+#nop 任务;
+#class hsza open;
+
+#tic {hsza} {#untic hsza;hszaa} {2};
+#ali {hszaa} {ask han about job};
+#ali {hszd} {ask han about finish};
+#ali {hszf} {ask han about fail;#untic hsza1;hszx};
+
+#act {^韩世忠说道：「我听说有一群异族奸细在%*附近出没%*去打探(datan)一下} {
+  #tic {hsza1} {#echo {%c%h} {light yellow} {奸细在%1，到了datan。}} {15}
+};
+
+#nop #act {}{};
+
+#act {^你已经完成了%*次清除异族奸细的工作。$} {
+    #untic hsza1;hszx
+};
+
+#class hsza close;

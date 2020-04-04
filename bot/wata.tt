@@ -1,0 +1,41 @@
+#nop 万安塔;
+#class wata open;
+
+#tic {wata} {
+    #untic wata;wataa;
+    #showme <afa>开始爬塔...;
+} {2};
+#math watl 4;
+#math watc 1;
+
+#alias {wataa} {
+   jiali max;yun powerup;ask ke about 进塔;
+};
+
+#act {如果你现在离开，可获厚礼} {
+    #if {$watc<$watl}
+    {#math watc {$watc+1};dazuo max};
+    #else
+    {qiao luo};
+};
+
+#act {你短时间内力使用大量内力}{
+   #var wat_wait 1;
+   #delay 60 {#var wat_wait 0;
+  };
+};
+
+#act {经过一段时间，你体内的内力又重新恢复正常运转！}{#var wat_wait 0};
+
+#act {你%*站了起来}{
+    #if {"$wat_wait"=="1"}{
+       #delay 120 {#var wat_wait 0;yp;up}
+    };
+    #else {
+       #delay 60 {yp;up}
+    };
+};
+
+#class wata close;
+
+

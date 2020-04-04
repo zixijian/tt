@@ -1,0 +1,16 @@
+#class sna open;
+
+#act {慢慢的，你发现自己可以睁开眼了，只是眼睛似有砂子，疼痛流泪。} {l snow};
+#act {洁白的雪地上零星的散落着几朵脚印。} {l snow};
+#act {你突然发现在路旁的一片积雪上行走(walk)似乎可以用来练习轻功。} {walk snow};
+#act {你一路走下来，看着脚印回想方才的步法，轻功水平提高了！} {skbrief dodge;l snow};
+#act {雪，雪，还是雪。} {l snow};
+#act {环顾四周，到处都是白皑皑的积雪。} {l snow};
+
+#act {^skbrief ok$}
+{
+	#echo {{踏雪：%s %d/%d(%d%a)} {-1}} {基本轻功} {$level} {$maxsk} {@eval{$lvpot*100/($level+1)/($level+1)}} {37};
+	#if {$level>=$maxsk} {#class sa kill;#show <faa>dodge已达到上限。<099>};
+};
+
+#class sna close;

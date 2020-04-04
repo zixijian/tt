@@ -1,0 +1,26 @@
+#class lzba open;
+
+#nop sword、blade、whip、staff、dagger;
+#var wuqi3 sword;
+
+#act {^你%*武功再高也怕菜刀} {
+sc;
+gt fds;
+#delay 5 {
+#if {"$mymenpai"=="丐帮"}
+{say 降龙打天下};
+#elseif {"$mymenpai"=="桃花岛"}
+{#2 {draw $wuqi3}};
+draw armor;
+draw head;
+draw surcoat;
+draw boots;
+wield all;
+sethere fds;
+#delay 1 {gt kd;
+#delay 3 {wear all;
+#delay 1 {drop xue;drop shoes;wear all;
+#class lzba kill;
+}}}}};
+
+#class lzba close;

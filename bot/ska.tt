@@ -1,0 +1,55 @@
+#class ska open;
+
+#tic {ska} {skaa} {77};
+#tic {skaa} {
+      #echo {%c%h} {light yellow}{【指令格式:ska [师傅] [技能] 向师傅学技能】};
+      set brief 1;
+     #untic skaa;
+     skaa;
+} {2};
+
+#alias {skaa} {
+  do 2 xue $shi for $gong 50;
+  exert regenerate;
+};
+
+#act {^你和师父切磋了%*消耗了大量潜能} {skx;dza};
+#act {^你的潜能已经发挥到极限} {skx;dza};
+
+#act {^你刚在三分钟内睡过} {#delay 15 sleep};
+
+#act {^你的%*进步了} {verify $gong};
+
+#act {你略一凝神，精神看起来好多了。} {skaa};
+
+#act {^你的内力不够。} {sleep};
+
+#act {^你一觉醒来} {
+  #if {"$mymenpai"=="桃花岛"} {
+        #delay 1 {w;s;w;w;
+        #delay 2 {eat liang;
+        #delay 1 {drink jiudai;
+        #delay 1 {skaa;
+    }}}}};
+   #else {
+          eat liang;
+         #delay 1 {drink jiudai;
+         #delay 1 {skaa;
+     }}};
+};
+
+#act {^这里不是你能睡的地方！} {
+   #if {"$mymenpai"=="桃花岛"} {
+        #delay 1 {e;e;n;e;
+        #delay 2 {sleep;
+   }}};
+   #else {
+         sleep;
+    };
+};
+
+#gag {^这里不是你能睡的地方！};
+#gag {走了过来};
+#gag {往%*离开};
+
+#class ska close;

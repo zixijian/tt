@@ -1,0 +1,59 @@
+#nop 投名状;
+#class tma open;
+
+#tic {tma} {#untic tma;tmaa} {2};
+#ali {tmaa} {ask qiu about 投名状};
+#var task_type {};
+#ali {tmd} {
+    #if {"$task_type"=="1"}{
+       give qiu zhenshan zhibao
+    };
+    #elseif {"$task_type"=="2"}{
+       give qiu shouji
+    };
+    #elseif {"$task_type"=="3"}{
+       give qiu beauty girl
+    };
+    #elseif {"$task_type"=="4"}{
+       give qiu hong huo
+    };
+};
+#act {^你小子还是值得老夫信任的。(+%d)$}{
+   #untic tma1;tmx
+};
+#ali {kbx} {unseal box}；
+#ali {htg} {hit beauty girl};
+#ali {rbc} {rob biao dui};
+#ali {cts} {cut corpse;get shouji};
+#ali {tmf} {ask qiu about 失败;tmx;#untic tma1};
+
+#act {^裘千丈瞪大了眼睛喝道：无关人等，给我滚开！投名状是你能问的吗？$}{ask qiu about join;tmaa};
+
+#act {宝箱最近在%*出现，你去帮忙找回来吧。} {
+  #var task_type 1;
+  #tic {tma1} {#echo {%c%h} {light yellow} {宝箱出现在%1,找到后kbx。}}{15};
+};
+
+#act {对你说道：你去把%1(%2)给我干掉，提他的脑袋来见我。$} {
+  #var task_type 2;
+  helpme find %};
+ #tic {tma1} {#echo {%c%h} {light yellow} {杀掉%1%2,然后cts。}} {15};
+};
+
+#act {美女在%*处附近游玩，你赶快去把她抢回来。$}{
+    #var task_type 3;
+    #tic {tma1} {#echo {%c%h} {light yellow} {美女在%1，找到后htg。}} {15};
+};
+#act {%*脚下一个不稳，跌在地上一动也不动了。}{
+  get beauty girl
+};
+
+#act {探子名叫%*在%*附近接应，你赶快过去吧。$}{
+     #var task_type 4;
+    #tic {tma1} {#echo {%c%h} {light yellow} {抢劫%1的镖车，%2在%3处，找到后rbc。}}{15};
+   #var jieying_name %2;
+};
+#act {^$jieying_name对着你大声道：你快抢(rob)镖队，我先闪了！}{stopwalk;rbc};
+
+
+#class tma close;

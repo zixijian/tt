@@ -1,0 +1,45 @@
+#class gba open;
+
+#act {彭有敬%*你%*说道：%1} {
+#tic {gbq3} {#echo {%c%h} {light yellow} {门忠任务%1}} {15}};
+
+#act {你对丐帮的忠诚度提高了}{#untic gbq3;gbx};
+#act {你对丐帮的忠诚度降低了} {#untic gbq3;gbx};
+
+#act {鲁有脚对你说道：%1，你去把其身上的%2讨(%3)来，上缴(jiao)帮里。} {
+  #tic {gbq1} {#echo {%c%h} {light yellow} {目标%1，%3物品%2，完成后(jiao)}} {15}}；
+#act {鲁有脚说道：「我帮素来%*，你去%1找到一个叫%2的人，和他接头(jietou)。} {
+  #tic {gbq1} {#echo {%c%h} {light yellow} {目标%2在%1处(jietou)情报}} {11}};
+
+#act {%*告诉你：%1目前在%2,快去摁死它吧!}
+ {#tic {gbq2} {
+  #echo {%c%h} {light yellow} {目标%1正在%2处} } {15}};
+
+#act {完成任务后，你被奖励了} {gbx};
+#act {鲁有脚说道：「没关系，没做到就算了吧。」} {gbx};
+
+#act {^左全对着你点了点头} {#delay 20 gbza};
+#act {^左全%*休息} {#delay 20 gbza};
+#act {^左全说道：「你的武艺已经不错了，去看看彭、鲁两位长老有何任务} {gbx};
+#act {^左全对你说道：人人都知道我们丐帮消息天下最为灵通，打探消息就靠你们这些跑腿的了，你去%1门打听(dating)些消息回来。$}
+{
+  #act {你已经完成了打听消息的任务}
+	{
+	#untic dta;#delay {5} {dtb};
+	};
+ #act {打探完了}
+	{
+	#untic dta;#delay {5} {dtb};
+	};
+  #if {"%1"=="北"} {#alias {dtb} {#3 s;enter shudong};out;#3 n};
+  #elseif {"%1"=="南"} {#alias {dtb} {#4 n;enter shudong};out;#4 s};
+  #elseif {"%1"=="东"} {#alias {dtb} {#4 w;enter shudong};out;#4 e};
+  #elseif {"%1"=="西"} {#alias {dtb} {#4 e;enter shudong};out;#4 w};
+  dating;
+  #tic {dta} {dating} {5};
+};
+
+
+
+#class gba close;
+
