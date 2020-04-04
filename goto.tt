@@ -367,8 +367,8 @@
                   $cmd
 	      };
 	      #case {"busy1"}{
-                  #math step {$step+1};
                   #var stepaccu 1;
+		  #var cmd {};
                   #delay {2} {walk};
               };
               #default {
