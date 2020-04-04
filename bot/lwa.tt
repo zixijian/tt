@@ -1,0 +1,44 @@
+#class lwa open;
+
+#tic {lwaa} {
+    #echo {%c%h} {light yellow}{【指令格式:lwa [技能]进行领悟】};
+    #untic lwaa;
+    lwaa;
+}{1};
+
+#tic {lwa} {lwaa} {77};
+
+#alias {lwaa} {do 2 lingwu $lwname 100;yun regenerate};
+
+#act {你的内力不够。} {
+   #echo {当前$lwname领悟进度:};
+   skbrief $lwname;
+   eat liang;
+	 #delay 1 {drink jiudai;
+  #delay 1 {sleep}}
+};
+#gag {^> $};
+#gag {^$};
+#gag {你略一凝神，精神看起来好多了%*};
+#gag {你领悟了%*次%*};
+#gag {你现在过于疲倦,无法静下心来领悟功夫%*};
+#gag {{你已经喝太多了，再也灌不下一滴水了%*|你已经吃太饱了，再也塞不下任何东西了%*}};
+#gag {你刚在三分钟内睡过一觉%*};
+
+#action {{你的基本功夫比你的高级功夫还高|你已经达到你的技能等级极限！}}{
+#echo {领悟已停止...};lwx;#echo {开始打坐...};dza};
+#action {^%*你的%*进步了} {verify $lwname};
+
+#act {你刚在三分钟内睡过一觉}{#delay 15 {sleep}};
+
+#act {你略一凝神，精神看起来好多了。} {lwaa};
+#act {你一觉醒来，精神抖擞地活动了几下手脚。} {dazuo max};
+#act {{你运功完毕，深深吸了口气，站了起来。|你将内息走了个小周天，流回丹田，收功站了起来。|你只觉神元归一，全身精力弥漫，无以复加，忍不住长啸一声，徐徐站了起来。|你将真气在体内沿脉络运行了一圈}} {lwaa};
+
+#act {你现在精不够，无法控制内息的流动！} {exert regenerate};
+#act {你现在精力充沛。} {lwaa};
+
+#act {你现在的气太少了，无法产生内息运行全身经脉。} {sleep};
+#act {你的内功还没有达到那个境界你至少需要十点的气来打坐！} {dazuo 10};
+
+#class lwa close;

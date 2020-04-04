@@ -1,0 +1,5 @@
+#nop 北大侠客行连接信息;
+#nop #event {SCREEN RESIZE} {#split};
+#split;
+#ses pku mud.pkuxkx.com 8080
+

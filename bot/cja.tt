@@ -1,0 +1,29 @@
+#class cja open;
+
+#tic {cjaa} {#show <afa>开始参悟残局。<099>;#untic cjaa;watch canju} {2};
+
+#tic {cja} {watch canju}{77};
+
+#act {你对着残局研究了一会,似乎有些心得。} {watch canju};
+#act {你精力不够，无法领悟残局。} {exert regenerate};
+#act {你略一凝神，精神看起来好多了。} {watch canju};
+#act {你的内力不够。} {verify literate;sleep};
+
+#act {你一觉醒来，精神抖擞地活动了几下手脚。} {watch canju};
+
+#act {你刚在三分钟内睡过一觉} {
+  eat liang;
+	#delay 1 {drink jiudai;
+  #delay 15 {watch canju;
+}}};
+
+#act {这里不是你能睡的地方} {dor;cjx};
+
+#act {你运功完毕} {exert recover};
+#act {你深深吸了几口气} {watch canju};
+#act {你现在精不够} {exert regenerate};
+#act {你现在气力充沛} {watch canju};
+#act {你将内息走了个小周天} {exert recover};
+#act {你现在的气太少了} {exert recover};
+
+#class cja close;

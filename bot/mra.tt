@@ -1,0 +1,25 @@
+#class mra open;
+
+#tic {mra} {#untic mra;mraa}{2};
+#alias {mraa} {ask pu ren about job};
+#alias  {mrd} {give pu xin};
+#alias  {mrf} {ask pu ren about fail};
+
+#act {仆人叹道：家贼难防，有人偷走了少爷的信件，据传曾在『%1』附近出现，你去把它找回来吧} {
+  #tic {mrq1} {#echo {%c%h} {light yellow} {慕容信件目标在%1处}} {15}};
+
+#act {%*目前在【%1】,快去摁死它吧!} {
+  #tic {mrq2} {
+  #echo {%c%h} {light yellow} {目标正在%1处} } {15}};
+
+#act {%*发现的%s慕容世家家贼(@capital{$myid}'s murong jiazei)} {wait;stopwalk;follow jiazei;jiali max;yun powerup;hit jiazei};
+
+#act {慕容世家家贼死了。} {#delay 2 {get all from corpse}};
+
+#act {由于你成功的找回慕容复写给江湖豪杰的信件} {#untic mrq1;#untic mrq2;mrx};
+#act {由于你没有找回慕容复丢失的信件} {
+#untic mrq1;#untic mrq2;mrx};
+
+
+#class mra close;
+

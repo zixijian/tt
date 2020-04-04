@@ -1,0 +1,65 @@
+#nop ==常用action==;
+
+#nop #act {1分钟内回答以下问题} {answer 1};
+
+set wimpy 30;
+#act {你动作似乎开始有点不太灵光，但是仍然有条不紊} {yun recover};
+#act {你看起来可能有些累了} {yun recover};
+#act {你似乎十分疲惫，看来需要好好休息了} {yun recover};
+#act {你气喘嘘嘘，看起来状况并不太好} {yun recover};
+#act {你看起来已经力不从心了} {yun recover};
+
+#act {^你有很长一段时间没有备份档案了} {backup};
+
+#act {^吊桥还没有升起来，你就这样走了，可能会给外敌可乘之机的。$} {sheng bridge};
+
+#act {^你拿出一两黄金(Gold)给钱老本。$} {ask qian about 进宫};
+
+#act {^你必须先把木门打开！$} {open door};
+
+#act {^你在这里找到了一本武功心得。$} {kan xinde};
+
+#act {^你找到了一些奇怪的线索。$} {mess clue};
+
+#nop #act {^你感觉心中的杀气渐渐消失} {#delay 1 {chanhui}};
+
+#act {^%s中年女佣(Nvyong)} {ask nvyong about 郭大侠};
+
+#act {^ %*文铜板(Coin)$} {wait;get coin};
+#act {^ %*两白银(Silver)$} {wait;get silver};
+#act {^ %*两黄金(Gold)$} {wait;get gold};
+#act {^ %*银票(Cash)$} {wait;get cash};
+
+#act {^你从%*{搜出|拿出}一柄长剑。$} {drop changjian};
+
+#nop #act {^你从%*{搜出|拿出}一柄长鞭。$} {drop whip};
+
+#act {^你从%*{除下|拿出|搜出}一件布衣。$} {drop cloth};
+
+#act {^你从%*{搜出|拿出}一只铁轮。$} {drop falun};
+
+#act {^卫士对你大吼一声：站住，干什么的？(answer)} {answer 送信};
+
+#act {^目前权限} {#delay 1 {hpbrief;sc}};
+
+#act {^重新连线完毕} {#delay 1 {hp;sc}};
+
+
+
+
+#nop slink查看mxp链接，termux调用浏览器mxp;
+#alias {mxp} {#sys termux-open-url $link};
+#act {^http://pkuxkx.net/antirobot/robot.php?filename=%1}
+{
+	#var link {http://pkuxkx.net/antirobot/robot.php?filename=%1};
+  #nop mxp;
+  #nop	#system sh bot/fullme.sh %1;
+};
+
+#act {^http://pkuxkx.com/antirobot/robot.php?filename=%1}
+{
+	#var link {http://pkuxkx.com/antirobot/robot.php?filename=%1};
+  #nop mxp;
+  #nop	#system sh bot/fullme.sh %1;
+};
+

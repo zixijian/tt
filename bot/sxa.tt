@@ -1,0 +1,32 @@
+#class sxa open;
+
+#tic {sxa} {#untic sxa;sxaa} {2};
+#alias {sxaa} {ask yue about job};
+#alias  {sxd} {ask yue about finish};
+#alias  {sxf} {ask yue about fail};
+
+#act {岳不群对你道：%*交给%1。} {
+  #tic {sxa1} {#echo {%c%h} {light yellow} {华山送信目标在%1处}} {15}
+};
+#act {岳不群道：%*送到%1。} {
+  #tic {sxa1} {#echo {%c%h} {light yellow} {华山送信目标在%1处}} {15}
+};
+
+#act {%*目前在【%1】,快去摁死它吧!} {
+  #tic {sxa2} {
+  #echo {%c%h} {light yellow} {目标正在%1处} } {15}
+};
+
+#act {你伸手向怀中一摸，发现密函已经不翼而飞！} {
+  #var wait wait;stopwalk;jiali max;yun powerup};
+
+#act {看起来%1想杀死你} {#var sxss %1};
+#act {$sxss死了} {#delay 2 {get all from corpse}};
+
+#act {你的任务失败}{
+   #untic sxa1;#untic sxa2;sxx};
+
+#act {你被奖励了} {#untic sxa1;#untic sxa2;sxx};
+
+#class sxa close;
+

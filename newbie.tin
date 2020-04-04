@@ -1,0 +1,449 @@
+#class newbie open;
+#action {蝴蝶进入了你的梦里，亦或是你进入了蝴蝶的梦中} {
+    set brief 1;
+   #delay 5 {hp;
+   #delay 5 {newbie.start;
+}}};
+
+#alias {newbie.start} {
+    look river;
+    get hulu;
+    get ye guo;
+    #10 eat ye guo;
+    fill hulu;
+    #15 drink hulu;
+};
+
+#action {终于吃饱喝足了，你现在可以去周围探索下，看看有没有能直接出去的出口} {
+    e;w;w;e;s;n
+};
+
+#action {把周围走了个遍，都没有发现有其他出口，还是从这里的山坡出去吧} {
+    #delay {2} {
+        climb up;
+    };
+};
+
+#action {你看着怀里的葫芦，心想柳秀山庄会不会就在前面附近的地方} {
+    n;n;n
+};
+
+#action {你怔怔地站在那里不知所措,不如去敲敲门%*knock gate%*，找里面的人问问} {
+    knock gate;
+    ask yahuan about 葫芦;
+};
+
+#action {你怔怔地站在那里不知所措，不如再去敲敲门，向她问个究竟} {
+    knock gate;
+    #delay {2} {
+        n;n;n;
+    };
+};
+
+#action {你怔怔地站在那里不知所措,不如去敲敲门，找里面的人问问} {
+    s;
+    give hulu to you kunyi;
+};
+
+#action {示意你赶紧把葫芦给这位庄主} {
+    give hulu to you kunyi;
+};
+
+#action {向游鲲翼依次打听：here、name、葫芦、闯荡江湖} {
+    ask you kunyi about here;
+    ask you kunyi about name;
+    ask you kunyi about 葫芦;
+    ask you kunyi about 闯荡江湖;
+};
+
+#action {你见他如此盛情，便也不好推辞，跟着丫鬟阿姝，让她带你熟悉一下山庄吧} {
+    #delay {0.5} {
+        follow a shu;
+    };
+};
+
+#action {请把衣服脱了,好好在这里洗个澡吧。} {
+    remove all;
+    #delay {3} {
+        bath;
+    };
+};
+
+#action {终于把澡洗完了，去问庄主关于闯荡江湖的事情吧} {
+    wear all;
+    #delay {2} {
+        s;e;ask you kunyi about 闯荡江湖;
+    };
+};
+
+#action {你跃跃欲试，已经迫不及待了！快去尚武堂找武师试试身手吧。} {
+    n;
+    fight wushi;
+};
+
+#action {这场比试消耗了你不少的体力，回厢房去休息(sleep)一下吧。} {
+    #delay {2} {
+        s;w;
+        #var newbiesk 2;
+        sleep;
+    };
+};
+
+#action {查下柳秀票号在哪里。} {
+    #delay {3} {
+        #send {localmaps};#send q;
+    };
+};
+
+#action {快去柳秀票号看看游鲲翼给你存了多少钱，都取出来吧} {
+    s;s;
+    #delay {2} {
+        open gate;
+        #delay {2} {
+            s;e;
+            #delay {2} {
+                qu 1 gold
+            };
+        };
+    };
+};
+
+#action {取了钱，赶紧去药铺买药疗伤吧。} {
+    #delay {2} {
+        w;s;s;ne;
+        #delay {2} {
+            buy yao;
+            #delay {2} {
+                buy yao;
+                #delay {2} {
+                    buy yao;
+                    #delay {2} {
+                        #delay {2} {
+                            eat yao;
+                        };
+                    };
+                };
+            };
+        };
+    };
+};
+
+#action {你的伤治好了！快回到游庄主处，让他指导你闯荡江湖吧！} {
+    sw;n;n;
+    #delay {3} {
+        knock gate;
+        #delay {2} {
+            n;n;n;
+            #delay {3} {
+                ask you kunyi about 闯荡江湖;
+            };
+        };
+    };
+};
+
+#action {快去尚武堂，找武师拜师学艺去吧。(bai wushi)} {
+    n;bai wushi;
+};
+
+#action {我需要一壶烧刀子和一把钢剑，你去酒铺、铁匠铺给我买回来} {
+    s;
+    #delay {5} {
+
+};
+};
+
+#action {先别走，还没给你钱} {
+    s;s;s;
+    #delay {1} {
+        open gate
+    };
+    #delay {4} {
+        s;s;w;
+        #delay {2} {
+            buy jian;
+            #delay {2} {
+                e;s;se;
+            };
+            #delay {4} {
+                buy shaodaozi;
+                #delay {2} {
+                    nw;n;n;knock gate;
+                    #delay {2} {
+                        #4 n;
+                        #delay {2} {
+                            give shaodaozi to wu shi;
+                            #delay {2} {
+                                give jian to wu shi;
+                            };
+                        };
+                    };
+                };
+            };
+        };
+    };
+};
+
+#action {痴老汉这酒还是那么够劲，直勾老子肚子里的馋虫，你去买根鸡腿给我下下酒。} {
+    #delay {5} {
+        s;s;s;
+    };
+    #delay {6} {
+        open gate;
+        #delay {2} {
+            s;s;e;
+            #delay {2} {
+                buy shi he;
+                #delay {2} {
+                    w;s;se;
+                    #delay {2} {
+                        buy jitui;
+                        #delay {2} {
+                            put jitui in shi he;
+                            #delay {2} {
+                                nw;n;n;knock gate;
+                                #delay {2} {
+                                    #4 n;
+                                    #delay {2} {
+                                        give shi he to wu shi;
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+        };
+    };
+}
+
+#action {还等什么，赶紧拜师} {
+    #delay {5} {
+        bai wu shi;
+        #delay {3} {
+            wield jian;
+            #delay {2} {
+                cha wu shi;
+            };
+        };
+    };
+};
+
+#action {内功是一切武学之根基！建议先学基本内功和特殊内功！} {
+    #var newbiesk 0;
+    xue wu shi for force 10;
+    xue wu shi for dodge 10;
+    xue wu shi for parry 10;
+    xue wu shi for strike 10;
+    xue wu shi for sword 10;
+    xue wu shi for taiyi-jian 10;
+    xue wu shi for taiyi-shengong 10;
+    xue wu shi for taiyi-you 10;
+    xue wu shi for taiyi-zhang 10;
+    s;w;sleep;
+};
+
+#action {你一觉醒来，精神抖擞地活动了几下手脚。} {
+    #delay {3} {
+        #if {$newbiesk == 2} {
+            e;ask you kunyi about 闯荡江湖;
+        };
+
+        #if {$newbiesk == 1} {
+            lian sword 1
+        };
+
+        #if {$newbiesk == 0} {
+            e;n;
+            #10 xue wu shi for force 1;
+            #10 xue wu shi for dodge 1;
+            #delay {2} {
+                #10 xue wu shi for parry 1;
+                #10 xue wu shi for strike 1;
+                #delay {2} {
+                    #10 xue wu shi for sword 1;
+                    #10 xue wu shi for taiyi-jian 1;
+                    #delay {2} {
+                        #10 xue wu shi for taiyi-shengong 1;
+                        #10 xue wu shi for taiyi-you 1;
+                        #delay {2} {
+                            #10 xue wu shi for taiyi-zhang 1;
+                            #delay {2} {
+                                s;w;sleep;
+                            };
+                        };
+                    };
+                };
+            };
+        };
+
+        #if {$newbiesk == 3} {
+            #delay {3} {
+                jifa force taiyi-shengong;
+                #delay {3} {
+                    jifa dodge taiyi-you;
+                    #delay {3} {
+                        jifa sword taiyi-jian;
+                        #delay {3} {
+                            jifa parry taiyi-jian;
+                            #delay {3} {
+                                jifa strike taiyi-zhang;
+                                #delay {10} {
+                                    bei taiyi-zhang;
+                                    #delay {2} {
+                                        e;n;
+                                        #delay {2} {
+                                            fight wu shi;
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+        };
+        #if {$newbiesk == 4} {
+             #delay 2 {e;n;
+                   #delay 2 {fight wushi;
+                   };
+              };
+        };
+    };
+};
+#action {把学到的功夫都激发起来吧！} {
+    sleep;#var newbiesk 3;
+}
+
+#action {这里禁止战斗} {
+    #var newbiesk 4;
+}
+
+#action {把学到的功夫都激发起来吧！} {
+    sleep;#var newbiesk 3;
+}
+
+#action {趁热打铁去练习一级太乙剑法，一定能有收获的。} {
+    #var newbiesk 1;
+    s;w;
+    lian sword 1
+};
+
+#action {你试着练习太乙神剑，获得了少许进步！} {
+    lian sword 1;
+};
+
+#action {你的体力不够练太乙神剑。} {
+    #delay {2} {
+        sleep;
+    };
+};
+
+#action {你握了握手中的剑，感觉自己有点功夫了，去找找游鲲翼，再向他打听闯荡江湖的事！} {
+    #delay {2} {
+        e;
+        ask you kunyi about 闯荡江湖;
+    };
+};
+
+#alias gkt {say 终于要正式上阵了，去树林手刃幼虎，以示武勇};
+
+#action {终于要正式上阵了，去树林手刃幼虎，以示武勇} { 
+    #delay {2} {
+        s;s;
+        #delay {2} {
+            open gate;
+            #delay {2} {
+                s;s;s;s;
+                #delay {2} {
+                    climb down;
+                    #delay {20} {
+                        w;
+                        #delay {2} {
+                            kill lao hu;
+                            #delay {2} {
+                                perform sword.bafang;
+                                #delay {3} {
+                                    perform sword.bafang;
+                                };
+                                #delay {5} {
+                                    perform sword.bafang;
+                                };
+                                #delay {8} {
+                                    perform sword.bafang;
+                                };
+                                #delay {10} {
+                                    perform sword.bafang;
+                                };
+                                #delay {12} {
+                                    perform sword.bafang;
+                                };
+                                #delay {14} {
+                                    perform sword.bafang;
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+        };
+    };
+};
+
+#action {手刃了恶虎，你感觉自己威风凛凛！回去再向游鲲翼问问能不能闯荡江湖了吧！} {
+    #delay {10} {
+        e;
+        #delay {2} {
+            climb up;
+            #delay {15} {
+                n;n;n;knock gate;
+                #delay {2} {
+                    n;n;n;
+                    ask you kunyi about 闯荡江湖;
+                };
+            };
+        };
+    };
+};
+
+#action {不知游鲲翼让你看那本《江湖掌故》有何用意} {
+    n;n;
+    #delay {2} {
+        l shujia;
+        #delay {2} {
+            get book from shujia;
+            #delay {2} {
+                read book for 1;
+            };
+        };
+    };
+};
+
+#action {江湖如此豪迈，我又如何能偏安} {
+    #delay {2} {
+        s;s;
+        ask you kunyi about 闯荡江湖;
+    };
+};
+
+#action {既然英雄要送你，却之不恭。在杏子林和游庄主道别。} {
+    #2 s;open gate;
+    #delay {1} {
+        s;s;s;w
+    };
+};
+
+#action {你刚在三分钟内睡过一觉} {
+    #delay {15} sleep;
+};
+#act {你现在精力不佳，走不动路。} {tuna max};
+#act {你吐纳完毕}{sleep};
+
+#action {你怎么乱跑没跟着我呢，我先回正厅去了，你过来重新跟随我吧！} {
+    #delay {2} {
+        e;
+        #delay {10} {
+            follow a shu;
+        };
+    };
+}
+#class newbie close;

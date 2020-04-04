@@ -1,0 +1,139 @@
+#class pza open;
+
+#tic {pza} {set wimpy 20;pzi;#untic pza;pzaa}{1};
+
+#act {你成功挽回桃花岛的声誉，被奖励：}{pzx};
+
+#alias pzaa {
+	#class pzaa open;
+	#action {你对陆乘风道：“听闻近来有人冒名桃花岛弟子在%S布下迷阵行恶，我愿代劳除去此獠。”} {
+		#var jobplace %%1;
+		pzp;
+		#class pzaa kill;
+	};
+	#class pzaa close;
+	ask lu about 破阵;
+};
+
+#alias jpz {ask lu about 破阵奖励};
+#alias fpz {ask lu about 破阵失败};
+
+#alias pzi {
+  #echo {%c%h} {light yellow};
+  #echo {%c%+2s开始破阵...} {light green};
+	#echo {%c%+2s占卜地点：【pzp】。} {light green};
+	#echo {%c%+2s占卜指令：【pzm】。} {light green};
+  #echo {%c%+2s交任务：【jpz】。} {light green};
+  #echo {%c%+2s取消任务：【fpz】。} {light green};
+  #echo {%c%h} {light yellow};
+};
+
+#alias pzp {
+	#echo {%c%h} {light yellow};
+	#echo {%c%+2s破阵地点：$jobplace。} {light green};
+	#echo {%c%h} {light yellow};
+};
+#alias pzm {
+	#class zhanbu.maze open;
+	#var pos {{nw}{2}{n}{2}{ne}{2}{w}{2}{e}{2}{sw}{2}{s}{2}{se}{2}};
+	#var posstep 0;
+	#var direc {nw;n;ne;w;e;sw;s;se};
+	#foreach $direc direction {
+		#var exec {#alias $direction {#var pace $direction;#send $direction}};
+		$exec;
+	};
+	#function printdirec {
+		#var printtext {　　经推算，正确方向可能为：};
+		#foreach $direc direction {
+			#if {$pos[$direction]} {
+				#var printtext $printtext $direction;
+			};
+		};
+		#echo <cfa><EAA>=================================================;
+		#echo <cfa>$printtext;
+		#echo <cfa><EAA>=================================================;
+   #return;
+   #send;
+	};
+	#action {~{\e\[5m\e\[42|\e\[42}%S{\e\[5m\e\[42|\e\[42}%S{\e\[5m\e\[42|\e\[42}} {
+		#if {$posstep} {
+			#var posstep 0;
+			#if {"%%1" == "\e[42"} {#var pos[sw] 0};
+			#elseif {"%%1" == "\e[5m\e[42" && !$pos[sw]} {#var pos[sw] 0};
+			#else {#var pos[sw] 1};
+			#if {"%%3" == "\e[42"} {#var pos[s] 0};
+			#elseif {"%%3" == "\e[5m\e[42" && !$pos[s]} {#var pos[s] 0};
+			#else {#var pos[s] 1};
+			#if {"%%5" == "\e[42"} {#var pos[se] 0};
+			#elseif {"%%5" == "\e[5m\e[42" && !$pos[se]} {#var pos[se] 0};
+			#else {#var pos[se] 1};
+			@printdirec{};
+		};
+		#else {
+			#var posstep 1;
+			#if {"%%1" == "\e[42"} {#var pos[nw] 0};
+			#elseif {"%%1" == "\e[5m\e[42" && !$pos[nw]} {#var pos[nw] 0};
+			#else {#var pos[nw] 1};
+			#if {"%%3" == "\e[42"} {#var pos[n] 0};
+			#elseif {"%%3" == "\e[5m\e[42" && !$pos[n]} {#var pos[n] 0};
+			#else {#var pos[n] 1};
+			#if {"%%5" == "\e[42"} {#var pos[ne] 0};
+			#elseif {"%%5" == "\e[5m\e[42" && !$pos[ne]} {#var pos[ne] 0};
+			#else {#var pos[ne] 1};
+		};
+	} {1};
+	#action {~{\e\[5m\e\[42|\e\[42}%S{\e\[5m\e\[42|\e\[42}} {
+		#if {"%%1" == "\e[42"} {#var pos[w] 0};
+		#elseif {"%%1" == "\e[5m\e[42" && !$pos[w]} {#var pos[w] 0};
+		#else {#var pos[w] 1};
+		#if {"%%3" == "\e[42"} {#var pos[e] 0};
+		#elseif {"%%3" == "\e[5m\e[42" && !$pos[e]} {#var pos[e] 0};
+		#else {#var pos[e] 1};
+	} {2};
+	#action {你尝试破阵，可惜选择了错误的方向，损失了一些气血和内力。} {
+		#var pos[$pace] 0;
+	};
+	#action {这里的迷阵在你眼中如同儿戏一般。} {
+		#var pos {{nw}{2}{n}{2}{ne}{2}{w}{2}{e}{2}{sw}{2}{s}{2}{se}{2}};
+		#var posstep 0;
+	};
+	#action {破阵失败！这里的真相恐怕永远被掩盖。} {
+		#class zhanbu.maze kill;
+	  #echo {%c%h} {light yellow};
+		#echo <cfa>　　破阵失败！;
+		#echo {%c%h} {light yellow};
+	};
+	#action {你彻底破解了这里的迷阵！} {
+		#class zhanbu.maze kill;
+		#echo {%c%h} {light yellow};
+		#echo <cfa>　　破阵成功！;
+		#echo {%c%h} {light yellow};
+	};
+	#action {看起来%S想杀死你！} {
+		#class zhanbu.maze.kill open;
+		#action {大 恶 %%1(%D)} {
+			#format npcid %l %%%1;
+			kill $npcid;
+		};
+		#action {%%1道：想不到我最终还是失败了！哎！} {
+			#class zhanbu.maze.kill kill;
+			#echo {%c%h} {light yellow};
+			#echo <cfa>　　破阵任务成功完成！;
+			#echo {%c%h} {light yellow};
+			s;
+		};  
+		#action {你在攻击中不断积蓄攻势。(气势：%d%)} {
+			#if {%%%1 >= 24} {#nop perform strike.leiting};
+		};
+		#class zhanbu.maze.kill close;
+	};
+	#class zhanbu.maze close;
+	jiali max;
+	yun recover;
+	yun regenerate;
+	yun qi;
+	yun powerup;
+	zhanbu -maze;
+};
+
+#class pza close;

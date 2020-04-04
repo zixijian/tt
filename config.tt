@@ -1,0 +1,30 @@
+#CONFIG           {CHARSET}  {BIG-5}
+#CONFIG           {CHARSET}  {BIG5}
+#CONFIG           {CHARSET}  {GBK}
+#CONFIG           {COLOR PATCH}  {ON}
+#CONFIG           {PACKET PATCH}  {0.8}
+#CONFIG           {WORDWRAP}  {ON}
+#PATHDIR         {n}  {s}  {1}
+#PATHDIR         {e}  {w}  {2}
+#PATHDIR         {s}  {n}  {4}
+#PATHDIR         {w}  {e}  {8}
+#PATHDIR         {u}  {d}  {16}
+#PATHDIR         {d}  {u}  {32}
+#PATHDIR         {ne} {sw} {3}
+#PATHDIR         {se} {nw} {6}
+#PATHDIR         {nw} {se} {9}
+#PATHDIR         {sw} {ne} {12}
+#PATHDIR	        {nu} {sd} {17}
+#PATHDIR	        {eu} {wd} {18}
+#PATHDIR	        {su} {nd} {20}
+#PATHDIR	        {wu} {ed} {24}
+#PATHDIR	        {nd} {su} {33}
+#PATHDIR         {ed} {wu} {34}
+#PATHDIR	        {sd} {nu} {36}
+#PATHDIR	        {wd} {eu} {40}
+#nop third argument must between 0-63;
+#PATHDIR	        {out} {enter} {61}
+#PATHDIR	        {enter} {out} {62}
+
+
+

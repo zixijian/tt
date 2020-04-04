@@ -1,0 +1,228 @@
+#class ali open;
+#nop ==常用alias==;
+#nop ==帮助==;
+#alias {omg} {
+    #echo {%c%h} {light green};
+    #showme {<efa>自定义命令如下：};
+    #showme {<efa>逍遥行使用方法:sethere {起点缩写};gt {目的地缩写};gt 帮助;};
+    #showme {<efa>pg/pb 自动记录/返回路径};
+    #showme {<efa>lzba 扬州自动领新手装备};
+    #showme {<efa>dea 扬州自动买吃喝};
+   #showme {<efa>tna/tnx 自动吐纳};
+    #showme {<efa>dza/dzx 自动打坐};
+   #echo {%c%h} {light green};
+}; 
+#nop 常用别名;
+#alias {zisha} {suicide -f};
+#alias {rl} {
+     #kill;
+    #re init.tt;
+    #event {SCREEN RESIZE} {#split}
+};
+#alias {dck} {dz -check};
+#alias {dqa} {#tic {duoqi} {duo} {1}};
+#alias {dqx} {#untic duoqi};
+#alias {p.lt} {perform strike.leiting};
+#alias {p.x} {perform strike.xiao};
+#alias {p.s} {perform strike.sanhui};
+#alias {dm} {dazuo max};
+#alias {tm} {tuna max};
+#alias {seq %0} {showequip %0};
+#alias {lx} {look box};
+#alias {gx %0} {get %0 from box};
+#alias {px %0} {put %0 in box};
+#alias {hbf} {set hpbrief long,report;hpbrief}
+#alias {de} {do 10 drink jiudai;do 10 eat liang};
+#alias {cq %0} {ask %0 about cancelquest};
+#alias {cf %0} {ask %0 about fail};
+#alias {ls} {look};
+#alias {xq} {yun recover};
+#alias {yp} {yun powerup};
+#alias {yh} {yun heal};
+#alias {jm} {jiali max};
+#alias {zl} {yun lifeheal $myid};
+#alias {home} {enter $myid};
+#alias {lm} {localmaps};
+#alias {fm} {fullme};
+#alias {slink} {#show $link};
+#alias {st} {status_me};
+#alias {sh} {sethere};
+#alias {gps} {gt here};
+#alias {way} {inquire};
+#alias {h} {halt;stopwalk;set brief 2};
+#alias {hf} {helpme find};
+#alias {ga} {get all};
+#alias {sa} {sell all};
+#alias {gc} {get all from corpse};
+#alias {bf %0} {set brief %0};
+#alias {k} {kill %0};
+#alias {ka} {killall %0};
+#alias {lq %0} {ask %0 about 例钱};
+#alias {zc} {check -g %1;status_me -a};
+#alias {tuneall} {tune chat;tune bd;tune helpme;tune jy;tune qq;tune qy;tune rumor;tune rw};
+#alias {dq} {say 请诸位师兄将吊桥升上来，以防奸恶之徒混入城中！};
+#alias {damo} {open door;n;sw;se;n;s;w;e;w;#2 e;s;w;n;nw;n};
+#alias {jiuyin} {ask yang about 九阴真经;give whip book to yang;#delay 2 {#3 n;e;#2 ne;e;swim river;#2 n;e;#2 n;w;enter xuanwo;get jiuyin zhenjing;#delay 1 {out;#2 s;out;w;#2 sw;w}}};
+#alias {shiban} {say 上报四重恩，下济三途苦;#4 pull stone up;#3 push stone down};
+#alias {shuikao} {e;nd;ask chou diao about 独孤求败;nu;ask yu fu about 过河;se;catch fish;nw;give fish to yu fu;swim;pick sword};
+#alias {shuikaob} {swim;#2 sd;su;w};
+#alias {swe} {swear 我将永远忠于帮主，若有悖逆，天诛地灭!!};
+#alias {swordbook} {#2 s;w;nw;ask punk about 王小二;se;e;#2 n;#2 nw;ne;enter hole;ask wang about 鸡;bihua};
+#alias {swordbookb} {w;sw;#2 se};
+#alias {bladebook} {#2 w;#3 n;ask tian about 淫贼;accept};
+#alias {bladebookb} {#3 s;#2 e};
+#alias {weizao} {ask teller about 伪造;give teller paper;#delay {1} {give teller 50 silver};#delay {2} {give teller 50 silver}};
+
+#nop 过迷宫,指令格式mazeout {n|s|e|w};
+#alias {mazeout}
+{
+	#if {"%1"=="n" | "%1"=="s" | "%1"=="e" | "%1"=="w"}
+	{
+		#show {<afa>开始过迷宫。};
+		#class mazeout open;
+		#var mazeout 1;
+		#ticker mazeout
+		{
+			#switch $mazeout
+			{
+				#case 1 {%1;#show %1};
+				#case 2 {%1u;#show %1u};
+				#case 3 {%1d;#show %1d};
+			};
+			#math mazeout {$mazeout+1};
+			#if {$mazeout>3} {#var mazeout 1};
+		} {6};
+		#act {^在你筋疲力尽之际，终于找到了出路(out)。$} {#unticker mazeout;#class mazeout kill;#delay 6 out};
+		#class mazeout close;
+	};
+	#else {#show {请指定正确的方向，格式为mazeout [dir]。}};
+};
+
+#nop 自动返回原点;
+#alias {pg} {
+#path new;
+#class pgtmp open;
+#act {%*这个方向没有出路。} {#path del};
+#class pgtmp close;
+#echo {%c%h} {light yellow}{【开始记录路径，指令pb返回】}};
+#alias {pb} {
+#path save backward ptmp;$ptmp;
+#path end;
+#class pgtmp kill;
+#delay 2 {#echo {%c%h} {light yellow}{【已回原点，指令pg记录新路径】}}};
+
+#nop 捡垃圾卖钱;
+#alias {sda}{#class sda read bot/sda.tt};
+#alias {sdx} {#class sda kill};
+
+#nop 洗澡从家里开始;
+#alias {xza}{#class xza read bot/xza.tt};
+#alias {xzx} {#class xza kill};
+
+#nop 残局;
+#alias {cja} {#class cja read bot/cja.tt};
+#alias {cjx} {#class cja kill};
+
+#nop 万安塔;
+#alias {wata} {#class wata read bot/wata.tt};
+#alias {watx} {#class wata kill};
+
+#nop 少林寺跳楼;
+#alias {tla} {#class tla read bot/tla.tt};
+#alias {tlx} {#class tla kill};
+
+#nop full skills;
+#alias {fska} {#class fska read bot/fska.tt};
+#alias {fskx} {#class fska kill};
+
+#nop 慕容；
+#alias {mra} {#class mra read bot/mra.tt};
+#alias {mrx} {#class mra kill};
+
+#nop 华山送信；
+#alias {sxa} {#class sxa read bot/sxa.tt};
+#alias {sxx} {#class sxa kill};
+
+#nop 天珠;
+#alias {tza} {#class tza read bot/tza.tt};
+#alias {tzx} {#class tza kill;#untic tza1};
+
+#nop 功德捐献;
+#alias {gda} {#class gda read bot/gda.tt;say 天不生我小乖乖，侠客万古长如夜};
+#alias {gdx} {#class gda kill};
+
+#nop 练习;
+#alias {lxa} {#class lxa read bot/lxa.tt;#var skname %1};
+#alias {lxx} {#class lxa kill};
+
+#nop 领悟;
+#alias {lwa} {#class lwa read bot/lwa.tt;#var lwname %1};
+#alias {lwx} {#class lwa kill};
+
+#nop 看雪轻功;
+#alias {sna} {#class sna read bot/sna.tt;l snow;}
+#alias {snx} {#class sna kill};
+
+#nop 新人福利;
+#alias {nfuli} {pick guo;eat guo;up;ask lver about 月饼;#delay {5} {answer 咸月饼;eat yuebing;d}};
+
+#nop 读书说文解字射雕等;
+#alias {dsa} {#class dsa read bot/dsa.tt;#var book %1};
+#alias {dsx} {#class dsa kill};
+
+#nop 自动吐纳;
+#alias {tna} {#class tna read bot/tna.tt;tunaa};
+#alias {tnx} {#class tna kill;#untic tna};
+
+#nop 自动打坐；
+#alias {dza} {#class dza read bot/dza.tt;
+     #switch {"%1"} {
+        #case {"dz"} {
+              #ali dzaa dz;
+              #echo 开始dz...}
+        #default {
+              #echo 开始打坐...}
+     }
+};
+#alias {dzx} {#class dza kill;#untic dza};
+
+#nop 自动修炼；
+#alias {xla} {#echo {%c%h} {light yellow}{【指令格式:xla [huntian-qigong]修炼混天气功】};#class xla read bot/xla.tt;#var xgong %1;xlaa};
+#alias {xlx} {#class xla kill;#untic xla};
+
+#nop skill学习;
+#alias ska {
+    #class ska read bot/ska.tt;
+    #var shi %1;
+    #var gong %2;
+};
+#alias {skx} {#class ska kill};
+
+#nop 丐帮门忠;
+#alias gbpa {#class gba read bot/gba.tt;ask peng about quest};
+#nop 半自动丐帮左全;
+#alias gbza {#class gba read bot/gba.tt;ask zuo about job};
+#alias gbla {#class  gba read bot/gba.tt;ask lu about job};
+#alias gbx {#class gba kill;#untic gbq1;#untic gbq2;#untic gbq3};
+#nop 半自动丐帮鲁有脚;
+
+#nop 破阵;
+#alias {pza} {#class pza read bot/pza.tt};
+#alias {pzx} {#class pza kill};
+
+#nop 自动钓鱼先去买一个鱼钩 50鱼饵；
+#alias fishb {e;n;n;gt yz};
+#alias fish {#class fish read bot/fish.tt};
+#alias fishx {#class fish kill};
+
+#nop 爱爱领装备;
+#alias lzba {#class lzba read bot/lzba.tt;say 武功再高也怕菜刀};
+
+#nop 买干粮酒袋；
+#alias dea {#class dea read bot/dea.tt}；
+
+#nop 学习技能;
+#alias xgb {#class xsk read bot/xsk.tt;#var shifu %1;say 丐帮弟子向师傅求教};
+#alias xth {#class xsk read bot/xsk.tt;#var shifu %1;say 桃花弟子向师傅求教};
+
+#class ali close;

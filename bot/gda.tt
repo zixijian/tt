@@ -1,0 +1,54 @@
+#class gda open;
+#alias {buygd}{
+#delay 1 {buy wp_3748;
+#delay 1 {buy wp_3748;
+#delay 1 {buy wp_3748;
+#delay 1 {buy wp_3748;
+#delay 1 {buy wp_3748;
+#delay 1 {buy wp_3748;
+#delay 1 {buy wp_3748;
+#delay 1 {buy wp_3748;
+#delay 1 {buy wp_3748;
+#delay 1 {buy wp_3748;
+#delay 1 {buy am_878;
+#delay 1 {buy am_878;
+#delay 1 {buy am_878;
+#delay 1 {buy am_878;
+#delay 1 {buy am_878;
+#delay 1 {buy am_878;
+#delay 1 {buy am_878;
+#delay 1 {buy am_878;
+#delay 1 {buy am_878;
+#delay 1 {buy am_878;}
+}}}}}}}}}}}}}}}}}}}};
+#alias {donategd}{
+#delay 1 {donate jian;
+#delay 1 {donate jian;
+#delay 1 {donate jian;
+#delay 1 {donate jian;
+#delay 1 {donate jian;
+#delay 1 {donate jian;
+#delay 1 {donate jian;
+#delay 1 {donate jian;
+#delay 1 {donate jian;
+#delay 1 {donate jian;
+#delay 1 {donate yi;
+#delay 1 {donate yi;
+#delay 1 {donate yi;
+#delay 1 {donate yi;
+#delay 1 {donate yi;
+#delay 1 {donate yi;
+#delay 1 {donate yi;
+#delay 1 {donate yi;
+#delay 1 {donate yi;
+#delay 1 {donate yi;}
+}}}}}}}}}}}}}}}}}}}};
+
+#act {天不生我小乖乖，侠客万古长如夜} {
+buygd;
+#delay 25 {w;n;n;n;
+#delay 3 {donategd;
+#delay 26 {s;s;s;e;gdx};
+}}};
+
+#class gda close;

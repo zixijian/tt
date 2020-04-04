@@ -1,0 +1,27 @@
+#nop 万安塔;
+#class wata open;
+
+#tic {wata} {
+    #untic wata;wataa;
+    #showme <afa>开始爬塔...;
+} {2};
+#math watl 4;
+#math watc 1;
+
+#alias {wataa} {
+   jiali max;yun powerup;ask ke about 进塔;
+};
+
+#act {如果你现在离开，可获厚礼} {
+    #if {$watc<$watl}
+    {#math watc {$watc+1};dazuo max};
+    #else
+    {qiao luo};
+};
+#act {你%*站了起来}{up;
+    #delay 2 {perform strike.xiao};
+};
+
+#class wata close;
+
+

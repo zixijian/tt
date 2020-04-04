@@ -1,0 +1,103 @@
+#class fish open;
+
+#nop 扬州广场开始;
+
+#tic {fisha} {l yuer} {77};
+
+#tic {fishaa} {#show <afa>开始钓鱼指令【fishaa 】。<099>;#untic fishaa} {1};
+
+#var fisha 1;
+
+#alias {fishaa} {
+    #if {$fisha == 1} {#var fisha 2;fish.aa};
+    #elseif {$fisha == 2} {#var fisha 3;fish.g};
+    #elseif {$fisha == 3} {#var fisha 4;fish.a};
+    #elseif {$fisha == 4} {#var fisha 5;fish.s};
+    #elseif {$fisha == 5} {#var fisha 2;fish.c};
+};
+    
+#alias {fish.aa} {
+  set brief 2;
+  e;s;
+  #delay 1 {buy yugou;
+  fishaa;
+}};
+
+#alias {fish.a} {
+  #delay 2 {do 5 eat liang;
+  #delay 5 {do 5 drink jiudai;
+  #delay 5 {diao yu;
+}}}};
+
+#alias {fish.g} {
+  #delay 2 {buy yuer 50;
+ #delay 1 {n;w;
+ #delay 2 {gt xiny;
+ #delay 10 {s;s;w;
+  fishaa;
+}}}}};
+
+#act {你要看什么} {
+ #delay 1 {e;n;n;
+ #delay 2 {gt yz;
+ #delay 10 {s;e;
+ fishaa;
+}}}};
+
+#alias {fish.s} {
+ #class fishi open;
+      #act {^你只有%*条fish}{#var ftmp @ctd{%%1}};
+ #class fishi close;
+  #delay 2 {sell fish for 10000;
+  #delay 2 {sell fish for $ftmp;
+  #class fishi kill;
+  #unvar ftmp;
+   fishaa;
+}}};
+
+#alias {fish.c} {
+ #delay 1 {buy im_234;
+ #delay 1 {buy im_18;
+ #delay 3 {w;n;n;w;
+ #delay 5 {cun all gold;
+ #delay 5 {qu 2 silver;
+ #delay 3 {e;s;e;s;
+ fishaa;
+}}}}}}};
+
+#alias gofish {
+ #delay 1 {out;d;w;s;
+ #delay 2 {gt xiny;
+ #delay 10 {s;s;w;
+ #delay 2 {fish.a;
+}}}}};
+
+#alias fishback {
+  #delay 1 {e;n;n;
+  #delay 2 {gt yz;
+  #delay 10 {n;e;u;enter;
+ #delay 2 {sleep;
+}}}}};
+
+#act {你刚在三分钟内睡过一觉} {#delay {15} {sleep}};
+
+#act {你一觉醒来}{
+  #delay 2 {gofish;
+}};
+
+#act {你太累了，歇会再钓吧！} {fishback};
+
+#act {你已经有足够的资本出去闯荡了，不用再浪费时间在钓鱼上了！} {set brief 3;fishb;fishx};
+#act {你想起之前师门给你的教诲，决定不在这里消磨光阴了。} {set brief 3;fishb;fishx};
+
+#act {你不由的在心里大骂} {l yuer};
+#act {你的潜能增加了} {l yuer};
+#act {你的鱼钩上已经有了一个鱼饵了，不能再挂了！} {diao yu};
+#act {你还没把鱼饵挂在鱼钩上哪！} {l yuer};
+#act {你看着%*，眼睛立刻红了。} {l yuer};
+#act {你看着%*不由的发呆了。} {l yuer};
+#act {你连声叫到：晦气，晦气。} {l yuer};
+#act {你小心的把鱼饵挂到鱼钩上。} {diao yu};
+#act {这是个钓鱼用的鱼饵。} {gua yuer};
+
+#class fish close;

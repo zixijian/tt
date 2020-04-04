@@ -1,0 +1,78 @@
+#class dsa open;
+
+#tic {dsa}{dsaa}{77};
+
+#tic {dsaa}{#echo {%c%h} {light yellow}{【指令格式:dsa [书名]进行读书，i2查看书id。】};#show <afa> 开始读书...;#untic dsaa;dsaa} {1};
+
+#gag {^你思索着小说中关于%*，对%*有一些新的理解。$};
+#gag {^你现在过于疲倦，无法专心下来研读新知。}
+#gag {^你研读了%*似乎有点心得。}
+#act {^{你运功完毕，深深吸了口气，站了起来。|你将内息走了个小周天，流回丹田，收功站了起来。|你只觉神元归一，全身精力弥漫，无以复加，忍不住长啸一声，徐徐站了起来。|你将真气在体内沿脉络运行了一圈}} {dsaa};
+#act {^你的精神太差，读不下去了。$} {exert regenerate};
+#act {^你的内力不够。} {
+   eat liang;
+	#delay 1 {drink jiudai;#delay 1 {sleep}};
+};
+
+#gag {^你已经很累了，歇歇再读吧，身体要紧};
+
+#act {你正专心看着一本厚厚的小说。} {exert regenerate};
+#act {你正专心阅读%*} {exert regenerate};
+#act {你从身上拿出} {exert regenerate};
+#act {你的%*火候} {cunbook};
+#act {你的%*等级已经高于} {cunbook};
+#act {你的武功等级受到经验限制} {cunbook};
+#act {也许是缺乏实战经验，你对%*总是无法领会。} {cunbook};
+#act {^你看着看着觉得郭靖的内功也不过如此。} {cunbook};
+#act {^你的%*等级已经高于%*，没法再从%*学到任何东西了。} {cunbook};
+#act {你把身上的%*拿出来放进柜子里了。} {dsx};
+#act {你将%*放进包袱。} {dsx;#ec {停止读书};#ec {开始打坐};dza};
+#act {这个东西不值得保存} {put $book in bag};
+#act {柜子里已经塞了太多的东西了} {put $book in bag};
+#act {这里没有这样东西。} {dsx;#show <faa>读书已停止，请随身携带包袱再运行dsa。<099>};
+
+#act {你刚在三分钟内睡过一觉}
+{
+#delay {15} {sleep};
+};
+
+#act {你略一凝神，精神看起来好多了。} {#ticker dushu {#unticker dushu;dsaa} {3}};
+#act {你现在精力充沛。} {#ticker dushu {#unticker dushu;dsaa} {3}};
+#act {你一觉醒来，精神抖擞地活动了几下手脚。}
+{dazuo max};
+
+#alias cunbook
+{
+	#unticker dushu;
+	#if {$myage<18}
+	{
+		put $book in bag;
+	};
+	#else
+	{
+		store $book;
+	};
+};
+
+
+#alias {dsaa}
+{
+	#if {"$book"=="基础梵文"}
+	{
+		read shu 5;
+	};
+	#elseif {"$book"=="shediao"}
+	{
+		read zhuan 50;
+	};
+ 	#elseif {"$book"=="tianlong"}
+	{
+		read tianlong 10;
+	};
+	#else
+	{
+		study $book for 50;
+	};
+};
+
+#class dsa close;

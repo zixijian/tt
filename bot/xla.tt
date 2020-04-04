@@ -1,0 +1,10 @@
+#class xla open;
+
+#tic {xla} {xlaa}{77};
+
+#alias {xlaa} {xiulian $xgong};
+
+#act {你从玄幻之境回过神来，顿觉内功修为增进不小。} {verify $xgong;xlaa};
+#act {你的潜能必须大于%*才能修炼}{xlx};
+
+#class xla close;

@@ -1,0 +1,1316 @@
+#nop {==修改信息==;
+200404 增加wait、waitfor、waitline功能，
+       增加节点观海石ghs；
+191106 增加节点莲花生大士lh,武门比武bw;
+190722 修改自动计算直连数目count表;
+  直连列表改为高级数据结构;
+  添加节点只需添加往返路径，双向直连地点即可;
+190710 添加甲午海战基地jd少林鼓楼gl;
+190709 添加春来茶馆cg，优化位置显示;
+190629 添加太湖街蛇窟sk牧羊人myr;
+190628 修改leadto函数自动计算直连路径偏移;
+  重写直连路径集合方便添加路径;
+  添加应天府ytf、正阳门zym男爵nj洪七公hq;
+  修改inquire list显示更多信息;
+190627 修改forall为foreach兼容高版本tt++;
+  修正口岸地标特殊符号显示不正常;
+  添加回家别名，防止计算路径时灵时不灵;
+190622 修复自身信息变量取值;
+190617  添加扬州当铺dp;
+        修正因添加地点导致的直连路径错位。;
+190616  添加hzbs jnqz路径，修正16个口岸定位;
+190615  修正小镇xz到长安ca到汉中hanz路径;
+190614  屏蔽unvar SUF，增加扬州钱庄bk;
+         修改下车触发防止换行;
+201906   修改说明、隐藏版权by Xgg@pkuxkx;
+         dzp@pkuxkx 修改地名触发sethere;
+20181016 北侠论坛dashu修改部分bug,
+         白驼去一次要1金币，慎去;
+201703   修改 by Meirenzhi@pkuxkx;
+201305   原作者 by Alucar@pkuxkx ;
+};
+
+#nop 走路速度控制;
+#var xiaoyao.accu 10;
+#var xiaoyao.delay_long 1;
+#var xiaoyao.delay_short 0.2;
+
+#alias gt {
+    #if {"%1"==""} {
+     #echo {%c%h} {light green} {【欢迎使用北侠逍遥行v1.5h1(for tt++)】 };
+		#echo ;
+		#echo {%c%h} {light green} {【sethere [地名缩写]指定当前位置】};
+		#echo ;
+		#echo {%c%+2s命令格式：gt [Destination|here|list]} {light yellow};
+		#echo {%c%+2s说明：gt Destination：前往指定区域，可使用地区全名或缩写} {light yellow};
+		#echo {%c%+8sgt here：显示当前区域名称及地标房间} {light yellow};
+		#echo {%c%+8sgt list：显示所有可通行区域的名称} {light yellow};
+		#echo {%c%+8sgt：显示本说明} {light yellow};
+		#echo {%c%+8s查询各地区地标房间请使用inquire命令} {light yellow};
+		#echo ;
+		#echo {%c%h} {light green}{【最后修改20200404】};
+	};
+    #else {
+        #if {"%1"=="here"} {
+            #list AreaAbbr_list find $CurrentPosition i;
+            #if {$i>0} {
+                #list AreaNameCh_list get $i j;
+                #list AreaName_list get $i k;
+                #echo {%c%h} {light yellow};
+                #echo {%c  当前位置：$j($i,$k, $CurrentPosition)} {light yellow};
+                #var current_area $j($k,$CurrentPosition);
+                #list AreaPosition_list get $i j;
+                #echo {%c  当前地区地标房间为：$j} {light yellow};
+                #echo {%c%h} {light yellow};
+            };
+            #else {
+                #echo {%c%h} {light yellow};
+                #echo {%c  不能确定当前位置} {light yellow};
+                #echo {%c%h} {light yellow};
+            };
+        };
+        #else {
+            #if {"%1"=="list"} {
+                #echo {%c%h} {light yellow};
+                #foreach {$AreaName_list[]} {n} {
+                    #list AreaNameCh_list get $n j;
+                    #list AreaName_list get $n k;
+                    #list AreaAbbr_list get $n l;
+                   #echo {$n . $j ($k,$l)};
+                };
+                #echo {%c%h} {light yellow};
+            };
+            #else {
+                #list AreaName_list find %1 i;
+                #list AreaAbbr_list find %1 j;
+                #math AreaId {$i+$j};
+                #if {$AreaId>0} {
+                    #list AreaAbbr_list find $CurrentPosition i;
+                    #if {$i>0} {
+                        #list AreaName_list find %1 i;
+                        #list AreaAbbr_list get $i j;
+                        #if {"$CurrentPosition"=="$j" | "$CurrentPosition"=="%1"} {
+                            #echo {%c%h} {light yellow};
+                            #echo {%c  你喜欢原地逛逛么？} {light yellow};
+                            #echo {%c%h} {light yellow};
+                        };
+                        #else {
+                            #if {$i>0} {#var Destination $j} {#var Destination %1};
+                            #list AreaNameCh_list get $AreaId i;
+                            #list AreaName_list get $AreaId j;
+                            #list AreaAbbr_list get $AreaId k;
+                            #echo {%c%h} {light yellow};
+                            #echo {%c  你要前往的地区是：$i ($j, $k)} {light yellow};
+                            #nop unload record;
+                            #var critical_running 1;
+                            routecreate;
+                        };
+                    };
+                    #else {
+                        #echo {%c%h} {light yellow};
+                        #echo {%c  不能确定当前位置} {light yellow};
+                        #echo {%c%h} {light yellow};
+                    };
+                };
+                #else {
+                    #echo {%c%h} {light yellow};
+                    #echo {%c  没有%1这个地区} {light yellow};
+                    #echo {%c%h} {light yellow};
+                };
+            };
+        };
+    };
+};
+
+#alias inquire {
+    #if {"%1"==""} {
+        #echo {%c%h} {light yellow};
+        #echo {%c  命令格式：inquire [areaname|list]} {lght yellow};
+        #echo {%c  说明：inquire areaname：查询指定区域的地标房间，可使用地区全名或缩写} {light yellow};
+        #echo {%c        inquire list：显示所有地区的地标房间清单} {light yellow};
+        #echo {%c        inquire：显示本说明} {light yellow};
+        #echo {%c%h} {light yellow};
+    };
+    #else {
+        #if {"%1"=="list"} {
+            #foreach {$AreaName_list[]} {n} {
+                #list AreaNameCh_list get $n i;
+                #list AreaName_list get $n j;
+                #list AreaAbbr_list get $n k;
+                #list RouteConnection_count get $n c;
+                #echo {$n . $i ($j,$k) --直连地区($c)个};
+                inquire $k;
+            };
+        };
+        #else {
+            #list AreaName_list find %1 i;
+            #list AreaAbbr_list find %1 j;
+            #math AreaId {$i+$j};
+            #if {$AreaId>0} {
+                #list AreaNameCh_list get $AreaId i;
+                #list AreaName_list get $AreaId j;
+                #list AreaAbbr_list get $AreaId k;
+         #showme 你要查询的地区是:$i($AreaId,$j,$k);
+                #list AreaPosition_list get $AreaId i;
+                #showme 该地区地标房间名为：$i;
+                #showme 与该地区直接相连的地区有：;
+                #list RouteConnection_count get $AreaId i;
+                #while {$i>0} {
+                    #var j @leadto{$AreaId;$i};
+                    #list AreaAbbr_list find $j k;
+                    #list AreaNameCh_list get $k l;
+                    #list AreaName_list get $k m;
+                    #showme {    $l($m,$j)};
+                    #math i {$i-1};
+                };
+            };
+            #else {
+                #echo {%c%h} {light yellow};
+                #echo {%c  没有%1这个地区} {light yellow};
+                #echo {%c%h} {light yellow};
+            };
+        };
+    };
+};
+
+#alias {sethere} {
+    #var AreaId @ismember{%1;AreaAbbr_list};
+    #if {$AreaId>0} {
+        #var CurrentPosition %1;
+        #echo {%c%h} {light yellow};
+        #echo {%c  当前位置设定为@item{AreaNameCh_list;$AreaId} (@item{AreaName_list;$AreaId},@item{AreaAbbr_list;$AreaId})} {light yellow};
+        #echo {%c%h} {light yellow};
+    };
+    #else {
+        #echo {%c%h} {light yellow};
+        #echo {%c  没有%1这个地区} {light yellow};
+        #echo {%c%h} {light yellow};
+    };
+};
+
+#alias {stopwalk} {#class walk kill};
+
+#nop ==自定函数==;
+
+#function {leadto} {
+    #list tmp create $RouteConnection_list[%1];
+    #list tmp get %2 result;
+};
+
+#function {abbrivation} {
+    #list AreaName_list find %1 tmp;
+    #list AreaAbbr_list get $tmp result;
+};
+
+#function {fullname} {
+    #list AreaAbbr_list find %1 tmp;
+    #list AreaName_list get $tmp result;
+};
+
+#nop ==路径计算==;
+
+#alias routecreate {
+    #echo {%c%h} {light yellow};
+    #echo {%c  开始计算从 @fullname{$CurrentPosition} 到 @fullname{$Destination} 路径...} {light yellow};
+    #nop ----------定义变量----------;
+    #var Route {};
+    #var Route_list {};
+    #var Route_list_from {};
+    #var AreaOpen_list {};
+    #var AreaOpen_list_from {};
+    #list AreaOpen_list_prev create {$CurrentPosition};
+    #list AreaClose_list create {$CurrentPosition};
+    #list AreaAbbr_list find $CurrentPosition AreaId;
+    #var Degree 1;
+    #while {@numitems{Route}==0} {
+        #nop //----------开始计算----------;
+        #nop        #showme -$Degree-;
+        #math Degree {$Degree+1};
+        #nop //----------生成当前度数的路径列表----------;
+        #var AreaOpen_list {};
+        #var AreaOpen_list_from {};
+        #loop @numitems{AreaOpen_list_prev} 1 i {
+            #var AreaId @ismember{@item{AreaOpen_list_prev;$i};AreaAbbr_list};
+            #loop @item{RouteConnection_count;$AreaId} 1 j {
+                #if {@ismember{@leadto{$AreaId;$j};AreaClose_list}==0} {
+                    #list AreaOpen_list add {@leadto{$AreaId;$j}};
+                    #list AreaOpen_list_from add {@item{AreaAbbr_list;$AreaId}};
+                    #list AreaClose_list add @leadto{$AreaId;$j};
+               };
+            };
+        };
+        #nop        #showme Degree: $Degree;
+        #nop        #showme AreaOpen_list: $AreaOpen_list[%*];
+        #nop        #showme AreaOpen_list_from: $AreaOpen_list_from[%*];
+        #if {$Degree>100} {
+            #echo {%c  出错了!!} {light yellow};
+            #break;
+        };
+        #nop //----------搜索目的地----------;
+        #if {@ismember{$Destination;AreaOpen_list}>0} {
+            #nop //----------发现目的地----------;
+            #nop            #showme =$Degree=;
+            #list Route create {$Destination};
+            #var i @ismember{$Destination;AreaOpen_list};
+            #var j @item{AreaOpen_list_from;$i};
+            #while {$Degree>1} {
+                #list Route add {$j};
+                #var i @ismember{$j;Route_list};
+                #var j @item{Route_list_from;$i};
+                #math Degree {$Degree-1};
+            };
+            #nop            #list Route add {$CurrentPosition};
+            #break;
+        };
+        #else {
+            #nop //----------未发现目的地----------;
+            #var AreaOpen_list_prev $AreaOpen_list;
+            #loop @numitems{AreaOpen_list} 1 i {
+                #list Route_list add {@item{AreaOpen_list;$i}};
+                #list Route_list_from add {@item{AreaOpen_list_from;$i}};
+            };
+        };
+    };
+    #echo {%c  路径创建中 ...} {light yellow};
+    #nop //----------生成路径列表----------;
+    #var Route_list {};
+    #var RouteName {};
+    #var Route_list_short {};
+    #loop @numitems{Route} 1 i {
+        #var RouteName Route_@item{Route;$i}_@item{Route;@eval{$i-1}};
+        #var Route_list_short ${$RouteName};
+        #list Route_list add $Route_list_short[%*];
+    };
+    #nop //----------开始路径简化----------;
+    #showme $Route[%*];
+    #nop    #showme $Route_list[%*];
+    #var i 1;
+    #var j @numitems{Route_list};
+    #while {$i<$j} {
+        #var k @ismember{@item{Route_list;$i};Directions};
+        #if {$k>0 & $k==@ismember{@item{Route_list;@eval{$i+1}};Directionsb}} {
+            #list Route_list delete $i 2;
+            #math j {$j-2};
+            #if {$i>1} {#math i {$i-1}};
+        };
+        #else {
+            #math i {$i+1};
+        };
+    };
+    #showme $Route_list[%*];
+    #echo {%c%h} {light yellow};
+    #echo ;
+    #showme <efa>  带你装B带你飞 ...;
+    #echo ;
+    #echo {%c%h} {light yellow};
+};
+#nop ==行走命令==;
+#ali {wait}{
+  #switch {"%1"}{
+     #case {""}{
+       #var cmd {wait 2};
+     };
+     #default {
+       #var cmd {wait %1}
+     };
+  };
+};
+#alias {waitfor}{
+  #var cmd {waitfor %1}
+};
+#alias {waitline}{
+  #var cmd {waitline %1}
+};
+
+#action {^  带你装B带你飞 ...$} {
+    #class walk open;
+    #alias walk {
+        #if {$step==$stepmax} {set brief 0};
+        #if {$step<=$stepmax} {
+	   #switch {"$cmd"}{
+              #case {"stop"} {
+	        #var stepaccu 1;
+		#var cmd {};
+	      };
+	      #case {"wait%s%d"} {
+                  #local time {$cmd};
+		  #replace time {wait} {};
+		  #replace time { } {};
+		  #delay {$time} {walk};
+		  #echo {%c%+2s等待「$time」s后行动。}{light yellow};
+		  #var cmd {};
+              };
+              #case {"wait{for|line} %*"}{
+	          #var waitfor {$cmd};
+                  #var matchline {false};
+                  #if { "$cmd" == "waitline %*" } {
+                    #format matchline {true};
+                  };
+                  #replace waitfor {waitfor }  {};
+                  #replace waitfor {waitline } {};
+                  #if { "$matchline" == "true" } {
+                    #format waitfor {^%p$} {$waitfor};
+                  };
+                  #else {
+                    #format waitfor {%p}   {$waitfor};
+                  };
+                  #var cmd {
+                    #class xiaoyao-walk-tmp kill;
+                    #class xiaoyao-walk-tmp open;
+                    #echo {%c%+2s等待事件「$waitfor」出现。}{light yellow};
+                    #action {$waitfor} {
+                        #class xiaoyao-walk-tmp kill;
+                        #delay 1 walk;
+                    }
+                    #class xiaoyao-walk-tmp close;
+                  };
+                  $cmd
+	      };
+	      #case {"busy1"}{
+                  #math step {$step+1};
+                  #var stepaccu 1;
+                  #delay {2} {walk};
+              };
+              #default {
+	         #var cmd @item{Route_list;$step};
+		 $cmd;
+                 #math stepaccu {$stepaccu+1};
+                 #math step {$step+1};
+                 #if {$stepaccu>=${xiaoyao.accu}} {
+                    #delay {${xiaoyao.delay_long}} {walk};
+                    #var stepaccu 1;
+                 };
+                 #else {
+                   #delay {${xiaoyao.delay_short}} {walk};
+                 };
+	      };
+           };
+        };
+        #else {
+            #nop whisper;
+            #var CurrentPosition $Destination;
+            #class walk kill;
+            #var critical_running 0;
+            #echo {%c%h} {light yellow};
+            #showme <efa>  抵达目的地 ...;
+            #echo {%c%h} {light yellow};
+        };
+    };
+
+    #nop #action {^你要对谁耳语些什么？} {
+    #nop    #var CurrentPosition $Destination;
+    #nop    #class walk kill;
+    #nop    #var critical_running 0;
+    #nop    #showme <fff>==================抵达目的地！==================;
+    #nop };
+
+    #alias guojiang1 {ask shao gong about 过江};
+    #alias guohe1 {ask shao gong about 过河};
+    #alias gb_andao {enter shudong;say 天堂有路你不走呀;d;%%1;};
+    #alias gy_yinzhe {s;w;w;e;s};
+    #alias meizhuang_gate {knock gate 4;knock gate 2;knock gate 5;knock gate 3};
+    #alias mr_mantuo {w;n;w;s;s;e;e;w;w};
+    #alias mr_mantuob {e;s;n;w;n;n;e;s;e};
+    #alias tiandihui_andao {knock guancai 3;ed;s;s;s;w;e;n;n;n;n;e};
+    #alias tiandihui_andaob {w;#4 s;w;n;n;e;n;s;wu};
+    #alias guohe3s2n {#if {"$mymenpai"=="明教"} {sw;n;ban stone;you;#alias guohe3 {n;ne}} {guohe1}};
+    #alias guohe3n2s {#if {"$mymenpai"=="明教"} {sw;s;ban stone;you;#alias guohe3 {s;ne}} {guohe1}};
+    #alias guohe3 {n;ne};
+    #alias taohuadao {#if {"$mymenpai"=="桃花岛"} {ride diao} {enter boat}};
+    #alias baituofufei {#if {"$mymenpai"=="白驼山"} {give qian 30 silver} {give qian 1 gold}};
+    #alias murongboat {#if {"$mymenpai"=="姑苏慕容"} {find boat} {enter boat}};
+    #alias shenlongboat {#if {"$mymenpai"=="神龙教"} {find boat} {enter boat}};
+    #alias qytoyzw {#if {$mydodgelv>120} {e;cai yanziwu} {#3 n;tan qin;row yanziwu}};
+    #alias qytotx {#if {$mydodgelv>120} {e;cai tingxiang} {#3 n;tan qin;row tingxiang}};
+    #alias gotoqinyun {#if {$mydodgelv>120} {cai qinyun} {enter boat;row qinyun}};
+    #alias gototingxiang {#if {$mydodgelv>120} {cai tingxiang} {enter boat;row tingxiang}};
+    #alias gotoyanziwu {#if {$mydodgelv>120} {cai yanziwu} {enter boat;row yanziwu}};
+    #action {^你沿着踏板走了上去。} {walk};
+    #action {^{你小心翼翼往前挪动，遇到艰险难行处，只好放慢脚步。|你还在山中跋涉，一时半会恐怕走不出这藏边群山！|青海湖畔美不胜收，你不由停下脚步，欣赏起了风景。|你还在山中跋涉，一时半会恐怕走不出这西南地绵绵群山！|你还在山中跋涉，一时半会恐怕走不出这六盘山！}} {#math step {$step-2}};
+    #action {正等着你呢，上来吧。} {#class tmp kill;enter};
+    #action {艄公将一块踏脚板搭上堤岸，} {#class tmp kill;enter};
+    #action {^%*接过你递给的船资} {
+        #class tmp open;
+        #action {^只听得江面上隐隐传来：“别急嘛，这儿正忙着呐……”} {#class tmp kill;#delay {3} {yell boat}};
+        #class tmp close;
+    };
+    #action {^你的车船通账上还剩%S，这一趟的船资%S。} {
+        #class tmp open;
+        #action {^只听得江面上隐隐传来：“别急嘛，这儿正忙着呐……”} {#class tmp kill;#delay {3} {yell boat}};
+        #class tmp close;
+    };
+    #action {^你吸了口气，一声“船家”，声音中正平和地远远传了出去。$} {
+        #class tmp open;
+        #action {^只听得江面上隐隐传来：“别急嘛，这儿正忙着呐……”} {#class tmp kill;#delay {3} {yell boat}};
+        #class tmp close;
+    };
+    #action {^你使出吃奶的力气喊了一声：“船家”$} {
+        #class tmp open;
+        #action {^只听得江面上隐隐传来：“别急嘛，这儿正忙着呐……”} {#class tmp kill;#delay {3} {yell boat}};
+        #class tmp close;
+    };
+    #var in_boat 0;
+    #action {^江心驶去。} {
+        #var in_boat 1;
+    };
+    #action {^艄公说“到啦，上岸吧”，随即把一块踏脚板搭上堤岸。} {
+        #if {${in_boat} == 1} {
+            #var in_boat 0;
+            #var stepaccu 1;
+            out;walk;
+        };
+    };
+    #action {^你反应迅速，急忙双手抱头，身体蜷曲。眼前昏天黑地，顺着山路直滚了下去。} {#class walk kill;#var CurrentPosition qbl};
+    #action {^你从山上滚了下来，只觉得浑身无处不疼，还受了几处伤。} {#class walk kill;#var CurrentPosition dzf};
+    #action {^不知过了多久，船终于靠岸了，你累得满头大汗。} {walk};
+    #action {^小舟终于划到近岸，你从船上走了出来。} {walk};
+    #action {^绿衣少女将小船系在树枝之上，你跨上岸去。} {walk};
+    #action {^你定了定神，走了出来。} {walk};
+    #action {^你身在半空，双手乱挥，只盼能抓到什么东西，这么乱挥一阵，又下堕下百馀丈。} {walk};
+    #action {^你终于一步步的终于挨到了桥头} {walk};
+    #action {^你朝船夫挥了挥手便跨上岸去。} {walk};
+    #action {^你终于来到了对面，心里的石头终于落地。} {walk};
+    #action {^%x道：你老人家快请上船。} {#delay {3} {yell boat}};
+    #action {^半晌，你终于游到了对岸，随手扔掉了石块。} {guohe3;walk};
+    #action {^你终于飞到了%*，白雕落了下来。} {walk};
+    #action {^不一会儿，你来到参合庄。} {walk};
+    #action {^不一会儿，小船划到了岸边。} {walk};
+    #action {^不一会儿就到了神龙岛，你纵身跃上码头。} {walk};
+    #action {^不一会儿就到了天津塘沽口，你走上码头。} {walk};
+    #action {^你健步如飞，不一会就走到} {walk};
+    #action {^六名雪山弟子一齐转动机关，吊桥便又升了起来。} {walk};
+    #action {^艄公把踏脚板收了起来，竹篙一点，扁舟向江心驶去。} {yell boat};
+    #action {^大车停稳了下来%*$} {walk};
+    #action {^你要进入哪间储物柜？$} {
+        score;
+        #delay 1 {
+            xy.home;
+            find;
+            #list Route_mz_hz create {open gate}{s}{ne}{ne}{ne}{ne}{n}{e}{e}{e}{se}{s}{s}{w}{n}{enter $myid}{store ouxue pu}{store xishan tu}{store shuaiyi tie}{store guangling san}{out}{s}{e}{n}{n}{nw};
+        };
+    };
+    #action {^%d%s《{广陵散|率意帖|溪山行旅图|呕血谱}》$} {#list sibao add {%%1}};
+    #action {^柜子里目前存放的物品有：$} {
+        #var sibao {};
+        #delay {1} {
+            #if {@numitems{sibao}==4} {
+                #loop 4 1 i {getout @item{sibao;$i}};
+                #delay 1 {walk};
+            };
+            #else {
+                #showme 你的柜子里四宝不齐或有多余，无法自动前往梅庄。;
+                set brief 2;
+            };
+        };
+    };
+
+    #class walk close;
+
+    #var step 1;
+    #var stepmax @numitems{Route_list};
+    #var stepaccu 1;
+    set brief 3;
+    walk;
+};
+
+#nop ==方向变量==;
+
+#list Directions create {e} {eu} {ed} {s} {su} {sd} {w} {wu} {wd} {n} {nu} {nd} {ne} {nw} {se} {sw} {u} {d} {enter} {out};
+#list Directionsb create {w} {wd} {wu} {n} {nd} {nu} {e} {ed} {eu} {s} {sd} {su} {sw} {se} {nw} {ne} {d} {u} {out} {enter};
+
+#nop ==路径变量==;
+#list Route_yz_sd create {enter shudong;say 天堂有路你不走呀};
+#list Route_sd_yz create {out};
+
+#list Route_hz_hzbs create {se} {s} {s} {w} {n} {xy.home};
+#list Route_hzbs_hz create {out} {s} {e} {n} {n} {nw};
+
+#list Route_hz_jnqz create {se} {e} {ne} {s};
+#list Route_jnqz_hz create {n} {sw} {w} {nw};
+
+#list Route_yz_bk create {n;w};
+#list Route_bk_yz create {e;s};
+
+#list Route_yz_dp create {s;e};
+#list Route_dp_yz create {w;n};
+
+#list Route_gy_lcf create {e;e};
+#list Route_lcf_gy create {w;w};
+
+#list Route_zjc_kf create {s} {s} {s} {w} {w} {w} {w} {n} {se} {s};
+#list Route_kf_zjc create  {n} {nw} {s} {e} {e} {e} {e} {n} {n} {n};
+
+#list Route_sz_mrf create {s;ne};
+#list Route_mrf_sz create {sw;n};
+
+#list Route_zjc_bj create {s;s;s;s;s;s;s;s};
+#list Route_bj_zjc create {n;n;n;n;n;n;n;n};
+
+#list Route_lanz_huangz create {w;w;w;w;nw;nw;w;w;w;s;s};
+#list Route_huangz_lanz create {n;n;e;e;e;se;se;e;e;e;e};
+
+#list Route_huangz_xx create {n;n;nw;w;wd;wd};
+#list Route_xx_huangz create {eu;eu;e;se;s;s};
+
+#list Route_lanz_hb4 create {w;w;w;w;se;se};
+#list Route_hb4_lanz create {nw;nw;e;e;e;e};
+
+#list Route_scm_cym create {s} {se} {s} {s} {s} {e} {e} {e} {ne} {se} {se};
+#list Route_cym_scm create  {nw} {nw} {sw} {w} {w} {w} {n} {n} {n} {nw} {n};
+
+#list Route_cym_jk create {nw;nw;sw;sw;w;w};
+#list Route_jk_cym create {e;e;ne;ne;se;se};
+
+#list Route_jk_scm create {n;n;n;n;n;nw;n};
+#list Route_scm_jk create {s;se;s;s;s;s;s};
+
+#list Route_sz_cym create {n} {n} {n} {n} {n} {n} {nw} {n} {nw} {nw} {nw} {nw} {wu} {w};
+#list Route_cym_sz create  {e} {ed} {se} {se} {se} {se} {s} {se} {s} {s} {s} {s} {s} {s};
+
+#list Route_ct_zjk create {s} {s} {s} {s} {s} {s} {s} {w} {w} {w} {w} {n} {hire} {qu zhangjiakou} {stop} {xia} {e} {n} {n} {n} {n} {n};
+#list Route_zjk_ct create {s} {s} {s} {s} {s} {w} {hire} {qu beijing} {stop} {xia} {s} {e} {e} {e} {e} {n} {n} {n} {n} {n} {n} {n};
+
+#list Route_zjk_kf create {s} {s} {s} {s} {s} {w} {hire} {qu beijing} {stop} {xia} {s} {w} {w} {w} {n} {se} {s};
+#list Route_kf_zjk create {n} {nw} {s} {e} {e} {e} {n} {hire} {qu zhangjiakou} {stop} {xia} {e} {n} {n} {n} {n} {n};
+
+#list Route_jb1_qiu create {w} {u};
+#list Route_qiu_jb1 create {d} {e};
+
+#list Route_fzl_dmy create {n} {nu} {u};
+#list Route_dmy_fzl create {d} {sd} {s};
+
+#list Route_zuo_sz create {s} {s} {sw};
+#list Route_sz_zuo create {ne} {n} {n};
+
+#list Route_wys_fz create {n} {se} {se} {sd} {s} {s} {s} {e} {n};
+#list Route_fz_wys create {s} {w} {n} {n} {n} {nu} {nw} {nw} {s};
+#list Route_wys_jx create {n} {n} {n};
+#list Route_jx_wys create {s} {s} {s};
+#list Route_wys_nc create {nw} {n} {nw} {n} {n} {n} {n} {e} {n};
+#list Route_nc_wys create {s} {w} {s} {s} {s} {s} {se} {s} {se};
+#list Route_wys_qz create {s} {s} {e};
+#list Route_qz_wys create {w} {n} {n};
+#list Route_qz_fz create {ne} {ne} {ne} {n} {n} {ne} {ne} {e} {e} {e} {e} {n};
+#list Route_fz_qz create {s} {w} {w} {w} {w} {sw} {sw} {s} {s} {sw} {sw} {sw};
+#list Route_jx_sz create {n} {n} {n} {n} {n};
+#list Route_sz_jx create {s} {s} {s} {s} {s};
+#list Route_jx_ljz create {s} {sw} {sw} {s};
+#list Route_ljz_jx create {n} {ne} {ne} {n};
+#list Route_jx_ys create {e} {se} {ne} {e} {ne} {ne} {e} {e} {e} {e} {e} {e} {e};
+#list Route_ys_jx create {w} {w} {w} {w} {w} {w} {w} {sw} {sw} {w} {sw} {nw} {w};
+#list Route_jx_th create {e} {nd} {e} {e} {e} {e} {n} {taohuadao} {stop};
+#list Route_th_jx create {taohuadao} {stop} {s} {w} {w} {w} {w} {su} {w};
+#list Route_sz_mr create {nw} {w} {w} {w} {w} {w} {s};
+#list Route_mr_sz create {n} {e} {e} {e} {e} {e} {se};
+#list Route_sz_zj create {n} {n} {n} {n} {n} {n} {nw} {n} {ne} {ne} {n} {nw} {nw} {w} {w} {w} {n};
+#list Route_zj_sz create {s} {e} {e} {e} {se} {se} {s} {sw} {sw} {s} {se} {s} {s} {s} {s} {s} {s};
+#list Route_mr_taih create {n} {w} {nw} {ne} {se} {n} {w} {n} {e} {e} {e} {e} {e};
+#list Route_taih_gy create {e} {e} {e} {e} {enter} {nu} {nu};
+#list Route_gy_taih create {sd} {sd} {out} {w} {w} {w} {w};
+#list Route_taih_mr create {w} {w} {w} {w} {w} {s} {e} {s} {nw} {sw} {se} {e} {s};
+#list Route_zj_jn1 create {w} {s} {w} {w} {w} {w} {nw} {nw} {e};
+#list Route_jn1_zj create {w} {se} {se} {e} {e} {e} {e} {n} {e};
+#list Route_jn1_jn2 create {w} {w} {w} {w} {nw} {w} {w} {w};
+#list Route_jn2_jn1 create {e} {e} {e} {se} {e} {e} {e} {e};
+#list Route_jn2_jn3 create {w} {sw} {sw} {sw} {w} {nw} {nw};
+#list Route_jn3_jn2 create {se} {se} {e} {ne} {ne} {ne} {e};
+#list Route_jn3_jn4 create {nw} {w} {w} {sw} {sw} {sw} {sw} {w} {w};
+#list Route_jn4_jn3 create {e} {e} {ne} {ne} {ne} {ne} {e} {e} {se};
+#list Route_jn3_jz create {se} {se} {s} {sw} {sw} {sw} {sw} {s} {e} {e};
+#list Route_jz_jn3 create {w} {w} {n} {ne} {ne} {ne} {ne} {n} {nw} {nw};
+#list Route_jn4_yy create {e}{e}{s}{s}{s}{s};
+#list Route_yy_jn4 create {n}{n}{n}{n}{w}{w};
+#list Route_yy_ty create {n}{w}{w}{w}{s}{su}{sw};
+#list Route_ty_yy create {ne}{nd}{n}{e}{e}{e}{s};
+#list Route_yy_jz create {n}{e}{e}{e}{ed}{se}{ed}{e}{ne}{ne}{ne}{s}{e}{e};
+#list Route_jz_yy create {w}{w}{n}{sw}{sw}{sw}{w}{wu}{nw}{wu}{w}{w}{w}{s};
+#list Route_wys_ywm create {n} {e} {n} {e} {ne} {n};
+#list Route_ywm_wys create {s} {sw} {w} {s} {w} {s};
+#list Route_jn2_ytf create {e} {sw} {se} {e};
+#list Route_ytf_jn2 create {w} {nw} {ne} {w};
+#list Route_nc_jz create {s} {w} {n} {n} {n} {nw} {nd} {n} {n} {n} {n} {e} {e};
+#list Route_jz_nc create {w} {w} {s} {s} {s} {s} {su} {se} {s} {s} {s} {e} {n};
+#list Route_sdb_sdn create {sw} {busy1} {se} {busy1} {se} {busy1} {sw} {busy1} {sw} {busy1};
+#list Route_sdn_sdb create {ne} {busy1} {ne} {busy1} {nw} {busy1} {nw} {busy1} {ne} {busy1};
+#list Route_cd_em create {s} {s} {s} {s} {su} {su} {su} {w} {nw} {n} {nu} {unwield all} {nu} {wield all} {n} {e} {eu} {nu} {nu};
+#list Route_em_cd create {sd} {sd} {wd} {w} {s} {sd} {sd} {s} {se} {e} {nd} {nd} {nd} {n} {n} {n} {n};
+#list Route_cd_tls create {s} {s} {s} {s} {su} {sw} {sw} {s} {busy1} {sw} {busy1} {sw} {sw} {wu};
+#list Route_tls_cd create {ed} {ne} {ne} {busy1} {ne} {busy1} {n} {busy1} {ne} {ne} {nd} {n} {n} {n} {n};
+#list Route_cd_zp create {nw} {nw} {w} {w} {busy1} {wu} {busy1} {wu} {busy1} {wu} {busy1} {nw} {busy1} {nw} {busy1} {w} {n} {n} {n};
+#list Route_zp_cd create {s} {s} {s} {e} {se} {busy1} {se} {busy1} {ed} {busy1} {ed} {busy1} {ed} {busy1} {e} {e} {se} {se};
+#list Route_tls_wl create {ed} {nw} {nu} {nu} {nu} {climb cliff} {stop};
+#list Route_wjg_tls create {s} {se} {wu};
+#list Route_tls_dl create {ed} {ne} {s} {sw} {sw} {sw} {s} {s} {s} {s} {s} {s} {s};
+#list Route_dl_km create {s} {s} {s} {e} {se} {e} {se} {e} {e} {n};
+#list Route_dl_tls create {n} {n} {n} {n} {n} {n} {n} {ne} {ne} {ne} {n} {sw} {wu};
+#list Route_km_dl create {s} {w} {w} {nw} {w} {nw} {w} {n} {n} {n};
+#list Route_km_px create {s} {e} {n} {n} {n} {n} {n} {n} {n} {ask tou about 自立为王};
+#list Route_px_km create {s} {s} {s} {s} {s} {s} {s} {w} {n};
+#list Route_zp_xs create {n} {n} {n} {nu} {ne} {nu} {nu} {n} {w} {w};
+#list Route_xs_zp create {e} {e} {s} {sd} {sd} {sw} {sd} {s} {s} {s};
+#list Route_xs_dls create {e} {e} {s} {sd} {sd} {e} {s} {enter dong} {se} {sw} {out} {sw} {wu} {nw};
+#list Route_dls_xs create {se} {ed} {ne} {enter dong} {ne} {nw} {out} {n} {w} {nu} {nu} {n} {w} {w};
+#list Route_xs_yz create {e} {e} {s} {sd} {sd} {e} {s} {enter dong} {se} {ne} {ne} {n} {ne} {e} {u} {out};
+#list Route_yz_xs create {gb_andao 9} {sw} {s} {sw} {sw} {nw} {out} {n} {w} {nu} {nu} {n} {w} {w};
+#list Route_dls_yz create {se} {ed} {ne} {enter dong} {ne} {ne} {ne} {n} {ne} {e} {u} {out};
+#list Route_yz_dls create {gb_andao 9} {sw} {s} {sw} {sw} {sw} {out} {sw} {wu} {nw};
+#list Route_yz_hn1 create {gb_andao 7} {n} {ne} {ne} {n} {out} {e};
+#list Route_hn1_yz create {w} {enter hole} {s} {sw} {sw} {s} {s} {u} {out};
+#list Route_yz_xz create {gb_andao 4} {w} {w} {w} {nw};
+#list Route_xz_ca create {se} {se} {busy1} {sd} {busy1} {e} {e} {e} {e} {e} {busy1} {s} {s} {e} {n};
+#list Route_ca_xz create {s} {w} {n} {n} {w} {w} {busy1}{w} {w} {w} {nu} {busy1}{nw}{busy1} {nw};
+#list Route_xz_lj create {nu} {n} {n} {nu} {nu};
+#list Route_lj_xz create {sd} {sd} {s} {s} {sd};
+#list Route_xz_lz create {nu} {n} {w} {w} {w} {w} {w} {n} {n};
+#list Route_lz_xz create {s} {s} {e} {e} {e} {e} {e} {s} {sd};
+#list Route_lj_lz create {sd} {sd} {s} {w} {w} {w} {w} {w} {n} {n};
+#list Route_lz_lj create {s} {s} {e} {e} {e} {e} {e} {n} {nu} {nu};
+#list Route_lz_hn3 create {s} {s} {w} {w} {nw} {nw};
+#list Route_hn3_lz create {se} {se} {e} {e} {n} {n};
+#list Route_ca_ly create {s} {e} {e} {e} {e} {e} {e} {n} {se} {e} {e} {e} {e} {e} {ed} {e} {e} {e};
+#list Route_ly_ca create {w} {w} {w} {wu} {w} {w} {w} {w} {w} {nw} {s} {w} {w} {w} {w} {w} {w} {n};
+#list Route_ca_gm create {s} {s} {s} {s} {s} {s} {s} {se} {su} {sw} {sw} {w};
+#list Route_gm_ca create {e} {ne} {ne} {nd} {nw} {n} {n} {n} {n} {n} {n} {n};
+#list Route_gm_qzh create {s} {s} {s} {wu} {eu} {su} {s} {s} {s} {s} {s} {s} {s} {s} {s} {s} {s};
+#list Route_qzh_gm create {n} {n} {n} {n} {n} {n} {n} {n} {n} {n} {n} {nd} {wd} {ed} {n} {n} {n};
+#list Route_ly_qlc create {e} {e} {e} {eu} {ed} {e} {e} {e} {e} {se} {ne} {n} {w} {s} {w};
+#list Route_qlc_ly create {e} {n} {e} {s} {sw} {nw} {w} {w} {w} {w} {wu} {wd} {w} {w} {w};
+#list Route_ly_rz create {e} {e} {e} {eu} {ed} {e} {e} {e} {e} {se} {sw} {sw};
+#list Route_rz_ly create {ne} {ne} {nw} {w} {w} {w} {w} {wu} {wd} {w} {w} {w};
+#list Route_ly_hn2 create {n} {n} {n} {nu} {nd} {n} {n} {nu};
+#list Route_hn2_ly create {sd} {s} {s} {su} {sd} {s} {s} {s};
+#list Route_rz_ny create {se} {se} {sw} {sw};
+#list Route_ny_rz create {ne} {ne} {nw} {nw};
+#list Route_qlc_rz create {e} {n} {e} {s} {sw} {sw} {sw};
+#list Route_rz_qlc create {ne} {ne} {ne} {n} {w} {s} {w};
+#list Route_rz_xch create {se} {se};
+#list Route_xch_rz create {nw} {nw};
+#list Route_rz_yz create {w} {w} {nu} {w} {ne} {enter dong} {sw} {sw} {sw} {u} {out};
+#list Route_yz_rz create {gb_andao 3} {ne} {ne} {u} {sw} {e} {sd} {e} {e};
+#list Route_ny_xch create {ne} {ne};
+#list Route_xch_ny create {sw} {sw};
+#list Route_xch_hb create {e} {se} {e};
+#list Route_hb_xch create {w} {nw} {w};
+#list Route_hb_yz create {se} {se} {se} {s} {s} {s} {s};
+#list Route_yz_hb create {n} {n} {n} {n} {nw} {nw} {nw};
+#list Route_hb_qf create {ne} {ne} {ne} {ne} {ne} {e} {e} {s} {e};
+#list Route_qf_hb create {w} {n} {w} {w} {sw} {sw} {sw} {sw} {sw};
+#list Route_qf_yz create {e} {s} {s} {s} {s} {s} {s} {s} {s} {s};
+#list Route_yz_qf create {n} {n} {n} {n} {n} {n} {n} {n} {w} {n};
+#list Route_yz_ssb create {s} {s} {s} {s} {su} {wu} {wu} {n} {n} {n} {ask liang about visit};
+#list Route_ssb_yz create {s} {s} {s} {ed} {ed} {nd} {n} {n} {n} {n};
+#list Route_ssb_jb1 create {s} {s} {s} {ed} {ed} {se} {su} {e};
+#list Route_jb1_ssb create {w} {nd} {nw} {wu} {wu} {n} {n} {n} {ask liang about visit};
+#list Route_jb1_yz create {w} {nd} {nw} {nd} {n} {n} {n} {n};
+#list Route_yz_jb1 create {s} {s} {s} {s} {su} {se} {su} {e};
+#list Route_yz_gb create {gb_andao 2} {ne} {ne} {u};
+#list Route_gb_yz create {s} {s} {w} {w} {w} {w};
+#list Route_yz_xiny create {w} {w} {w} {w} {nw} {w} {w} {w} {w} {w} {n};
+#list Route_xiny_yz create {s} {e} {e} {e} {e} {e} {se} {e} {e} {e} {e};
+#list Route_yz_xc create {gb_andao 1} {n} {n} {u};
+#list Route_xc_ny create {s} {s} {s} {s} {s} {se};
+#list Route_ny_xc create {nw} {n} {n} {n} {n} {n};
+#list Route_xc_qzh create {nw} {nw} {w} {nw} {nw} {n} {nw} {nu} {nu} {n} {nu} {n} {n};
+#list Route_qzh_xc create {s} {s} {sd} {s} {sd} {sd} {se} {s} {se} {se} {e} {se} {se};
+#list Route_ny_xy create {sw} {s} {s} {s} {s} {s} {s} {w} {w} {n};
+#list Route_xy_ny create {s} {e} {e} {n} {n} {n} {n} {n} {n} {bo xiaolu} {ne};
+#list Route_xy_xiny create {s} {e} {e} {e} {e} {e} {e} {e} {se} {e} {e} {e} {n};
+#list Route_xiny_xy create {s} {w} {w} {w} {nw} {w} {w} {w} {w} {w} {w} {w} {n};
+#list Route_wdc_wd create {wu} {nu} {nu} {nu} {w} {nu} {nu} {eu} {eu} {nu} {nu};
+#list Route_wd_wdc create {n} {ask song about 下山} {s} {sd} {sd} {wd} {wd} {sd} {sd} {e} {sd} {sd} {sd} {ed};
+#list Route_yz_qlc create {gb_andao 1} {n} {nw} {nw} {nw} {n} {nw} {u} {e} {s} {w};
+#list Route_qlc_yz create {e} {n} {w} {enter dong} {se} {s} {se} {se} {se} {s} {s} {u} {out};
+#list Route_qf_hn1 create {e} {n} {n} {n} {n} {nw} {nw} {nw};
+#list Route_hn1_qf create {se} {se} {se} {s} {s} {s} {s} {w};
+#list Route_xiny_jb3 create {s} {s} {s} {s} {sd} {se} {s};
+#list Route_jb3_xiny create {n} {nw} {nu} {n} {n} {n} {n};
+#list Route_hb3_mj create {nw} {w} {w} {w} {n} {n} {w} {w} {w} {n} {n} {w} {w} {nw} {n} {nw} {nu};
+#list Route_mj_ll create {sd} {se} {s} {se} {sw} {w} {se};
+#list Route_ll_mj create {nw} {e} {ne} {nw} {n} {nw} {nu};
+#list Route_mj_hb3 create {sd} {se} {s} {se} {e} {e} {e} {e} {s} {s} {s} {e} {e} {e} {e} {se};
+#list Route_hb3_hb2 create {ne} {ne} {ne} {e} {se} {s} {sw} {s} {s} {se} {se} {se};
+#list Route_hb2_hb3 create {nw} {nw} {nw} {n} {n} {ne} {n} {nw} {w} {sw} {sw} {sw};
+#list Route_hb2_jy create {n} {ne} {ne} {ne} {e} {n} {n} {w};
+#list Route_jy_hb2 create {e} {s} {s} {w} {sw} {sw} {sw} {s};
+#list Route_jy_zjk create {e} {n} {n} {e} {n} {n} {nu} {nu} {ne} {n} {ne} {e} {e} {e} {n} {n};
+#list Route_zjk_jy create {s} {s} {w} {w} {w} {sw} {s} {sw} {sd} {sd} {s} {s} {w} {s} {s} {w};
+#list Route_jy_bj create {e} {ne} {e} {e} {e} {e} {e} {e} {e} {ne} {ne} {s} {s} {e} {e} {e} {e};
+#list Route_bj_jy create {w} {w} {w} {w} {n} {n} {sw} {sw} {w} {w} {w} {w} {w} {w} {w} {sw} {w};
+#list Route_jy_ry create {e} {ne} {e} {e} {e} {e} {e} {e} {e} {nu} {n} {ne} {nu} {nu};
+#list Route_ry_jy create {sd} {sd} {sw} {s} {sd} {w} {w} {w} {w} {w} {w} {w} {sw} {w};
+#list Route_ry_bj create {sd} {sd} {sw} {s} {sd} {ne} {ne} {s} {s} {e} {e} {e} {e};
+#list Route_bj_ry create {w} {w} {w} {w} {n} {n} {sw} {sw} {nu} {n} {ne} {nu} {nu};
+#list Route_bj_zjk create {w} {w} {w} {w} {n} {n} {n} {n} {n} {n} {n} {n} {n} {n} {n} {n} {n} {ne} {nw} {nw} {nw} {w} {w} {w} {n} {n};
+#list Route_zjk_bj create {s} {s} {e} {e} {e} {se} {se} {se} {sw} {s} {s} {s} {s} {s} {s} {s} {s} {s} {s} {s} {s} {s} {e} {e} {e} {e};
+#list Route_bj_tgk create {s} {se};
+#list Route_tgk_bj create {nw} {n};
+#list Route_bj_hyd create {s} {sw} {n};
+#list Route_hyd_bj create {s} {ne} {n};
+#list Route_hb2_hb1 create {s} {e} {se} {e};
+#list Route_hb1_hb2 create {w} {nw} {w} {n};
+#list Route_hn3_hn2 create {ne} {ne} {ne} {e} {se} {s} {sw} {s} {s} {se} {se} {se} {e};
+#list Route_hn2_hn3 create {w} {nw} {nw} {nw} {n} {n} {ne} {n} {nw} {w} {sw} {sw} {sw};
+#list Route_hn2_hn1 create {e} {se} {e};
+#list Route_hn1_hn2 create {w} {nw} {w};
+#list Route_jb1_jb2 create {w} {w} {w} {w} {nw} {w} {w} {w};
+#list Route_jb2_jb1 create {e} {e} {e} {se} {e} {e} {e} {e};
+#list Route_jb2_jb3 create {w} {sw} {sw} {sw} {w} {nw} {nw};
+#list Route_jb3_jb2 create {se} {se} {e} {ne} {ne} {ne} {e};
+#list Route_jb3_jb4 create {nw} {w} {w} {sw} {sw} {sw} {sw} {w} {w};
+#list Route_jb4_jb3 create {e} {e} {ne} {ne} {ne} {ne} {e} {e} {se};
+#list Route_bt_yz create {nw} {s} {ask zhang about 扬州} {e} {s};
+#list Route_yz_bt create {n} {w} {ask qian about 白驼山} {baituofufei};
+#list Route_jb1_jn1 create {guojiang1} {stop};
+#list Route_jb2_jn2 create {guojiang1} {stop};
+#list Route_jb3_jn3 create {guojiang1} {stop};
+#list Route_jb4_jn4 create {guojiang1} {stop};
+#list Route_jn1_jb1 create {guojiang1} {stop};
+#list Route_jn2_jb2 create {guojiang1} {stop};
+#list Route_jn3_jb3 create {guojiang1} {stop};
+#list Route_jn4_jb4 create {guojiang1} {stop};
+#list Route_hb1_hn1 create {guohe1} {stop};
+#list Route_hb2_hn2 create {guohe1} {stop};
+#list Route_hb3_hn3 create {guohe3n2s} {stop};
+#list Route_hn1_hb1 create {guohe1} {stop};
+#list Route_hn2_hb2 create {guohe1} {stop};
+#list Route_hn3_hb3 create {guohe3s2n} {stop};
+#list Route_yz_skf create {n} {n} {n} {e};
+#list Route_skf_yz create {w} {s} {s} {s};
+#list Route_ly_xf create {n} {w} {u};
+#list Route_xf_ly create {d} {e} {s};
+#list Route_ly_wat create {s} {s} {s} {w} {w} {w} {nw} {nw} {nw} {n} {n} {n} {n} {n} {nd} {nw} {nw};
+#list Route_wat_ly create {se} {se} {su} {s} {s} {s} {s} {s} {se} {se} {se} {e} {e} {e} {n} {n} {n};
+#list Route_ly_tdh create {s} {s} {s} {e} {e} {e} {n} {e} {e} {busy1} {tiandihui_andao};
+#list Route_tdh_ly create {tiandihui_andaob} {busy1} {w} {w} {s} {w} {w} {w} {n} {n} {n};
+#list Route_xz_lvz create {se} {sw} {nw} {nw} {sw} {se} {ne};
+#list Route_lvz_xz create {ne} {nw};
+#list Route_hn4_hn3 create {ne} {ne} {ne};
+#list Route_hn3_hn4 create {sw} {sw} {sw};
+#list Route_hn4_hb4 create {guohe1} {stop};
+#list Route_hb4_hn4 create {guohe1} {stop};
+#list Route_hb4_hb3 create {ne} {ne} {ne};
+#list Route_hb3_hb4 create {sw} {sw} {sw};
+#list Route_hb4_mgk create {sw} {w} {w} {nw} {climb mount} {w} {enter hole};
+#list Route_mgk_hb4 create {n} {e} {ne} {se} {e} {e} {ne};
+#list Route_bj_zf create {e} {e} {e} {e} {e} {n} {n} {n} {n} {n} {n} {n} {e} {ne} {n} {n};
+#list Route_zf_bj create {s} {s} {sw} {w} {s} {s} {s} {s} {s} {s} {s} {w} {w} {w} {w} {w};
+#list Route_qf_dzf create {e} {n} {n} {n} {n} {ne} {e} {ne} {n} {n};
+#list Route_dzf_qf create {s} {s} {sw} {w} {sw} {s} {s} {s} {s} {w};
+#list Route_hn1_dzf create {se} {se} {se} {ne} {e} {ne} {n} {n};
+#list Route_dzf_hn1 create {s} {s} {sw} {w} {sw} {nw} {nw} {nw};
+#list Route_dzf_tais create {nu} {nu} {nu} {eu} {nu} {nu} {nu} {nu} {nu} {nu};
+#list Route_tais_dzf create {sd} {sd} {sd} {sd} {sd} {sd} {wd} {sd} {sd} {sd};
+#list Route_zp_qbl create {w} {w} {w} {nw} {ne} {w} {nw};
+#nop #list Route_qbl_dls create {wu} {wd} {goto.clear {bao}} {stop} {wu} {nu} {ne} {se} {eu} {nw};
+#nop #list Route_dls_qbl create {se} {wd} {nw} {sw} {sd} {ed} {goto.clear {bao}} {stop} {eu} {ed};
+#list Route_qbl_dls create {wu} {wd} {wu} {nu} {ne} {se} {eu} {nw};
+#list Route_dls_qbl create {se} {wd} {nw} {sw} {sd} {ed} {eu} {ed};
+#list Route_qbl_zp create {se} {e} {sw} {se} {e} {e} {e};
+#list Route_wd_tyc create {ed} {e} {e} {ed} {sd} {ed} {sd} {ed} {e} {e};
+#list Route_tyc_wd create {w} {w} {wu} {nu} {wu} {nu} {wu} {w} {w} {wu};
+#list Route_wd_tzf create {sd} {wu} {wu} {nu} {wu} {nu} {eu} {eu} {eu};
+#list Route_tzf_wd create {wd} {wd} {wd} {sd} {ed} {sd} {ed} {ed} {nu};
+#list Route_km_mlx create {s}{e}{e}{e}{e}{ne}{eu}{eu};
+#list Route_mlx_km create {wd}{wd}{sw}{w}{w}{w}{w}{n};
+#list Route_cd_sdn create {se} {se} {e} {e};
+#list Route_sdn_cd create {w} {w} {nw} {nw};
+#list Route_sdb_yy create {ed}{e}{n}{e}{e}{e}{s};
+#list Route_yy_sdb create {n}{w}{w}{w}{s}{w}{wu};
+#list Route_ty_tz create {sw} {s} {sw} {w} {nw} {nu} {nu} {nu} {nu};
+#list Route_tz_ty create {sd} {sd} {sd} {sd} {se} {e} {ne} {n} {ne};
+#list Route_ty_yg create {e} {sw} {s} {e} {n} {w} {s} {s} {w};
+#list Route_yg_ty create {out} {ne} {w};
+#list Route_yy_mlb create {s}{s}{su}{su}{su};
+#list Route_mlb_nc create {ed} {ed} {ed} {e} {e} {e} {e} {n};
+#list Route_nc_mlb create {s} {w} {w} {w} {w} {wu} {wu} {wu};
+#list Route_mlb_yy create {nd}{nd}{nd}{n}{n};
+#list Route_nc_llx create {s} {e} {e} {eu} {eu};
+#list Route_llx_nc create {wd} {wd} {w} {w} {n};
+#list Route_jz_pyh create {w} {w} {s} {s} {s} {s} {e};
+#list Route_pyh_jz create {w} {n} {n} {n} {n} {e} {e};
+#list Route_jx_gjc create {e} {nd} {ask chou diao about 独孤求败} {nu} {se};
+#list Route_gjc_jx create {nw} {sd} {sd} {su} {w};
+#list Route_cz_yz create {u} {w} {n} {n};
+#list Route_yz_cz create {s} {s} {e} {d};
+#list Route_yz_bxs create {n} {n} {e} {u};
+#list Route_bxs_yz create {d} {w} {s} {s};
+#list Route_qy_yzw create {n} {e} {e} {qytoyzw} {stop} {w} {n} {n} {n} {n};
+#list Route_yzw_qy create {s} {s} {s} {s} {e} {gotoqinyun} {stop} {w} {w} {w} {s};
+#list Route_qy_tx create {n} {e} {e} {qytotx} {stop} {w} {n} {w} {nw} {n} {n} {w};
+#list Route_tx_qy create {e} {s} {s} {se} {e} {s} {e} {gotoqinyun} {stop} {w} {w} {w} {s};
+#list Route_yzw_tx create {s} {s} {s} {s} {e} {gototingxiang} {stop} {w} {n} {w} {nw} {n} {n} {w};
+#list Route_tx_yzw create {e} {s} {s} {se} {e} {s} {e} {gotoyanziwu} {stop} {w} {n} {n} {n} {n};
+#list Route_qy_mt create {n} {e} {e} {n} {n} {n} {play qin} {row mantuo} {stop} {mr_mantuo} {w};
+#list Route_mt_qy create {e} {e} {mr_mantuob} {enter boat} {stop} {w} {w} {w} {s};
+#list Route_qy_mr create {n} {e} {e} {e} {murongboat} {stop};
+#list Route_mr_qy create {ask girl about 拜庄} {murongboat} {stop} {w} {w} {w} {s};
+#list Route_yz_rbz create {s} {e} {s};
+#list Route_rbz_yz create {n} {w} {n};
+#list Route_yz_bs create {s} {s} {s} {w} {xy.home};
+#list Route_bs_yz create {out} {e} {n} {n} {n};
+#list Route_zp_qhn create {n} {n} {ne} {e} {nd} {n} {n} {e};
+#list Route_qhn_zp create {s} {w} {s} {su} {w} {sw} {s} {s};
+#list Route_lz_qhb create {s} {s} {s} {s} {s} {s} {s};
+#list Route_qhb_lz create {n} {n} {n} {n} {n} {n} {n};
+#list Route_qhb_qhn create {sw} {busy1} {s} {busy1} {sw} {busy1};
+#list Route_qhn_qhb create {ne} {busy1} {n} {busy1} {ne} {busy1};
+#list Route_yinz_taih create {n} {n} {n} {n} {n} {n};
+#list Route_taih_yinz create {s} {gy_yinzhe};
+#list Route_hmy_ry create {s} {out} {s} {enter lou} {stop} {s} {s} {s} {s};
+#list Route_ry_hmy create {n} {n} {n} {n} {enter lou} {stop} {n} {enter} {n};
+#list Route_wl_gd create {climb yafeng};
+#list Route_gd_yb create {s} {s} {sw} {sw} {sw} {s} {e} {n} {w} {n};
+#list Route_yb_gd create {s} {ne} {ne} {ne} {n} {n};
+#list Route_gd_fd create {s} {s} {s} {push stone} {s} {e} {ed} {ed} {push men} {e} {e};
+#list Route_fd_wjg create {w} {s} {out} {guo qiao} {stop};
+#list Route_tls_wjg create {ed} {nw} {n};
+#list Route_sy_fengd create {s} {nw} {busy1} {nu} {n} {n} {nu} {eu} {n} {nu} {nu} {nu} {wu} {nu};
+#list Route_fengd_sy create {sd} {ed} {sd} {sd} {sd} {s} {wd} {sd} {s} {s} {sd} {se} {n};
+#list Route_sy_sld create {s} {nw} {s} {wd} {sd} {sd} {busy1} {w} {w} {w} {w} {w} {w};
+#list Route_sld_sy create {e} {e} {e} {e} {e} {e} {e} {e} {e} {e} {e} {nu} {nu} {eu} {n} {se} {n};
+#list Route_sld_tgk create {s} {shenlongboat} {stop};
+#list Route_tgk_sld create {ask chuan fu about 出海} {shenlongboat} {stop} {n};
+#list Route_fds_yz create {enter} {u};
+#list Route_yz_fds create {d} {out};
+#list Route_lj_dzt create {zou tiesuo} {stop} {nw} {ne} {nu} {nu} {n} {n};
+#list Route_dzt_lj create {s} {s} {sd} {sd} {sw} {se} {zou tiesuo} {stop};
+#list Route_ddj_ly create {out} {s} {e};
+#list Route_ly_ddj create {w} {n} {enter};
+#list Route_wm_yz create {e} {s} {s};
+#list Route_yz_wm create {n} {n} {w};
+#list Route_ny_ly create {n} {n} {n} {n} {n} {n} {n};
+#list Route_ly_ny create {s} {s} {s} {s} {s} {s} {s};
+#list Route_gw_shg create {s} {s} {s} {s} {s} {s} {sw} {s} {sw} {sw} {sw} {sw} {ask jiang about 入关};
+#list Route_shg_bj create {se} {sw} {sw} {sw} {sw} {s} {s} {s} {e} {e} {s} {s} {s} {s} {s} {s} {s} {s} {s} {s} {s} {w} {w} {w} {w} {w};
+#list Route_bj_shg create {e} {e} {e} {e} {e} {n} {n} {n} {n} {n} {n} {n} {n} {n} {n} {n} {w} {w} {n} {n} {n} {ne} {ne} {ne} {ne} {nw};
+#list Route_shg_gw create {ask jiang about 出关} {ne} {ne} {ne} {ne} {n} {ne} {n} {n} {n} {n} {n} {n};
+#list Route_xc_cll create {e} {e} {e} {e} {e} {se} {su} {eu} {su} {eu} {su} {su};
+#list Route_cll_xc create {nd} {nd} {wd} {nd} {wd} {nd} {nw} {w} {w} {w} {w} {w};
+#list Route_cll_hs create {sd} {su} {s} {s} {s} {w} {w};
+#list Route_hs_cll create {e} {e} {n} {n} {n} {nd} {nu};
+#list Route_cll_ly create {n} {nd} {nd} {nd} {nd} {n} {n} {se} {e} {e} {e} {e} {e} {ed} {e} {e} {e};
+#list Route_ly_cll create {w} {w} {w} {wu} {w} {w} {w} {w} {w} {nw} {s} {s} {su} {su} {su} {su} {s};
+#list Route_cll_ca create {n} {nd} {nd} {nd} {nd} {n} {w} {w} {w} {w} {w} {w} {n};
+#list Route_ca_cll create {s} {e} {e} {e} {e} {e} {e} {s} {su} {su} {su} {su} {s};
+#list Route_xx_txg create {n} {nd} {n} {n} {juan zhulian} {e} {eu} {ed} {e} {ne} {e} {s};
+#list Route_txg_xx create {n} {w} {sw} {w} {wu} {wd} {w} {s} {s} {s} {su} {s};
+#list Route_hb1_py create {w} {ne} {nw};
+#list Route_py_hb1 create {se} {sw} {e};
+#list Route_py_bj create {n} {ne} {ne} {n};
+#list Route_bj_py create {s} {sw} {sw} {s};
+#list Route_py_hyd create {n} {ne} {n};
+#list Route_hyd_py create {s} {sw} {s};
+#list Route_qfa_em create {s} {s} {sd} {ed} {sd} {sd} {sd} {s} {wd};
+#list Route_em_qfa create {eu} {n} {nu} {nu} {nu} {wu} {nu} {n} {n};
+#list Route_dls_xkt create {knock gate} {busy1} {nu} {nu} {n} {n} {nd};
+#list Route_xkt_dls create {su} {s} {s} {sd} {pull gate} {sd};
+#list Route_rz_sl create {w} {nu} {nu} {wu} {nu} {nu} {nu} {e};
+#list Route_sl_rz create {w} {sd} {sd} {sd} {ed} {sd} {sd} {e};
+#list Route_xy_jzh create {s} {e} {e} {s} {s} {s} {s} {s} {s} {s} {s} {s} {s} {s};
+#list Route_jzh_jb4 create {s} {se} {s} {w};
+#list Route_jb4_jzh create {e} {n} {nw} {n};
+#list Route_jzh_xy create {n} {n} {n} {n} {n} {n} {n} {n} {n} {n} {n} {w} {w} {n};
+#list Route_xs_lxc create {yell bridge} {n} {sheng bridge} {stop} {n} {n} {n} {n} {nu} {n};
+#list Route_lxc_xs create {s} {sd} {s} {s} {s} {s} {jiang bridge} {s};
+#list Route_sl_fzl create {unwield all} {eu} {wield all} {nu} {nu} {nu} {n} {knock gate} {n} {n} {nu} {n} {n} {n} {nu} {n} {n};
+#list Route_fzl_sl create {s} {s} {sd} {s} {s} {s} {sd} {s} {open gate} {s} {s} {sd} {sd} {sd} {wd};
+#list Route_gm_ha create {e} {ne} {ne} {e} {swim river} {n} {n} {e} {n} {n} {w} {w} {n} {n};
+#list Route_ha_gm create {s} {s} {s} {s} {out} {w} {sw} {sw} {w};
+#list Route_ms_xt create {u} {out} {juan picture} {s} {s} {e} {n} {n} {n} {n};
+#list Route_xt_gm create {s} {s} {s} {s} {s} {ban stone} {s};
+#list Route_ha_ms create {e} {n} {w} {ban stone} {w} {w};
+#list Route_jyg_hb4 create {se} {e} {se} {e} {e} {ne};
+#list Route_hb4_jyg create {sw} {w} {w} {nw} {w} {nw};
+#list Route_xz_txg create {nw} {zuan} {nw} {w} {n};
+#list Route_txg_xz create {s} {jump well} {se} {se} {se};
+#list Route_jmg_cd create {sd} {s} {s} {s} {s};
+#list Route_cd_jmg create {n} {n} {n} {n} {nu};
+#list Route_hanz_xz create {nw} {nu} {nd} {ne} {nu} {ne} {busy1} {nw} {busy1}{nw};
+#list Route_xz_hanz create {se} {se} {busy1} {sw} {busy1} {sd} {sw} {su} {sd} {se};
+#list Route_hanz_ca create {e} {e} {ne} {ne} {ne} {ne} {n} {n} {n} {n} {n} {n} {n};
+#list Route_ca_hanz create {s} {s} {s} {s} {s} {s} {s} {sw} {sw} {sw} {sw} {w} {w};
+#list Route_hn2_ca create {w} {nw} {sw} {s} {e} {e} {e} {s} {s} {s} {s} {w} {w} {w} {s} {s} {w} {w} {n};
+#list Route_ca_hn2 create {s} {e} {e} {n} {n} {e} {e} {e} {n} {n} {n} {n} {w} {w} {w} {n} {ne} {se} {e};
+#list Route_hanz_jmg create {su} {busy1} {sw} {busy1} {se} {busy1} {su} {busy1};
+#list Route_jmg_hanz create {nd} {busy1} {nw} {busy1} {ne} {busy1} {nd} {busy1};
+#list Route_jx_zym create {w} {nu} {nw} {nw} {n} {nw} {w} {nw} {nw} {n};
+#list Route_zym_jx create {s} {se} {se} {e} {se} {s} {se} {se} {sd} {e};
+#list Route_xiny_xch create {n} {n} {n} {n} {n};
+#list Route_xch_xiny create {s} {s} {s} {s} {s};
+#list Route_xy_zz create {s} {w} {w} {w} {w} {w} {w} {w} {w} {w} {n};
+#list Route_zz_xy create {s} {e} {e} {e} {e} {e} {e} {e} {e} {e} {n};
+#list Route_zz_wdc create {s} {w} {w} {s} {sw} {w} {w} {nw} {w} {w} {w};
+#list Route_wdc_zz create {e} {e} {e} {se} {e} {e} {ne} {n} {e} {e} {n};
+#list Route_nc_zx create {s} {w} {w} {w} {w} {wu} {wu} {nu} {enter};
+#list Route_zx_nc create {out} {sd} {ed} {ed} {e} {e} {e} {e} {n};
+#list Route_qq_yz create {s} {w} {w} {w};
+#list Route_yz_qq create {e} {e} {e} {n};
+#list Route_sz_xyz create {n} {n} {sw};
+#list Route_xyz_sz create {ne} {s} {s};
+#list Route_yz_yiz create {s} {s} {s} {w} {s};
+#list Route_yiz_yz create {n} {e} {n} {n} {n};
+#list Route_hz_tdf create {se}{s}{s}{s}{w}{s}{e}{s}{w};
+#list Route_tdf_hz create {e}{n}{w}{n}{e}{n}{n}{n}{nw};
+#list Route_hz_hhh create {se}{w}{s}{w}{sw}{w}{nw}{n}{e}{enter boat}{stop}{w}{w}{w}{w}{w}{w};
+#list Route_hhh_hz create {e}{e}{e}{enter boat}{stop}{w}{s}{se}{e}{ne}{e}{n}{e}{nw};
+#list Route_hz_wys create {e}{e}{e}{e}{e}{e}{e}{e}{ne}{e}{ne}{s};
+#list Route_wys_hz create {n}{sw}{w}{sw}{w}{w}{w}{w}{w}{w}{w}{w};
+#list Route_hz_zym create {n}{n}{n}{n}{n}{ne}{n}{n}{n}{nw}{nw}{n};
+#list Route_zym_hz create {s}{se}{se}{s}{s}{s}{sw}{s}{s}{s}{s}{s};
+#list Route_hz_xh create {w}{w}{w}{s}{sw}{sw}{sw};
+#list Route_xh_hz create {ne}{ne}{ne}{n}{e}{e}{e};
+#list Route_xh_hhh create {nw}{n}{w}{s}{se}{e}{enter boat}{stop}{w}{w}{w}{w}{w}{w};
+#list Route_hhh_xh create {e}{e}{e}{enter boat}{stop}{w}{nw}{n}{e}{s}{se};
+#list Route_tdf_lld create {e}{su}{wu};
+#list Route_lld_tdf create {ed}{nd}{w};
+#list Route_mz_hz create {open gate}{s}{ne}{ne}{ne}{ne}{n}{e}{e}{e}{se}{s}{s}{w}{n}{xy.home}{store ouxue pu}{store xishan tu}{store shuaiyi tie}{store guangling san}{out}{s}{e}{n}{n}{nw};
+#list Route_hz_mz create {se}{s}{s}{w}{n}{xy.home}{find}{stop}{out}{s}{e}{n}{w}{w}{sw}{w}{nw}{n}{nw}{n}{e}{s}{se}{sw}{meizhuang_gate};
+#list Route_cd_yy create {nw}{nw}{n}{hire}{qu yueyang}{stop}{xia}{w}{s}{s};
+#list Route_yy_cd create {n}{n}{e}{hire}{qu chengdu}{stop}{xia}{s}{se}{se};
+#list Route_hz_hsz create {e}{e}{n}{enter}{n};
+#list Route_hsz_hz create {s}{out}{s}{w}{w};
+#list Route_xkt_bf create {su}{s}{s}{sd};
+#list Route_bf_xkt create {nu}{n}{n}{nd};
+#list Route_ca_fm create {s}{w}{w}{w}{s};
+#list Route_fm_ca create {n}{e}{e}{e}{n};
+#list Route_fh_nc create {w}{s}{e}{n};
+#list Route_nc_fh create {s}{w}{n}{e};
+#list Route_wd_ht create {n}{n};
+#list Route_ht_wd create {s}{s};
+#list Route_tf_jz create {n}{sw}{s}{e}{e};
+#list Route_jz_tf create {w}{w}{n}{ne}{s};
+#list Route_kf_tt create {n}{nw}{s}{s}{s}{s}{s}{e}{e}{e}{e}{e}{e}{eu};
+#list Route_tt_kf create {wd}{w}{w}{w}{w}{w}{w}{n}{n}{n}{n}{n}{se}{s};
+#list Route_mj_hst create {nu}{nu}{nu}{n};
+#list Route_hst_mj create {s}{sd}{sd}{sd};
+#list Route_yz_kd create {n}{e};
+#list Route_kd_yz create {w}{s};
+#list Route_ytf_scm create {w}{sd}{s};
+#list Route_scm_ytf create {n}{nu}{e};
+#list Route_ca_nj create {s}{w}{s}{w};
+#list Route_nj_ca create {e}{n}{e}{n};
+#list Route_gb_hq create {enter}{e};
+#list Route_hq_gb create {w}{out};
+#list Route_yz_cg create {s}{s}{w}{fillall};
+#list Route_cg_yz create {e}{n}{n};
+#list Route_ny_myr create {sw}{n}{n};
+#list Route_myr_ny create {s}{s}{bo xiaolu}{ne};
+#list Route_xy_myr create {s}{e;e}{n;n;n;n;n;n;n;n};
+#list Route_myr_xy create {s;s;s;s;s;s;s;s}{w;w}{n};
+#list Route_taih_sk create {nu}{nu}{nu}{w};
+#list Route_sk_taih create {e}{sd}{sd}{sd};
+#list Route_ys_jd create {e}{e}{e};
+#list Route_jd_ys create {w}{w}{w};
+#list Route_fzl_gl create {s}{s}{sd}{s}{s}{w};
+#list Route_gl_fzl create {e}{n}{n}{nu}{n}{n};
+#list Route_ly_bw create {w;w;w;n};
+#list Route_bw_ly create {s;e;e;e};
+#list Route_xkt_lh create {su};
+#list Route_lh_xkt create {nd};
+#list Route_th_ghs create {n;n;nu;nu;nu;n;n;n;n;w;wu;eu};
+#list Route_ghs_th create {wd;ed;e;s;s;s;s;sd;sd;sd;s;s};
+
+#class xiaoyao_data open;
+#list AreaName_list create {baituo} {baixiaosheng} {beijing} {chengdu} {chongzi} {dali} {qianbuling} {dalunsi} {xieketing} {dudajin} {emei} {qianfuoan} {fadaishi} {fuzhou} {gaibang} {gumu} {hean} {mishi} {xiaoting} {guajianci} {guanwai} {yinzhe} {guiyun} {hanzhong} {hangzhou} {heimuya} {honghuahui} {huyidao} {bieshu} {huashan} {canglongling} {xiaocun} {huaibei} {huanghedukoubei1} {huanghedukoubei2} {huanghedukoubei3} {huanghedukoubei4} {huanghedukounan1} {huanghedukounan2} {huanghedukounan3} {huanghedukounan4} {jiaxing} {jiayuguan} {jianmenguan} {jiangzhou} {jinyang} {jingzhou} {kunming} {fudi} {laolindong} {laolinxi} {lingjiu} {duzunting} {lingzhou} {lingxiaocheng} {lujiazhuang} {luoyang} {lvliu} {mantuo} {meizhuang} {miaolingbei} {miaolingxi} {mingjiao} {mogaoku} {murong} {murongfu} {nanchang} {nanyang} {pingxi} {poyanghu} {puyang} {qilingcun} {qinyun} {qinghaihubei} {qinghaihunan} {qufu} {quqing} {quanzhen} {quanzhou} {riyue} {rongbaozhai} {ruzhou} {shashoubang} {lvzhou} {shanhaiguan} {fangzhanglou} {shaolinsi} {shenlongdao} {fengding} {shanyao} {shikefa} {shudaobei} {shudaonan} {suzhou} {taihu} {taishan} {daizongfang} {tanggukou} {taohua} {taoyuancun} {taoyuan} {tiandihui} {tianlongsi} {tianzhufeng} {tiezhangfeng} {tingxiang} {wananta} {wanjiegu} {gudi} {wuliang} {yubi} {wudang} {wudangcun} {wumiao} {wuyishan} {xiyuanzi} {xiangyang} {xiaofeng} {xiaozhen} {xinyang} {xingxiu} {tianxiugong} {xuchang} {xueshan} {yashan} {yanziwu} {yangzhou} {yizhan} {yinggu} {yuewangmu} {yueyang} {zanpu} {zhangjiakou} {zhangzhi} {changan} {changjiangdukoubei1} {changjiangdukoubei2} {changjiangdukoubei3} {changjiangdukoubei4} {changjiangdukounan1} {changjiangdukounan2} {changjiangdukounan3} {changjiangdukounan4} {zhenjiang} {zhuxi} {zhuangfu} {tidufu} {xihu} {hanshizhong} {jiangnanqianzhuang} {hangzhoubieshu} {changlong} {chaoting} {qiuqianzhang} {kangqinwangfu} {bofu} {feima} {feihu} {houtang} {tianfu} {tiantan} {hongshuitan} {chaoyangmen} {shencemen} {zijincheng} {andao} {kedian} {jiankangfu} {lanzhou} {huangzhong} {luchengfeng}{yzbank} {yzdangpu} {yingtianfu} {zhengyangmen} {nanjue} {hongqigong} {sheku} {muyangren}{chaguan}{jidi}{gulou}{lianhua}{biwu}{guanhaishi};
+#list AreaAbbr_list create {bt} {bxs} {bj} {cd} {cz} {dl} {qbl} {dls} {xkt} {ddj} {em} {qfa} {fds} {fz} {gb} {gm} {ha} {ms} {xt} {gjc} {gw} {yinz} {gy} {hanz} {hz} {hmy} {hhh} {hyd} {bs} {hs} {cll} {xc} {hb} {hb1} {hb2} {hb3} {hb4} {hn1} {hn2} {hn3} {hn4} {jx} {jyg} {jmg} {jz} {jy} {jzh} {km} {fd} {lld} {llx} {lj} {dzt} {lz} {lxc} {ljz} {ly} {ll} {mt} {mz} {mlb} {mlx} {mj} {mgk} {mr} {mrf} {nc} {ny} {px} {pyh} {py} {qlc} {qy} {qhb} {qhn} {qf} {qq} {qzh} {qz} {ry} {rbz} {rz} {ssb} {lvz} {shg} {fzl} {sl} {sld} {fengd} {sy} {skf} {sdb} {sdn} {sz} {taih} {tais} {dzf} {tgk} {th} {tyc} {ty} {tdh} {tls} {tzf} {tz} {tx} {wat} {wjg} {gd} {wl} {yb} {wd} {wdc} {wm} {wys} {xyz} {xy} {xf} {xz} {xiny} {xx} {txg} {xch} {xs} {ys} {yzw} {yz} {yiz} {yg} {ywm} {yy} {zp} {zjk} {zz} {ca} {jb1} {jb2} {jb3} {jb4} {jn1} {jn2} {jn3} {jn4} {zj} {zx} {zf} {tdf} {xh} {hsz} {jnqz} {hzbs} {zuo} {ct} {qiu} {kf} {bf} {fm} {fh} {ht} {tf} {tt} {hst} {cym} {scm} {zjc} {sd} {kd} {jk} {lanz} {huangz} {lcf} {bk} {dp} {ytf} {zym} {nj} {hq} {sk} {myr} {cg} {jd} {gl} {lh} {bw}{ghs};
+#list AreaNameCh_list create {白驼} {百晓生} {北京} {成都} {虫子} {大理} {大轮千步岭} {大轮寺} {大轮谢客亭} {都大锦} {峨嵋} {峨嵋千佛庵} {发呆室} {福州} {丐帮} {古墓} {古墓河岸} {古墓密室} {古墓小厅} {挂剑祠} {关外} {归云隐者} {归云庄} {汉中} {杭州} {黑木崖} {红花会} {胡一刀} {花园别墅区} {华山} {华山苍龙岭} {华山村} {淮北} {黄河渡口北1} {黄河渡口北2} {黄河渡口北3} {黄河渡口北4} {黄河渡口南1} {黄河渡口南2} {黄河渡口南3} {黄河渡口南4} {嘉兴} {嘉峪关} {剑门关} {江州} {晋阳} {荆州} {昆明} {琅缳福地} {老林东} {老林西} {灵鹫} {灵鹫独尊厅} {灵州} {凌霄城} {陆家庄} {洛阳} {绿柳山庄} {曼陀山庄} {梅庄} {苗岭北} {苗岭西} {明教} {莫高窟} {慕容} {慕容复} {南昌} {南阳} {平西王府} {鄱阳湖} {濮阳} {麒麟村} {琴韵小筑} {青海湖北} {青海湖南} {曲埠} {曲清} {全真教} {泉州} {日月神教} {荣宝斋} {汝州} {杀手帮} {沙漠绿洲} {山海关} {少林方丈楼} {少林寺} {神龙岛} {神龙峰顶} {神龙山腰} {史可法} {蜀道北} {蜀道南} {苏州} {太湖} {泰山} {泰山岱宗坊} {塘沽口} {桃花岛} {桃园村} {桃源} {天地会} {天龙寺} {天柱峰} {铁掌峰} {听香水榭} {万安塔} {万劫谷} {无量谷底} {无量山} {无量玉璧} {武当} {武当村} {武庙} {武夷山} {戏园子} {襄阳} {萧峰} {小镇} {信阳} {星宿} {星宿天秀宫} {许昌} {雪山派} {牙山} {燕子坞} {扬州} {驿站} {瑛姑} {岳王墓} {岳阳} {赞普} {张家口} {张志} {长安} {长江渡口北1} {长江渡口北2} {长江渡口北3} {长江渡口北4} {长江渡口南1} {长江渡口南2} {长江渡口南3} {长江渡口南4} {镇江} {朱熹} {庄府} {提督府} {西湖} {韩世忠} {江南钱庄} {杭州别墅} {昌隆镖局} {朝廷} {裘千丈} {康亲王府} {钵夫} {飞马镖局} {飞虎镖局} {后堂} {天福镖局} {丹陛桥} {洪水坛} {朝阳门} {神策门} {端门} {树洞内部} {客店} {建康府} {兰州} {湟中} {陆乘风} {扬州钱庄} {扬州当铺} {应天府} {正阳门} {京兆府男爵}{洪七公}{蛇窟}{牧羊人}{茶馆}{海边基地}{鼓楼}{莲花生大士}{武门比武}{观海石};
+#nop 地标房间信息;
+#list AreaPosition_list create {戈壁} {醉仙楼二楼} {永安门} {总督府门前} {丽春院密室} {十字路口} {千步岭} {大轮寺山门} {谢客亭} {龙门镖局} {玉女池} {千佛庵大殿} {发呆室} {福威镖局} {土地庙} {断龙石} {河岸} {密室} {小厅} {挂剑祠} {集市} {隐者居} {归云亭} {汉中} {大理寺} {成德殿} {杭州分舵大门} {高粱地} {玩家储物柜} {书房} {苍龙岭} {打谷场} {淮北} {[黄河北岸w㊣e黄河北岸]} {风陵渡[官道u㊣d黄河北岸]} {[沙漠边缘nw㊣ne黄河北岸]} {[大路nw㊣ne黄河北岸]} {[黄河南岸w㊣se青石大道]} {孟津渡[㊣sd洛水]} {[黄河南岸sw㊣se土路]} {[黄河南岸sw㊣ne黄河南岸]} {嘉兴城} {嘉峪关} {剑门关} {韩家} {萧府} {荆州} {神威镖局} {琅缳福地} {老林尽头} {老林边缘} {百丈涧} {独尊厅大门} {皇宫大门} {凌霄大厅} {陆家庄} {洛阳中心广场} {绿柳山庄大门} {小桥} {梅庄天井} {无} {无} {半山门} {莫高窟} {湖边} {春来茶馆} {白家} {南阳城} {平西王府大门} {鄱阳湖边} {濮阳} {岳飞家} {琴韵小居} {黄羊滩} {无} {孔庙} {荣昌交易行} {崇玄台} {泉州港} {小村庄} {荣宝斋} {汝州城} {万纶台} {沙漠绿洲} {山海关南门} {方丈楼} {少林寺} {海滩} {峰顶} {小回廊} {城北军营} {无} {无} {宝带桥} {太湖边} {南天门} {岱宗坊} {塘沽口} {海港} {桃园小路} {桃源驿站} {侧厅} {瑞鹤门} {天柱峰下} {小亭} {听香水榭} {万安塔} {万劫谷} {谷底} {崖间古松} {无量玉璧} {武当广场} {武当山门} {武庙} {武夷山路} {戏园子} {襄阳当铺} {望星楼二层} {小镇} {镇淮桥} {巨岩} {天秀宫} {许昌城} {桥头} {牙山湾中心} {燕子坞大门} {中央广场㊣大榕树} {驿站} {黑沼小屋} {墓前广场} {南门内大街} {赞普广场} {大境门} {荆西镖局} {朱雀门} {扬子津[扬子津w㊣e长江岸边]} {[长江岸边w㊣e长江渡口]} {[小池镇u㊣]} {陵矶[长江渡口w㊣e长江岸边]} {[西津渡口w㊣e长江岸边]} {采石矶[长江岸边w㊣e长江渡口]} {[长江岸边nw㊣se长江岸边]} {陵矶[长江渡口w㊣e长江岸边]} {梦溪园} {岳麓书院} {庄府大门} {提督府正门} {孤山} {大厅} {江南钱庄} {盛昌行临安府分店} {昌隆镖局} {厅堂} {望江亭} {王府大门} {殿前广场} {飞马镖局} {飞虎镖局} {后堂} {天福镖局} {丹陛桥} {洪水坛} {朝阳门} {神策门} {端门} {树洞内部} {客店} {中城} {府前广场} {宫城} {大厅} {扬州钱庄} {扬州当铺} {玄武湖畔} {建康南正阳门} {京兆府侧厅}{林间小屋洪七公} {归云蛇窟} {荒地}{春来茶馆}{甲午海战基地}{鼓楼小院}{珠都巴殿}{武门比武}{观海石};
+#nop 花括号对应该地所有直连，采用高级数据结构;
+#var {RouteConnection_list} {{1}{yz} {2}{yz} {3}{zjc;ry;jy;zjk;tgk;hyd;zf;py;shg} {4}{em;tls;zp;sdn;jmg;yy} {5} {yz}{6} {tls;km} {7}{dls;zp} {8}{qbl;xs;yz;xkt} {9}{dls;bf;lh} {10}{ly} {11}{cd;qfa} {12}{em} {13}{yz} {14}{qz;wys} {15}{yz;hq} {16}{qzh;ca;ha} {17}{ms;gm} {18}{xt} {19}{gm} {20}{jx} {21}{shg} {22}{taih} {23}{taih;lcf} {24}{ca;xz} {25}{zym;xh;wys;hhh;tdf;mz;hsz;hzbs;jnqz} {26}{ry} {27}{xh;hz} {28}{py;bj} {29}{yz} {30}{cll} {31}{xc;hs;ca;ly} {32}{cll;ny;qzh} {33}{qf;yz;xch} {34}{py;hn1} {35}{hb3;jy;hn2} {36}{hb2;mj;hn3;hb4} {37}{lanz;hb3;hn4;mgk;jyg} {38}{qf;dzf;yz;hb1} {39}{hn3;ly;hb2;ca} {40}{hn2;lz;hn4;hb3} {41}{hn3;hb4} {42}{zym;gjc;wys;th;ys;ljz;sz} {43}{hb4} {44}{cd} {45}{jn3;yy;nc;pyh;tf} {46}{bj;zjk;ry;hb2} {47}{xy;jb4} {48}{dl;px;mlx} {49}{wjg} {50}{tdf} {51}{nc} {52}{lz;xz;dzt} {53}{lj} {54}{lj;xz;qhb;hn3} {55}{xs} {56}{jx} {57}{ca;qlc;cll;rz;hn2;xf;wat;tdh;ddj;ny;bw} {58}{mj} {59}{qy} {60}{hz} {61}{nc;yy} {62}{km} {63}{ll;hb3;hst} {64}{hb4} {65}{sz;taih;qy} {66}{sz} {67}{jz;mlb;wys;llx;zx;fh} {68}{myr;ly;xch;xc;xy} {69}{km} {70}{jz} {71}{hb1;hyd;bj} {72}{ly;rz;yz} {73}{mr;tx;yzw;mt} {74}{lz;qhn} {75}{zp;qhb} {76}{hb;yz;dzf;hn1} {77}{yz} {78}{gm;xc} {79}{fz;wys} {80}{bj;jy;hmy} {81}{yz} {82}{yz;ly;sl;qlc;xch} {83}{yz;jb1} {84}{xz} {85}{gw;bj} {86}{sl;gl} {87}{rz;fzl} {88}{tgk;sy} {89}{sy} {90}{sld;fengd} {91}{yz} {92}{sdn;yy} {93}{sdb;cd} {94}{mrf;jx;mr;zj;xyz;zuo;cym} {95}{sk;gy;mr;yinz} {96}{dzf} {97}{tais;qf;hn1} {98}{bj;sld} {99}{jx;ghs} {100}{wd} {101}{yy;tz;yg} {102}{ly} {103}{cd;dl;wl;wjg} {104}{wd} {105}{ty} {106}{yzw;qy} {107}{ly} {108}{tls} {109}{yb;fd} {110}{gd} {111}{gd} {112}{wdc;tzf;tyc;ht} {113}{zz;wd} {114}{yz} {115}{fz;hz;jx;nc;qz;ywm} {116}{sz}{117}{myr;ny;zz;xiny;jzh} {118}{ly} {119}{ca;lj;lz;hanz} {120}{xy;yz;jb3;xch} {121}{huangz;txg} {122}{xx} {123}{hb;ny;rz;xiny} {124}{zp;dls;yz;lxc} {125}{jx;jd} {126}{tx;qy} {127}{bt;gb;hb;qf;ssb;xiny;cg;xc;qlc;rz;xz;xs;dls;skf;bxs;cz;rbz;bs;fds;wm;qq;yiz;sd;kd;bk;dp;hn1;jb1} {128}{yz} {129}{ty} {130}{wys} {131}{sdb;jz;mlb;ty;jn4;cd} {132}{cd;qbl;qhn;xs} {133}{bj;jy;ct;kf} {134}{xy;wdc} {135}{ly;cll;gm;xz;hanz;hn2;fm;nj} {136}{jb2;yz;ssb;jn1;qiu} {137}{jb1;jb3;jn2} {138}{jb2;jb4;xiny;jn3} {139}{jb3;jzh;jn4} {140}{jn2;zj;jb1} {141}{ytf;jn1;jn3;jb2} {142}{jn2;jn4;jz;jb3} {143}{jn3;yy;jb4} {144}{sz;jn1} {145}{nc} {146}{bj} {147}{hz;lld} {148}{hz;hhh} {149}{hz} {150}{hz} {151}{hz} {152}{sz} {153}{zjk} {154}{jb1} {155}{zjk;tt;zjc} {156}{xkt} {157}{ca} {158}{nc} {159}{wd} {160}{jz} {161}{kf} {162}{mj} {163}{sz;scm;jk} {164}{cym;jk;ytf} {165}{bj;kf} {166}{yz} {167}{yz} {168}{cym;scm} {169}{hb4;huangz} {170}{lanz;xx} {171}{gy} {172}{yz} {173}{yz} {174}{jn2;scm} {175}{jx;hz} {176}{ca} {177}{gb} {178}{taih} {179}{ny;xy} {180}{yz} {181}{ys} {182}{fzl} {183}{xkt} {184}{ly}{185}{th}};
+#nop 自动计算直连地点数目count;
+#list RouteConnection_count create {};
+#foreach *RouteConnection_list[] id {
+    #list tmp create  $RouteConnection_list[$id];
+    #var tmp &tmp[];
+    #list RouteConnection_count add $tmp;
+    #unvar tmp;
+};
+
+#var SUF {%s-%s{\[(城内|门派|野外)\][ ]*(|\[存盘点\])(|\[玩家储物柜\])|}%s};
+
+#action {^戈壁${SUF}$} {set_position {bt}};
+#action {^醉仙楼二楼${SUF}$} {set_position {bxs}};
+#action {^永安门${SUF}$} {set_position {bj}};
+#action {^总督府门前${SUF}$} {set_position {cd}};
+#action {^丽春院密室${SUF}$} {set_position {cz}};
+#action {^十字路口${SUF}$} {set_position {dl}};
+#action {^千步岭${SUF}$} {set_position {qbl}};
+#action {^大轮寺山门${SUF}$} {set_position {dls}};
+#action {^谢客亭${SUF}$} {set_position {xkt}};
+#action {^龙门镖局${SUF}$} {set_position {ddj}};
+#action {^玉女池${SUF}$} {set_position {em}};
+#action {^千佛庵大殿${SUF}$} {set_position {qfa}};
+#action {^发呆室${SUF}$} {set_position {fds}};
+#action {^福威镖局${SUF}$} {set_position {fz}};
+#action {^土地庙${SUF}$} {set_position {gb}};
+#action {^断龙石${SUF}$} {set_position {gm}};
+#action {^河岸${SUF}$} {set_position {ha}};
+#action {^密室${SUF}$} {set_position {ms}};
+#action {^小厅${SUF}$} {set_position {xt}};
+#action {^挂剑祠${SUF}$} {set_position {gjc}};
+#action {^集市${SUF}$} {set_position {gw}};
+#action {^隐者居${SUF}$} {set_position {yinz}};
+#action {^归云亭${SUF}$} {set_position {gy}};
+#action {^汉中${SUF}$} {set_position {hanz}};
+#action {^大理寺${SUF}$} {set_position {hz}};
+#action {^成德殿门${SUF}$} {set_position {hmy}};
+#action {^杭州分舵大门${SUF}$} {set_position {hhh}};
+#action {^高粱地${SUF}$} {set_position {hyd}};
+#action {^盛昌总行${SUF}$} {set_position {bs}};
+#action {^盛昌行临安府分店${SUF}$} {set_position {hzbs}};
+#action {^书房${SUF}$} {set_position {hs}};
+#action {^苍龙岭${SUF}$} {set_position {cll}};
+#action {^打谷场${SUF}$} {set_position {xc}};
+#action {^淮北${SUF}$} {set_position {hb}};
+#action {^嘉兴城${SUF}$} {set_position {jx}};
+#action {^嘉峪关${SUF}$} {set_position {jyg}};
+#action {^剑门关${SUF}$} {set_position {jmg}};
+#action {^韩家${SUF}$} {set_position {jz}};
+#action {^萧府${SUF}$} {set_position {jy}};
+#action {^荆州${SUF}$} {set_position {jzh}};
+#action {^神威镖局${SUF}$} {set_position {km}};
+#action {^琅缳福地${SUF}$} {set_position {fd}};
+#action {^老林尽头${SUF}$} {set_position {lld}};
+#action {^老林边缘${SUF}$} {set_position {llx}};
+#action {^百丈涧${SUF}$} {set_position {lj}};
+#action {^独尊厅大门${SUF}$} {set_position {dzt}};
+#action {^皇宫大门${SUF}$} {set_position {lz}};
+#action {^凌霄大厅${SUF}$} {set_position {lxc}};
+#action {^陆家庄${SUF}$} {set_position {ljz}};
+#action {^洛阳中心广场${SUF}$} {set_position {ly}};
+#action {^绿柳山庄大门${SUF}$} {set_position {ll}};
+#action {^小桥${SUF}$} {set_position {mt}};
+#action {^梅庄天井${SUF}$} {set_position {mz}};
+#action {^半山门${SUF}$} {set_position {mj}};
+#action {^莫高窟${SUF}$} {set_position {mgk}};
+#action {^湖边${SUF}$} {set_position {mr}};
+#action {^茶馆${SUF}$} {set_position {mrf}};
+#action {^白家${SUF}$} {set_position {nc}};
+#action {^南阳城${SUF}$} {set_position {ny}};
+#action {^平西王府大门${SUF}$} {set_position {px}};
+#action {^鄱阳湖边${SUF}$} {set_position {pyh}};
+#action {^濮阳${SUF}$} {set_position {py}};
+#action {^岳飞家${SUF}$} {set_position {qlc}};
+#action {^琴韵小居${SUF}$} {set_position {qy}};
+#action {^黄羊滩${SUF}$} {set_position {qhb}};
+#action {^孔庙${SUF}$} {set_position {qf}};
+#action {^荣昌交易行${SUF}$} {set_position {qq}};
+#action {^崇玄台${SUF}$} {set_position {qzh}};
+#action {^泉州港${SUF}$} {set_position {qz}};
+#action {^小村庄${SUF}$} {set_position {ry}};
+#action {^荣宝斋${SUF}$} {set_position {rbz}};
+#action {^汝州城${SUF}$} {set_position {rz}};
+#action {^万纶台${SUF}$} {set_position {ssb}};
+#action {^沙漠绿洲${SUF}$} {set_position {lvz}};
+#action {^山海关南门${SUF}$} {set_position {shg}};
+#action {^方丈楼${SUF}$} {set_position {fzl}};
+#action {^少林寺${SUF}$} {set_position {sl}};
+#action {^海滩${SUF}$} {set_position {sld}};
+#action {这是桃花岛的出海口} {set_position {th}};
+#action {^峰顶${SUF}$} {set_position {fengd}};
+#action {^小回廊${SUF}$} {set_position {sy}};
+#action {^城北军营${SUF}$} {set_position {skf}};
+#action {^宝带桥${SUF}$} {set_position {sz}};
+#action {^太湖边${SUF}$} {set_position {taih}};
+#action {^南天门${SUF}$} {set_position {tais}};
+#action {^岱宗坊${SUF}$} {set_position {dzf}};
+#action {^塘沽口${SUF}$} {set_position {tgk}};
+#action {^海港${SUF}$} {set_position {th}};
+#action {^桃园小路${SUF}$} {set_position {tyc}};
+#action {^桃源驿站${SUF}$} {set_position {ty}};
+#action {^侧厅${SUF}$} {set_position {tdh}};
+#action {^瑞鹤门${SUF}$} {set_position {tls}};
+#action {^天柱峰下${SUF}$} {set_position {tzf}};
+#action {^小亭${SUF}$} {set_position {tz}};
+#action {^听香水榭${SUF}$} {set_position {tx}};
+#action {^万安塔${SUF}$} {set_position {wat}};
+#action {^万劫谷${SUF}$} {set_position {wjg}};
+#action {^谷底${SUF}$} {set_position {gd}};
+#action {^崖间古松${SUF}$} {set_position {wl}};
+#action {^无量玉璧${SUF}$} {set_position {yb}};
+#action {^武当广场${SUF}$} {set_position {wd}};
+#action {^武当山门${SUF}$} {set_position {wdc}};
+#action {^武庙${SUF}$} {set_position {wm}};
+#action {^武夷山路${SUF}$} {set_position {wys}};
+#action {^戏园子${SUF}$} {set_position {xyz}};
+#action {^襄阳当铺${SUF}$} {set_position {xy}};
+#action {^望星楼二层${SUF}$} {set_position {xf}};
+#action {^小镇${SUF}$} {set_position {xz}};
+#action {^镇淮桥${SUF}$} {set_position {xiny}};
+#action {^巨岩${SUF}$} {set_position {xx}};
+#action {^天秀宫${SUF}$} {set_position {txg}};
+#action {^许昌城${SUF}$} {set_position {xch}};
+#action {^桥头${SUF}$} {set_position {xs}};
+#action {^牙山湾中心${SUF}$} {set_position {ys}};
+#action {^燕子坞大门${SUF}$} {set_position {yzw}};
+#action {^%s%s大榕树(Rong shu)$} {set_position {yz}};
+#action {^驿站${SUF}$} {set_position {yiz}};
+#action {^黑沼小屋${SUF}$} {set_position {yg}};
+#action {^墓前广场${SUF}$} {set_position {ywm}};
+#action {^南门内大街${SUF}$} {set_position {yy}};
+#action {^赞普广场${SUF}$} {set_position {zp}};
+#action {^大境门${SUF}$} {set_position {zjk}};
+#action {^荆西镖局${SUF}$} {set_position {zz}};
+#action {^朱雀门${SUF}$} {set_position {ca}};
+#action {^梦溪园${SUF}$} {set_position {zj}};
+#action {^岳麓书院${SUF}$} {set_position {zx}};
+#action {^庄府大门${SUF}$} {set_position {zf}};
+#action {^提督府正门${SUF}$} {set_position {tdf}};
+#action {^孤山${SUF}$} {set_position {xh}};
+#action {这里是韩王府的大厅} {set_position {hsz}};
+#action {这里是归云庄的大厅} {set_position {lcf}};
+#action {^江南钱庄${SUF}$} {set_position {jnqz}};
+#action {^昌隆镖局${SUF}$} {set_position {zuo}};
+#action {^厅堂${SUF}$} {set_position {ct}};
+#action {^望江亭${SUF}$} {set_position {qiu}};
+#action {^王府大门${SUF}$} {set_position {kf}};
+#action {^殿前广场${SUF}$} {set_position {bf}};
+#action {^飞马镖局${SUF}$} {set_position {fm}};
+#action {^飞虎镖局${SUF}$} {set_position {fh}};
+#action {^后堂${SUF}$} {set_position {ht}};
+#action {^天福镖局${SUF}$} {set_position {tf}};
+#action {^丹陛桥${SUF}$} {set_position {tt}};
+#action {^洪水坛${SUF}$} {set_position {hst}};
+#action {^朝阳门${SUF}$} {set_position {cym}};
+#action {^神策门${SUF}$} {set_position {scm}};
+#action {^天福镖局${SUF}$} {set_position {tf}};
+#action {^丹陛桥${SUF}$} {set_position {tt}};
+#action {^端门${SUF}$} {set_position {zjc}};
+#action {^树洞内部${SUF}$} {set_position {sd}};
+#action {^客店${SUF}$} {set_position {kd}};
+#action {^中城${SUF}$} {set_position {jk}};
+#action {^府前广场${SUF}$} {set_position {lanz}};
+#action {^宫城${SUF}$} {set_position {huangz}};
+#action {^扬州钱庄${SUF}$} {set_position {bk}};
+#action {^%s%s当铺老板 唐楠(Tang nan)$} {set_position {dp}};
+#action {^%s%s这里是建康府的东南面的正阳门。$} {set_position {zym}};
+#action {^玄武湖畔${SUF}$} {set_position {ytf}};
+#action {^京兆府侧厅${SUF}$} {set_position {nj}};
+#action {^林间小屋${SUF}$} {set_position {hq}};
+#action {^蛇窟${SUF}$} {set_position {sk}};
+#action {^春来茶馆${SUF}$} {set_position {cg}};
+#action {^海边基地${SUF}$} {set_position {jd}};
+#action {^鼓楼小院${SUF}$} {set_position {gl}};
+#action {^看来快到蒙古人的驻地了。$} {set_position {myr}};
+#action {^珠都巴殿${SUF}$} {set_position {lh}};
+#action {^%s武林大会主持 天天好味道(Jason npc)$} {set_position {bw}};
+#action {^观海石${SUF}$} {set_position {ghs}};
+
+#nop 利用地点描述匹配16个口岸;
+#action {^%s这里是长江北岸的渡口，扼守扬州的门户} {set_position {jb1}};
+#action {^%s%s这里是长江北岸的渡口，扼守建康府的门户} {set_position {jb2}};
+#action {^%s%s这里是长江北岸的渡口。$} {set_position {jb3}};
+#action {^%s%s这里是长江北岸的渡口。东面不远就是华容道，关羽义释曹操的地方} {set_position {jb4}};
+#action {^%s%s这里是长江南岸的渡口，扼守镇江门户} {set_position {jn1}};
+#action {^%s%s这里是长江南岸的渡口，南边就是重镇建康府了} {set_position {jn2}};
+#action {^%s%s这里是长江南岸的渡口。$} {set_position {jn3}};
+#action {^%s%s这里是长江南岸的渡口。南面就是江汉通黔贵的要冲——岳阳} {set_position {jn4}};
+#action {^%s%s这里是黄河北岸的渡口，往北通向濮阳。渡过河去就是山东地界了} {set_position {hb1}};
+#action {^%s%s这里是黄河北岸的渡口，东北通向晋阳。渡过黄河就是洛阳了} {set_position {hb2}};
+#action {^%s%s这里是黄河北岸的渡口，渡过河去通向灵州} {set_position {hb3}};
+#action {^%s%s这里是黄河北岸的渡口，西北通向兰州} {set_position {hb4}};
+#action {^%s%s这里是黄河南岸的渡口，往南通向曲阜。渡过黄河向北就是濮阳} {set_position {hn1}};
+#action {^%s%s这里是黄河南岸的渡口，南面通向洛阳。渡过河就进入晋阳了} {set_position {hn2}};
+#action {^%s%s这里是黄河南岸的渡口，东南面通向灵州} {set_position {hn3}};
+#action {^%s%s这里是黄河南岸的渡口，往东南通向长安。渡过河去就是兰州了} {set_position {hn4}};
+
+#nop 旧口岸描述;
+#nop #act {^风陵渡${SUF}$} {set_position {hb2}};
+#nop #act {^孟津渡${SUF}$} {set_position {hn2}};
+#nop #act {^扬子津${SUF}$} {set_position {jb1}};
+#nop #act {^采石矶${SUF}$} {set_position {jn2}};
+
+#nop 触发地点描述变量;
+#nop #unvar SUF;
+
+#class xiaoyao_data close;
+
+#alias {goto.clear} {
+    clear %1;
+    on_cleared {
+        walk;
+    };
+};
+#class goto close;
+
+#nop ==自定函数==;
+#function {numitems} {#list %1 size result};
+#function {ismember} {#list %2 find %1 result};
+#function {item} {#list %1 get %2 result};
+#nop 列表包装;
+#function {wrap} {#format result {%w} {%1}};
+#nop 普通字符串;
+#function {string} {#format result {%s} {%1}};
+#nop 数学运算;
+#function {eval} {#math result {%1}};
+#nop 小写文本;
+#function {lower} {#format result {%l} {%1}};
+#nop 取整数;
+#function {int} {#format result {%d} {%1}};
+#nop 大写文本;
+#function {upper} {#format result {%u} {%1}};
+#nop 大写第一个字母;
+#function {capital} {#format result {%n} {%1}};
+#nop 字符串长度;
+#function {len} {#format result {%L} {%1}};
+#nop  剥离前后空格;
+#function {trim} {#format result {%p} {%1}};
+#nop 屏幕宽度;
+#function {screenw} {#format result {%C}};
+#nop 屏幕高度;
+#function {screenh} {#format result {%R}};
+#nop 替换中文数字为阿拉伯数字;
+#function {replace} {#var result %1;#replace result {%2} {%3}};
+#function {ctd} {
+    #math result {@replace{@replace{{0+@replace{@replace{@replace{@replace{@replace{@replace{@replace{@replace{@replace{@replace{@replace{@replace{@replace{@replace{%1;{零};{*0+}};{十};{*10+}};{百};{*100+}};{千};{*1000+}};{万};{*10000+}};{六};{6}};{一};{1}};{二};{2}};{三};{3}};{四};{4}};{五};{5}};{七};{7}};{八};{8}};{九};{9}}+0};{++};{+}};{+*};{+}}}
+};
+
+#nop 地点定位;
+#alias set_position {
+    #var CurrentPosition %1;
+    #list AreaName_list find %1 i;
+    #list AreaAbbr_list find %1 j;
+    #math AreaId {$i+$j};
+    #list AreaNameCh_list get $AreaId a;
+    #var position_connect {};
+    #if {$AreaId>0} {
+        #list RouteConnection_count get $AreaId i;
+        #while {$i>0} {
+            #var j @leadto{$AreaId;$i};
+            #list AreaAbbr_list find $j k;
+            #list AreaNameCh_list get $k l;
+            #var position_connect {$position_connect$l($j) };
+            #math i {$i-1};
+        };
+    };
+    #echo {%c%s %c>> %s} {light yellow} { 当前位置：$a($AreaId,%1)} {light white} {$position_connect};
+    #showme {};
+    #nop #if {@blsupport{${CurrentPosition}} == 1} {
+    #nop    #showme 支持遍历;
+    #nop };
+    #nop #else {
+    #nop    #showme 不支持遍历;
+    #nop };
+};
+
+#nop ==个人信息==sc,sk查看刷新;
+#alias {xy.home} {enter $myid};
+#var mymenpai {};
+#var myid {};
+#var mygender {};
+#var mydodgelv 0;
+#act {^≡━━━━◎人物详情◎━━━━━━━━━━━━━━━━━━━━━━━━━━≡$}
+{
+	#class tmp open;
+	#act {^ 【%*】%*(%*)$} {#var myid @lower{%%3}};
+	#act {你是%*第%*代弟子} {#var mymenpai %%1};
+	#act {你是朝廷%*品官员} {#var mymenpai 朝廷};
+	#act {你是一位%*岁的%*婚%*性人类} {#var myage @ctd{%%1};#var mygender %%3};
+	#act {^≡━━━━━━━━━━━━━━━━━━━━━━━━◎北大侠客行◎━━━━≡$} {#class tmp kill};
+	#class tmp close;
+};
+
+#act {^│%s%s基本轻功%s│dodge%*│%*│%1│%2│$} {#var mydodgelv @int{%1}};
+
+#nop ==个人信息结束=;
