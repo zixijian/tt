@@ -11,9 +11,12 @@
   #tic {tza1} {#echo {%c%h} {light yellow} {天珠在%1}} {15}
 };
 
-#act {^似乎有什么东西一闪……$} {};
+#act {^似乎有什么东西一闪……$} {
+   wait;stopwalk;
+   #delay 2 look
+};
 
-#act {}{};
+#nop #act {}{};
 
 #act {^莲花生大士给了你一枚天珠，并嘱咐到：在短期内佩戴(pei)在身会有凝神醒脑、提升修为的作用。$} {
     pei;

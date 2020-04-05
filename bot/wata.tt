@@ -18,8 +18,22 @@
     #else
     {qiao luo};
 };
-#act {你%*站了起来}{up;
-    #delay 2 {perform strike.xiao};
+
+#act {你短时间内力使用大量内力}{
+   #var wat_wait 1;
+   #delay 60 {#var wat_wait 0;
+  };
+};
+
+#act {经过一段时间，你体内的内力又重新恢复正常运转！}{#var wat_wait 0};
+
+#act {你%*站了起来}{
+    #if {"$wat_wait"=="1"}{
+       #delay 120 {#var wat_wait 0;yp;up}
+    };
+    #else {
+       #delay 60 {yp;up}
+    };
 };
 
 #class wata close;

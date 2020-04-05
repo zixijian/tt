@@ -1,0 +1,25 @@
+#nop 任务样本;
+#class a open;
+开始任务
+#tic {a} {#untic a;aa} {2};
+#ali {aa} {ask  about job};
+#ali {d} {give };
+#ali {f} {ask about fail;#untic a1;x};
+触发
+#act {^$} {
+  #tic {a1} {#echo {%c%h} {light yellow} {在%1}} {15}
+};
+
+#act {^$} {
+   wait;stopwalk;
+   #delay 2 look
+};
+
+#nop #act {}{};
+
+#act {^$} {
+    ;
+    #untic a1;x
+};
+
+#class a close;

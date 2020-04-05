@@ -49,7 +49,7 @@
 #alias {sh} {sethere};
 #alias {gps} {gt here};
 #alias {way} {inquire};
-#alias {h} {halt;stopwalk;set brief 2};
+#alias {h} {halt;stopwalk;set brief 1};
 #alias {hf} {helpme find};
 #alias {ga} {get all};
 #alias {sa} {sell all};
@@ -146,6 +146,18 @@
 #nop 天珠;
 #alias {tza} {#class tza read bot/tza.tt};
 #alias {tzx} {#class tza kill;#untic tza1};
+
+#nop 投名状;
+#alias {tma} {#class tma read bot/tma.tt};
+#alias {tmx} {#class tma kill;#untic tma1};
+
+#nop 韩世忠;
+#alias {hsza} {#class hsza read bot/hsza.tt};
+#alias {hszx} {#class hsza kill;#untic hsza1};
+
+#nop 公孙止;
+#alias {gsza} {#class gsza read bot/gsza.tt};
+#alias {gszx} {#class gsza kill;#untic gsza1};
 
 #nop 功德捐献;
 #alias {gda} {#class gda read bot/gda.tt;say 天不生我小乖乖，侠客万古长如夜};

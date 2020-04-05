@@ -1,0 +1,24 @@
+#nop 公孙止任务;
+#class gsza open;
+
+#nop 辅助别名;
+#ali {gszaa} {ask gongsun about job};
+#ali {gszd} {ask gongsun about finish};
+#ali {gszf} {ask gongsun about fail};
+
+#ali {jqg} {
+   s;#6 w;
+   #delay 2 {northwest;enter;enter;
+   #delay 2 {move hou;move qian;move qian;move hou;move you;move zuo;move qian;
+   #delay 2 {move qian;move zuo;move you;move hou;move qian;move qian;move hou;
+   #delay 4 {#5 n;
+}}}}};
+
+#ali {jqgb} {
+   #5 s;w;enter;
+   #delay 2 {move qian;move zuo;move you;move hou;move qian;move qian;move hou;
+  #delay 2 {move hou;move qian;move qian;move hou;move you;move zuo;move qian;
+   #delay 4 {out;se;#6 e;n;
+}}}};
+
+#class gsza close;
