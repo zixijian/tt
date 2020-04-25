@@ -90,7 +90,7 @@ dor;
 #act {^ %*ÓñÖñÕÈ(Yuzhu zhang)$} {sd.pause;get zhang};
 #act {^ %*Óñóï(Yu xiao)$} {sd.pause;get xiao};
 #act {^ %*±ùÆÇÕÈ(Bingpo zhang)$} {sd.pause;get zhang};
-#act {^ %*ÇàÓÄÖ®Ñ¥(Boots)$} {sd.pause;get boots};
+#act {^ %*Ö®%*(%w)$} {sd.pause;get @lower{%3}};
 #nop #act {^%s%*$} {sd.pause;get };
 #act {^ %*¡òÓñËè(Shan sui)$} {sd.pause;get sui};
 

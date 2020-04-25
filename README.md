@@ -1,32 +1,32 @@
 # START
 
-|[Tintin++](https://tintin.sourceforge.io/)
+|[TinTin++](https://tintin.sourceforge.io/)
 |[Termux](https://github.com/termux/termux-app)|
 <br>
-|[Tintin++中文手册](./Wiki.md)|
+|[TinTin++中文手册](./Wiki.md)|
 <br>
 |[北侠官网](http://pkuxkx.net/)
 |[北侠Wiki](http://pkuxkx.net/wiki/)
 |[北侠论坛](http://pkuxkx.net/forum/)
 |[紫溪涧](http://zixijian.github.io)|
 
-### 这是做什么的？
+### 这里是做什么的？
 
 本仓库用于存储 xgg@pkuxkx 的游戏配置，  
 以及部分相关脚本和文档。
 
-北大侠客行是一个MUDs文字游戏，  
-Termux是一个安卓系统上的终端模拟器，  
-Tintin++ 是一个跨平台的MUDs客户端。  
+北大侠客行是一个 MUDs 文字游戏，  
+Termux 是一个安卓系统上的终端模拟器，  
+Tintin++ 是一个跨平台的 MUDs 客户端。  
 支持：  
 Mac OS X,IOS,Android,Linux,Windows。  
 
-北大侠客行可使用 Tintin++ 客户端连接，  
-Tintin++可以运行在Termux上。
+北大侠客行可使用 TinTin++ 客户端连接，  
+TinTin++ 可以运行在 Termux 上。
 
 So：TinTin++ on Termux for pkuxkx。
 
-注：客户端用法与其他平台一致。
+__注：客户端用法与其他平台一致。__
 
 ### 安卓怎么进入MUDs游戏？
 
@@ -87,14 +87,17 @@ Termux需要安装 MUDs 客户端，比如：TinTin++ 、Go-Mud ，
 
 __按行复制命令后按回车执行！！！__
 
-安装完毕后，可跳转到screen转码部分。  
+__安装完毕后，可跳转到screen转码部分。__ 
 
-注：Linux deploy是一款能在安卓手机上利用chroot部署任意linux发行版的app（需要root权限、比Termux更强大），使用linuxdeploy在手机上部署的chroot环境，比如Debian，使用apt(相当于pkg)指令安装完 tintin++ 的路径在`/usr/games/tt++`。
+--- 
 
-由于Debian上tt版本比较老旧<br>
-也可以使用源码进行编译安装。<br>
+注：Linux Deploy 是一款能在安卓手机上利用 chroot 命令部署任意 linux 发行版的app（需要root权限、比Termux更强大）。  
+使用 Linux Deploy 在手机上部署的 Debian 系统安装 `tintin++` 的路径在 `/usr/games/tt++`。
 
-Tintin++ 可在 [Github](https://github.com/scandum/tintin) 获取源码。
+由于 Debian 上 tintin++ 版本比较老，    
+也可以使用源码进行编译安装。
+
+TinTin++ 可在 [Github](https://github.com/scandum/tintin) 获取源码。
 
 
 Termux不用看此段内容。
@@ -301,7 +304,7 @@ vim init.tt
 
 - 或者安装ssh使用sftp或scp传输。
 
-- Tintin++官网提供了从电脑端`wintin++`使用chat传输配置的方法。
+- TinTin++官网提供了从电脑端`wintin++`使用chat传输配置的方法。
 
 - Termux内建的termux-setup-storage接口可以在`$HOME`用户目录中创建一个对内部存储的符号链接，我们可以直接访问内存卡（内部存储）或者建立相应目录的符号链接。
 
