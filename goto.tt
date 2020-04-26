@@ -72,7 +72,7 @@
         #else {
             #if {"%1"=="list"} {
                 #echo {%c%h} {light yellow};
-                #foreach {$AreaName_list[]} {n} {
+                #foreach {*AreaName_list[]} {n} {
                     #list AreaNameCh_list get $n j;
                     #list AreaName_list get $n k;
                     #list AreaAbbr_list get $n l;
@@ -133,7 +133,7 @@
     };
     #else {
         #if {"%1"=="list"} {
-            #foreach {$AreaName_list[]} {n} {
+            #foreach {*AreaName_list[]} {n} {
                 #list AreaNameCh_list get $n i;
                 #list AreaName_list get $n j;
                 #list AreaAbbr_list get $n k;
