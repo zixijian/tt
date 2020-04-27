@@ -705,7 +705,7 @@ TinTin++定义了以下特殊字符:
 `\` 发送到服务器时以反斜杠开头的输入行是原样发送的。  
 可以使用 #config 重新定义该字符。
 
-另可参见：[Colors](#colors),[Escape](#escape),[Mathematics](#mathematics) and [PCRE](#pcre).
+另可参见：[Colors](#colors),[Escape](#escape-codes),[Mathematics](#mathematics) and [PCRE](#pcre).
 
 ## Chat
 

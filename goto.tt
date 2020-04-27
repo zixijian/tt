@@ -1,6 +1,6 @@
 #nop {==修改信息==;
-200404 增加wait、waitfor、waitline功能，
-       增加节点观海石ghs；
+200404 增加wait、waitfor、waitline功能;
+       增加节点观海石ghs;
 191106 增加节点莲花生大士lh,武门比武bw;
 190722 修改自动计算直连数目count表;
   直连列表改为高级数据结构;
@@ -24,10 +24,10 @@
          修改下车触发防止换行;
 201906   修改说明、隐藏版权by Xgg@pkuxkx;
          dzp@pkuxkx 修改地名触发sethere;
-20181016 北侠论坛dashu修改部分bug,
+20181016 北侠论坛dashu修改部分bug;
          白驼去一次要1金币，慎去;
 201703   修改 by Meirenzhi@pkuxkx;
-201305   原作者 by Alucar@pkuxkx ;
+201305   原作者 by Alucar@pkuxkx;
 };
 
 #nop 走路速度控制,分别为每秒上限步数、超限等待时间、正常行走间隔时间;
