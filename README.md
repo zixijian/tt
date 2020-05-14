@@ -17,7 +17,7 @@
 
 北大侠客行是一个 MUDs 文字游戏，  
 Termux 是一个安卓系统上的终端模拟器，  
-Tintin++ 是一个跨平台的 MUDs 客户端。  
+TinTin++ 是一个跨平台的 MUDs 客户端。  
 支持：  
 Mac OS X,IOS,Android,Linux,Windows。  
 
@@ -197,7 +197,7 @@ alias ck='vim ~/.termux/termux.properties'
 
 ## 2。screen、vim中文乱码
 
-__Tintin++ 老版本不支持GBK编码，  
+__TinTin++ 旧版本不支持GBK编码，  
 新版本2.02以后添加了对中文的支持，  
 新版本使用 #config charset 设置编码，  
 旧版本使用 screen 进行转码。__
@@ -297,7 +297,7 @@ vim init.tt
 
 > screen tt++ init.tt
 
-### 管理配置文件
+### 管理配置文件及脚本
 
 - 此处可将配置文件使用git上传至github，<br>
 这样更换环境后克隆仓库即可快速使用配置。
@@ -307,6 +307,8 @@ vim init.tt
 - TinTin++官网提供了从电脑端`wintin++`使用chat传输配置的方法。
 
 - Termux内建的termux-setup-storage接口可以在`$HOME`用户目录中创建一个对内部存储的符号链接，我们可以直接访问内存卡（内部存储）或者建立相应目录的符号链接。
+
+以下将文件直接存放到手机上：
 
 ```
 使用Termux管理的流程（本地推荐）：
@@ -323,6 +325,8 @@ cd $HOME/tt
 
 注:此处也可将git仓库克隆到内存卡中。
 ```
+
+以下将文件存放到github上，手机存放副本：
 
 ```
 使用git管理的流程（远程推荐）：
