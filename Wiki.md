@@ -1588,9 +1588,9 @@ Foreach 命令就像一个简化的循环。列表中的每个单词将在执行
 #foreach {{Bob}{Jim}{Tom}} {name} {say Hello $name!}
 ```
 
-相当于：hello，Bob!hello,jim!hello,tom!
+相当于：hello Bob!hello jim!hello tom!
 
-要使用 foreach 命令循环遍历列表 (或嵌套变量) 中的所有项目，请使用 `$<list> [%*]`。
+要使用 foreach 命令循环遍历列表 (或嵌套变量) 中的所有项目，请使用 `$<list>[%*]`，新版本中请用`*<list>[]`。
 
 另可参见: [Break](#break), [Continue](#continue), [List](#list), [Loop](#loop), [Parse](#parse), [Repeat](#repeat), [Return](#return) and [While](#while).
 
