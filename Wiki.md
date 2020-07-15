@@ -23,7 +23,7 @@
 |[ Continue ](#continue)|  
 |[ Coordinates ](#coordinates)
 |[ Cursor ](#cursor)|  
-|[ Daemon ](#daemon)
+|[ Daemon ](#daemon)|  
 |[ Debug ](#debug)
 |[ Default ](#default)
 |[ Delay ](#delay)
@@ -1152,7 +1152,7 @@ detach 分离选项将屏蔽tintin，将其变成后台进程。Name 参数是�
   #default giggle
 }
 ```
-另可参见: [Case](#case), [Default](#default), [Else](#else), [Elseif](#elseif), [If](#if), [Switch](#switch) and [Regex](regex).
+另可参见: [Case](#case), [Default](#default), [Else](#else), [Elseif](#elseif), [If](#if), [Switch](#switch) and [Regex](#regex).
 
 ## Delay
 
@@ -3191,7 +3191,7 @@ $return
 
 注意: 您可以使用 #unprompt 命令删除提示。
 
-另可参见: [Action](#action), [Gag](#gag), [Highlight](#highlight) and [Substitute](#substitude).
+另可参见: [Action](#action), [Gag](#gag), [Highlight](#highlight) and [Substitute](#substitute).
 
 ## Read
 

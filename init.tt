@@ -5,6 +5,7 @@
 #re goto.tt;
 #re emote.tt;
 
+#nop 断线事件;
 #event {SESSION ACTIVATED}
 {
 	#if {"%0" == "gts"} {#read init.tt}
@@ -25,7 +26,7 @@
 #echo {%c%h} {light yellow};
 #echo {%c%h} {light green} {【请输入pku指令连接至北大侠客行】};
 #echo {%c%h} {light green} {【自定义命令帮助指令omg】};
-#echo {%c%h} {light green}{【逍遥行指令gt】};
+#echo {%c%h} {light green} {【逍遥行指令gt】};
 #echo {%c%h} {light yellow};
 
 
