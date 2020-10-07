@@ -1,4 +1,5 @@
 #nop {==修改信息==;
+201006 修复天柱峰到武当路径，小心土匪;
 200404 增加wait、waitfor、waitline功能;
        增加节点观海石ghs;
 191106 增加节点莲花生大士lh,武门比武bw;
@@ -48,7 +49,7 @@
 		#echo {%c%+8sgt：显示本说明} {light yellow};
 		#echo {%c%+8s查询各地区地标房间请使用inquire命令} {light yellow};
 		#echo ;
-		#echo {%c%h} {light green} {【最后修改20200404】};
+		#echo {%c%h} {light green} {【最后修改20201006】};
 	};
     #else {
         #if {"%1"=="here"} {
@@ -810,8 +811,10 @@
 #list Route_qbl_zp create {se} {e} {sw} {se} {e} {e} {e};
 #list Route_wd_tyc create {ed} {e} {e} {ed} {sd} {ed} {sd} {ed} {e} {e};
 #list Route_tyc_wd create {w} {w} {wu} {nu} {wu} {nu} {wu} {w} {w} {wu};
-#list Route_wd_tzf create {sd} {wu} {wu} {nu} {wu} {nu} {eu} {eu} {eu};
-#list Route_tzf_wd create {wd} {wd} {wd} {sd} {ed} {sd} {ed} {ed} {nu};
+#nop #list Route_wd_tzf create {sd} {wu} {wu} {nu} {wu} {nu} {eu} {eu} {eu};
+#nop #list Route_tzf_wd create {wd} {wd} {wd} {sd} {ed} {sd} {ed} {ed} {nu};
+#list Route_wd_tzf create {n;{ask song about 下山};s;sd;eu;e;e;e;eu;eu;eu;e;e;e;eu;eu;eu;ne;nu;nw;nu;ne;eu;se;u;nu;eu;su;wu;u;eu;nu;eu;ne;nu;nw;nu;ne;eu;se;u;nu;eu;su;wu;u;nu;nu;wu;nu;nw;wu;sw;nu;eu;su;wu;u;nu;nw;wu;sw;nu;eu;su;wu;u;nu;nw;wu;sw;nu;eu;su;wu;u;wu;sw;nu;nu;nu;nu;nu;nu;nu;nu};
+#list Route_tzf_wd create {sd;sd;sd;sd;sd;sd;sd;sd;ne;ed;d;ed;nd;wd;sd;ne;ed;se;sd;d;ed;nd;wd;sd;ne;ed;se;sd;d;ed;nd;wd;sd;ne;ed;se;sd;ed;sd;sd;d;ed;nd;wd;sd;d;nw;wd;sw;sd;se;sd;sw;wd;sd;wd;d;ed;nd;wd;sd;d;nw;wd;sw;sd;se;sd;sw;wd;wd;wd;w;w;w;wd;wd;wd;w;w;w;wd;nu};
 #list Route_km_mlx create {s}{e}{e}{e}{e}{ne}{eu}{eu};
 #list Route_mlx_km create {wd}{wd}{sw}{w}{w}{w}{w}{n};
 #list Route_cd_sdn create {se} {se} {e} {e};
