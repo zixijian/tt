@@ -506,7 +506,7 @@
             };
         };
     };
-
+    #nop #action {看起来土匪想杀死你！} {waitfor {土匪死了。};kill tufei};
     #class walk close;
 
     #var step 1;
@@ -1032,7 +1032,7 @@
     #unvar tmp;
 };
 
-#var SUF {%s-%s{\[(城内|门派|野外)\][ ]*(|\[存盘点\])(|\[玩家储物柜\])|}%s};
+#var SUF {%s-%s{\[大.*国\][ ]*|}{\[(城内|门派|野外|.*势力范围)\][ ]*(|\[存盘点\])(|\[玩家储物柜\])|}%s};
 
 #action {^戈壁${SUF}$} {set_position {bt}};
 #action {^醉仙楼二楼${SUF}$} {set_position {bxs}};
