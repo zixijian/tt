@@ -1,10 +1,8 @@
 # START
 
 |[TinTin++](https://tintin.sourceforge.io/)
-|[Termux](https://github.com/termux/termux-app)|
-<br>
-|[TinTin++中文手册](./Wiki.md)|
-<br>
+|[Termux](https://github.com/termux/termux-app)|  
+|[TinTin++中文手册](./Wiki.md)|  
 |[北侠官网](http://pkuxkx.net/)
 |[北侠Wiki](http://pkuxkx.net/wiki/)
 |[北侠论坛](http://pkuxkx.net/forum/)
@@ -37,7 +35,7 @@ api插件可以帮助使用安卓硬件等资源。
 
 - 2.在Termux中安装必须软件及配置
 
-Termux需要安装 MUDs 客户端，比如：TinTin++ 、Go-Mud ，
+Termux需要安装 MUDs 客户端，如：TinTin++ 、Go-Mud ，
 环境配置可以帮助提升游戏体验(比如解决乱码和快速进入游戏)。
 
 - 3.配置文件管理
@@ -46,14 +44,14 @@ Termux需要安装 MUDs 客户端，比如：TinTin++ 、Go-Mud ，
 
 - 4.启动游戏客户端
 
-这时候启动游戏即可。
+这时候启动客户端进入游戏即可。
 
 注：其他平台安装使用可访问[官网](https://tintin.mudhalla.net/install.php)。
 
 ***
-请细致地阅读文中内容，<br>
-请合理地使用搜索引擎，<br>
-请合理地联想相同的方法和规律，<br>
+请细致地阅读文中内容，  
+请合理地使用搜索引擎，  
+请合理地联想相同的方法和规律，  
 有些内容不会在文中重复出现。
 ***
 
@@ -61,16 +59,16 @@ Termux需要安装 MUDs 客户端，比如：TinTin++ 、Go-Mud ，
 
 ### Termux 简介
 
-> 安卓系统高级终端模拟器。<br>
- 使用bash 和 zsh。<br>
- 使用nano 和 vim编辑文件。<br>
- 通过ssh访问服务器。<br>
- 使用gcc和clang编译代码。<br>
- 使用python控制台来作为掌上电脑。<br>
- 使用git 和 subversion管理项目。<br>
- 使用frotz运行基于文本的游戏。<br>
- 双指捏合缩放界面。<br>
- 长按弹出菜单。<br>
+> 安卓系统高级终端模拟器。  
+ 使用bash 和 zsh。  
+ 使用nano 和 vim编辑文件。  
+ 通过ssh访问服务器。  
+ 使用gcc和clang编译代码。  
+ 使用python控制台来作为掌上电脑。  
+ 使用git 和 subversion管理项目。  
+ 使用frotz运行基于文本的游戏。  
+ 双指捏合缩放界面。  
+ 长按弹出菜单。  
  PGDW PGUP上下翻页。
  
 ### 下载安装 Termux
@@ -82,8 +80,8 @@ Termux需要安装 MUDs 客户端，比如：TinTin++ 、Go-Mud ，
 ### 安装vim git screen tintin++
 
 打开Termux输入如下指令安装「必须」软件：
-> pkg up -y
-<br>pkg install vim git screen tintin++ -y
+> pkg up -y  
+pkg install vim git screen tintin++ -y
 
 __按行复制命令后按回车执行！！！__
 
@@ -106,7 +104,7 @@ Termux不用看此段内容。
 Debian9编译安装tt++
 
 1.安装编译环境
-apt install gcc libgnutls-dev zlib1g-dev libpcre3-dev make cmake -y
+apt install gcc libgnutls-dev zlib1g-dev libpcre3-dev make cmake git -y
 2.克隆源码到本地
 git clone https://github.com/scandum/tintin.git tt
 3.编译
@@ -122,7 +120,7 @@ Termux一般不用编译，仅列出方法。
 Termux编译安装tt++
 
 1.安装环境
-pkg install make cmake libgnutls zlib pcre wget -y
+pkg install git make cmake libgnutls zlib pcre wget -y
 2.获取代码
 git clone https://github.com/scandum/tintin.git tt
 3.进行编译并拷贝二进制文件到bin目录
@@ -204,7 +202,8 @@ __TinTin++ 旧版本不支持GBK编码，
 
 ### 利用screen给tt++转码
 
-> echo defencoding GBK > ~/.screenrc
+> echo defencoding GBK > ~/.screenrc  
+echo mousetrack off >> ~/.screenrc
 
 以上命令效果等同于下列操作。
 
@@ -217,6 +216,7 @@ __TinTin++ 旧版本不支持GBK编码，
 
 ```
 defencoding GBK
+mousetrack off
 ```
 将以上内容复制粘贴到文本中，<br>
 修改完毕后按ESC键退出编辑模式：
@@ -237,12 +237,12 @@ syntax on
 set t_Co=256
 set bg=dark
 set autoindent
-"set number
 set hlsearch
 colorscheme murphy
 set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936
 set termencoding=utf-8
 set encoding=utf-8
+"set number
 ```
 
 ### 脚本中文乱码转换编码

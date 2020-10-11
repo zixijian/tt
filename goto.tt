@@ -34,7 +34,7 @@
 #nop 走路速度控制,分别为每秒上限步数、超限等待时间、正常行走间隔时间;
 #var xiaoyao.accu 10;
 #var xiaoyao.delay_long 1;
-#var xiaoyao.delay_short 0.2;
+#var xiaoyao.delay_short 0.1;
 
 #alias gt {
     #if {"%1"==""} {
@@ -358,7 +358,7 @@
                     #action {$waitfor} {
                         #class xiaoyao-walk-tmp kill;
                         #delay 1 walk;
-                    }
+                    };
                     #class xiaoyao-walk-tmp close;
                   };
                   $cmd
