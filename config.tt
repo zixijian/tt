@@ -1,5 +1,3 @@
-#CONFIG           {CHARSET}  {BIG-5}
-#CONFIG           {CHARSET}  {BIG5}
 #CONFIG           {CHARSET}  {GBK}
 #CONFIG           {COLOR PATCH}  {ON}
 #CONFIG           {PACKET PATCH}  {0.8}

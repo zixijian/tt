@@ -32,9 +32,9 @@
 };
 
 #nop 走路速度控制,分别为每秒上限步数、超限等待时间、正常行走间隔时间;
-#var xiaoyao.accu 10;
-#var xiaoyao.delay_long 1;
-#var xiaoyao.delay_short 0.1;
+#var xiaoyao.accu 15;
+#var xiaoyao.delay_long 0.5;
+#var xiaoyao.delay_short 0.05;
 
 #alias gt {
     #if {"%1"==""} {
@@ -282,15 +282,16 @@
         #var Route_list_short ${$RouteName};
         #list Route_list add $Route_list_short[%*];
     };
+#nop {简化暂时关闭;
     #nop //----------开始路径简化----------;
-    #showme $Route[%*];
+    #showme {$Route[%*]};
     #nop    #showme $Route_list[%*];
     #var i 1;
     #var j @numitems{Route_list};
     #while {$i<$j} {
         #var k @ismember{@item{Route_list;$i};Directions};
         #if {$k>0 & $k==@ismember{@item{Route_list;@eval{$i+1}};Directionsb}} {
-            #list Route_list delete $i 2;
+	    #list Route_list delete $i 2;
             #math j {$j-2};
             #if {$i>1} {#math i {$i-1}};
         };
@@ -298,7 +299,8 @@
             #math i {$i+1};
         };
     };
-    #showme $Route_list[%*];
+};
+    #showme {$Route_list[%*]};
     #echo {%c%h} {light yellow};
     #echo ;
     #showme <efa>  带你装B带你飞 ...;
