@@ -282,7 +282,6 @@
         #var Route_list_short ${$RouteName};
         #list Route_list add $Route_list_short[%*];
     };
-#nop {简化暂时关闭;
     #nop //----------开始路径简化----------;
     #showme {$Route[%*]};
     #nop    #showme $Route_list[%*];
@@ -299,7 +298,6 @@
             #math i {$i+1};
         };
     };
-};
     #showme {$Route_list[%*]};
     #echo {%c%h} {light yellow};
     #echo ;
@@ -1243,7 +1241,7 @@
 
 #nop ==自定函数==;
 #function {numitems} {#list %1 size result};
-#function {ismember} {#list %2 find %1 result};
+#function {ismember} {#list %2 find {%1} result};
 #function {item} {#list %1 get %2 result};
 #nop 列表包装;
 #function {wrap} {#format result {%w} {%1}};
