@@ -1,4 +1,4 @@
-#nop 调色版;
+#nop 调色板;
 #class colorpad open;
 
 #alias {colorpad} {
