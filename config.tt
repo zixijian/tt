@@ -1,4 +1,4 @@
-#CONFIG           {CHARSET}  {GBK}
+#CONFIG           {CHARSET}  {BIG}
 #CONFIG           {COLOR PATCH}  {ON}
 #CONFIG           {PACKET PATCH}  {0.8}
 #CONFIG           {WORDWRAP}  {ON}
@@ -17,7 +17,7 @@
 #PATHDIR	        {su} {nd} {20}
 #PATHDIR	        {wu} {ed} {24}
 #PATHDIR	        {nd} {su} {33}
-#PATHDIR         {ed} {wu} {34}
+#PATHDIR         	{ed} {wu} {34}
 #PATHDIR	        {sd} {nu} {36}
 #PATHDIR	        {wd} {eu} {40}
 #nop third argument must between 0-63;
