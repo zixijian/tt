@@ -72,22 +72,6 @@
 #alias {bladebook} {#2 w;#3 n;ask tian about 淫贼;accept};
 #alias {bladebookb} {#3 s;#2 e};
 #alias {weizao} {ask teller about 伪造;give teller paper;#delay {1} {give teller 50 silver};#delay {2} {give teller 50 silver}};
-#ali {ccd} {
-  #show 颜色代码效果查看。;
-  #show    <faa> \<faa> - red;
-  #show    <afa> \<afa> - green;
-  #show    <ffa> \<ffa> - yellow;
-  #show    <aaf> \<aaf> - blue;
-  #show    <faf> \<faf> - magenta;
-  #show    <aff> \<aff> - cyan;
-  #show    <fff> \<fff> - white;
-  #show    <acf> \<acf> - Azure;
-  #show    <afc> \<afc> - Jade;
-  #show    <caf> \<caf> - Violet;
-  #show    <cfa> \<cfa> - Lime;
-  #show    <fac> \<fac> - Pink;  
-  #show    <fca> \<fca> - Orange;
-};
 
 #nop 过迷宫,指令格式mazeout {n|s|e|w};
 #alias {mazeout}

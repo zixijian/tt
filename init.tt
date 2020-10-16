@@ -4,6 +4,7 @@
 #re config.tt;
 #re goto.tt;
 #re emote.tt;
+#re colorpad.tt;
 
 #nop ¶ÏÏßÊÂ¼þ;
 #event {SESSION ACTIVATED}

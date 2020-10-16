@@ -1,0 +1,27 @@
+#nop 调色版;
+#class colorpad open;
+
+#alias {colorpad} {
+  #echo {调色板『<afa>大<dfa>慈<aff>大<faa>悲<fff>入<fcf>凡<faf>尘，<afc>普<efc>度<fee>苍<aef>生<eba>怜<fcf>世<faf>人』};
+  #var color_dic {A;B;C;D;E;F};
+  #var color_bg {};
+  #var color_str {};
+  #math i 0;
+  #foreach {$color_dic} c1 {
+    #foreach {$color_dic} c2 {
+      #foreach {$color_dic} c3 {
+	#var color_bg {$color_bg<$c1$c2$c3>\<$c1$c2$c3\> };
+	#var color_str {$color_str<@lower{$c1$c2$c3}>\<@lower{$c1$c2$c3}\> };
+	#math i {$i+1};
+	#if {$i==6} {
+	  #math i 0;
+	  #echo {$color_bg <000> $color_str};
+	  #var color_bg {};
+	  #var color_str {};
+	};
+      };
+    };
+  };
+};
+
+#class colorpad close;
