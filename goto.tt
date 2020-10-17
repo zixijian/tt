@@ -453,7 +453,7 @@
         #class tmp close;
     };
     #var in_boat 0;
-    #action {^江心驶去。} {
+    #action {江心驶去。} {
         #var in_boat 1;
     };
     #action {^艄公说“到啦，上岸吧”，随即把一块踏脚板搭上堤岸。} {
@@ -462,6 +462,9 @@
             #var stepaccu 1;
             out;walk;
         };
+    };
+    #action {^你刚要前行，忽然发现江水决堤，不由暗自庆幸，还好没过去。$} {
+       #0;
     };
     #action {^你反应迅速，急忙双手抱头，身体蜷曲。眼前昏天黑地，顺着山路直滚了下去。} {#class walk kill;#var CurrentPosition qbl};
     #action {^你从山上滚了下来，只觉得浑身无处不疼，还受了几处伤。} {#class walk kill;#var CurrentPosition dzf};
