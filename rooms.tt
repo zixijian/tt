@@ -1,5 +1,5 @@
-#nop rooms-v2.0-4339-20191227 by dzp;
-#var JMapData-rooms {
+#nop rooms-v2.0-4339-20191227;
+#var {JMapData-rooms} {
 {26} {{id}{26}{name}{客店}{exits}{up;west}{area}{扬州}{center}{45}{map}{客店二楼〓北大街-----客店}{desc}{这是一家价钱低廉的客栈，生意非常兴隆。外地游客多选择这里落脚，你可以在这里打听到各地的风土人情。店小二里里外外忙得团团转，接待着南腔北调的客人。客店的主人从不露面，他究竟是谁，有各种各样的猜测。墙上挂着一个牌子(paizi)。}{cost}{0}{links}{{142}{q;u}{27}{q;w}}{objs}{{天神随从}{tianshen suicong}{店小二}{xiao er}{彭波}{peng bo}{扬州的客店留言板}{26}{酉鸡}{zodiac animal}}}
 {27} {{id}{27}{name}{北大街}{exits}{east;north;south;southeast;west}{area}{扬州}{center}{45}{map}{北大街｜扬州钱庄----北大街----客店｜   ＼中央广场   比武场}{desc}{你走在一条繁忙的街道上，看着操着南腔北调的人们行色匆匆，许多人都往南边走去，那里有一个热闹的广场。东边是一家生意兴隆的客栈，来自各地的人们进进出出，据说也是情人们的幽会地点。东南边新开了一个比武场，可以见到各式各样的江湖人物走动。西边是一家钱庄，可以听到叮叮当当的金银声音。}{cost}{0}{links}{{26}{e}{28}{w}{29}{n}{43}{se}{45}{s}}{objs}{{流氓}{liu mang}{流氓头}{liumang tou}{行者}{xingzhe}}}
 {28} {{id}{28}{name}{扬州钱庄}{exits}{east;south}{area}{扬州}{center}{45}{map}{扬州钱庄---北大街｜扬州金店}{desc}{这是一家老字号的钱庄，已有几百年的历史，在全国各地都有分店。它发行的银票信誉非常好，通行全国。在对面的墙上挂了块牌子(paizi)。}{cost}{0}{links}{{151}{s}{2340}{cross_che_yzbt}{27}{e}}{objs}{{地痞}{di pi}{钱眼开}{qian yankai}}}

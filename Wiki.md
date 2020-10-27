@@ -2142,27 +2142,31 @@ TinTin有几种不同类型的列表，它们的行为方式相当普遍。为�
 ```
 集合的数量是没有限制的，只需增加更多的大括号。要在此示例中查看 dzp 的电子邮件，您将使用: `#showme {$friendlist[dzp][email]}`。
 ```
+注意：新版本中使用$var[]将会展开整个变量，
+这可能导致crash，
+应使用${var[]}。
+
 来自dzp@pkuxkx的高级数据结构示例:
 
-#var JMapData-rooms {
+#var {JMapData-rooms} {
 {26} {{id}{26}{name}{客店}{links}{up;west}{area}{扬州}{center}{45}{map}{客店二楼〓北大街-----客店}{desc}{这是一家价钱低廉的客栈，生意非常兴隆。外地游客多选择这里落脚，你可以在这里打听到各地的风土人情。店小二里里外外忙得团团转，接待着南腔北调的客人。客店的主人从不露面，他究竟是谁，有各种各样的猜测。墙上挂着一个牌子(paizi)。}{cost}{0}{exits}{{q;u}{142}{q;w}{27}}{objs}{{天神随从}{tianshen suicong}{店小二}{xiao er}{彭波}{peng bo}{扬州的客店留言板}{26}{酉鸡}{zodiac animal}}}}
 
 打印26号room的全部数据：
-#showme ${JMapData-rooms}[26]
+#showme ${JMapData-rooms[26]}
 #精简代码长度
-#var room {${JMapData-rooms}[26]}
+#var room {${JMapData-rooms[26]}}
 打印26号room的第一层键：
-#showme $room[]
+#showme ${room[]}
 打印26号room的id：
-#showme $room[id]
+#showme ${room[id]}
 打印26号room的出口：
-#showme $room[exits][]
+#showme ${room[exits][]}
 打印26号room的出口个数：
-#showme &room[exits][]
+#showme &{room[exits][]}
 打印26号room的第一个出口的键：
-#showme *room[exits][+1]
+#showme *{room[exits][+1]}
 打印26号room的最后一个出口的值：
-#showme $room[exits][-1]
+#showme ${room[exits][-1]}
 
 高级数据结构可大幅度简化代码。
 ```
