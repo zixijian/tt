@@ -373,11 +373,6 @@
                         #math step {$step+1};
                         #var stepaccu 1;
                         #delay {2} {walk};
-                    }; #elseif {"$cmd"=="busy5"}{
-                        #math step {$step+1};
-                        #var stepaccu 1;
-                        #echo {%c慢慢来，等待5秒后继续走...}{light yellow};
-                        #delay {5} {walk};
                     }; #else {
                         $cmd;
                         #math stepaccu {$stepaccu+1};
