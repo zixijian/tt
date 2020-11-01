@@ -1039,8 +1039,8 @@
 #list Route_lh_xkt create {nd};
 #list Route_th_ghs create {n;n;nu;nu;nu;n;n;n;n;w;wu;eu};
 #list Route_ghs_th create {wd;ed;e;s;s;s;s;sd;sd;sd;s;s};
-#list Route_mlx_mld create {eu} {mlx_to_mld} {stop} {out}
-#list Route_mld_mlx create {enter} {mld_to_mlx} {stop} {out}
+#list Route_mlx_mld create {eu} {mlx_to_mld} {stop} {out};
+#list Route_mld_mlx create {enter} {mld_to_mlx} {stop} {out};
 #list Route_mld_wdj create {eu} {busy1} {eu} {busy1} {e} {busy1} {e} {busy1} {se} {se} {se} {eu} {e} {e} {eu} {se} {s} {sd} {su} {s} {enter} {s} {e} {s} {w} {s} {out} {s};
 #list Route_wdj_mld create {n} {enter} {n} {e} {n} {w} {n} {out} {n} {nd} {nu} {n} {nw} {wd} {w} {w} {wd} {nw} {nw} {nw} {busy1} {w} {busy1} {w} {busy1} {wd} {busy1} {wd};
 
