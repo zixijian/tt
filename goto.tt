@@ -1068,7 +1068,15 @@
     #unvar tmp;
 };
 
-#var SUF {%s-%s{\[大.*国\][ ]*|}{\[(都城|城内|城市|门派|野外|.*势力范围)\][ ]*(|\[存盘点\])(|\[玩家储物柜\])|(|(/\w).+)}%s};
+#nop 地点项目匹配;
+#var s_nation {?:[ ]+\[大(宋|元|理|夏)国\]|};
+#var s_terrain {?:[ ]+\[(城市|城内|门派|野外|阴间|(\S+)势力范围)\]|};
+#var s_save {?:[ ]+\[(存盘点)\]|};
+#var s_store {?:[ ]+\[(玩家储物柜)\]|};
+#var s_group {?:[ ]+\[(\S+)\]|};
+#var s_node {?:[ ]+★|};
+#var s_path {?:[ ]+((/\w).+)|};
+#var SUF {%s-%s{$s_nation}{$s_terrain}{$s_save}{$s_store}{$s_group}{$s_node}{$s_path}%s};
 
 #action {^戈壁${SUF}$} {set_position {bt}};
 #action {^醉仙楼二楼${SUF}$} {set_position {bxs}};
