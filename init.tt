@@ -23,6 +23,7 @@
 #event {GAG SESSION DEACTIVATED} {#0};
 #event {GAG SESSION DISCONNECTED} {#0};
 #event {GAG SESSION TIMED OUT} {#0};
+#event {CATCH IAC SB NAWS} {#0};
 
 #class tmp open;
 #alias pku {#class tmp kill;#re pku.tt};
@@ -47,3 +48,35 @@
 #echo {%c%h} {light green} {【逍遥行指令gt】};
 #echo {%c%h} {light yellow};
 
+#nop ==通知样式包装==;
+#nop 彩虹色;
+#function bc0 {
+  #local tmp @color_radom{%0};
+  #return $tmp;
+};
+#nop 绿色;
+#function bc1 {
+  #local tmp {<129>-->%0<--<099>};
+  #return $tmp;
+};
+#nop 青色;
+#function bc2 {
+  #local tmp {<169>...%0...<099>};
+  #return $tmp;
+};
+#nop 黄色;
+#function bc3 {
+  #local tmp {<139>***%0***<099>};
+  #return $tmp;
+};
+#nop ==命令回显==;
+#EVENT {SEND OUTPUT} {
+  #nop 剥离前后空字符;
+  #format {temp} {%p} {%0};
+  #if {"$temp" != ""} {
+    #nop 绿黄配色;
+    #echo {<129>-->CMD:[<139>$temp<129>]<--<099>};
+    #nop 彩虹色;
+    #nop #echo @bc0{-->CMD:[$temp]<--};
+  };
+};
