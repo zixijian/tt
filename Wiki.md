@@ -192,7 +192,7 @@ cd ~/tt && screen tt++ init.tt
 
 如果要退出 TinTin++ 可以键入 `#end`，或者在空行上按组合键 ctrl-d。
 
-对于 WinTin++ 用户，会选择时自动复制文本，使用 shift-insert 进行粘贴。
+对于 WinTin++ 用户，会选择文本时时自动复制，使用 shift-insert 进行粘贴。
 
 - **程序的基本特性**
 
@@ -252,9 +252,10 @@ TinTin++ 的所有命令可以缩写。
 
 > 命令: #split
 
-split 命令将创建一个独立的输入和输出区域。
+#Split 命令将创建一个独立的输入和输出区域。
 
 使用 `#prompt` 命令，您可以捕获提示并将其放在拆分行上。  
+
 要取消拆分界面，您可以使用 `#unsplit` 将终端设置恢复为默认设置。
 
 - **别名**
@@ -324,15 +325,15 @@ TinTin++ 不检查递归别名！您可以通过转义整行来避免递归。
 通过键入 “#debug action on”，  
 您可以看到 TinTin++ 在触发时执行的命令。
 
-您可以使用 #unaction 命令删除触发器操作。
+您可以使用 `#unaction` 命令删除触发器操作。
 
 - **高亮显示**
 
-> 命令: #highlight (记住你可以缩写命令：#high) 
+> 命令: #highlight (记住你可以缩写命令：#high)  
 语法: #high {text} {color}
 
 这个命令有点像 `#action`。  
-这个命令的目的是用你提供的颜色替换 MUDs 中的文本。  
+这个命令的目的是用你提供的颜色包装 MUDs 中的文本。  
 此命令是 `#substitute` 命令的简化版本。
 
 ```
@@ -483,7 +484,7 @@ help 帮助命令是你的最忠实的朋友，它包含所有可用 TinTin 命�
 
 > 语法：#action {文本} {命令} {优先级}
 
-#action 触发器命令可用于用一个或多个命令响应服务器发送的特定消息。  
+#Action 触发器命令可用于用一个或多个命令响应服务器发送的特定消息。  
 从文本消息中替换 %1-%99 个变量，并可以在触发器的命令部分使用。  
 优先级部分是可选的，用来确定操作的优先级，默认为 5。
 
@@ -520,7 +521,7 @@ __注意：%0 永远不应用于触发器（会导致所有内容被响应）。
 #action {%1告诉你'%2'} {tell %1 我暂时不在.}
 ```
 
-#showme 命令可以被触发器响应。  
+#Showme 命令可以被触发器响应。  
 如果你不想让 #showme 被触发器响应：  
 ```
 #line ignore #showme {text}
@@ -546,7 +547,7 @@ __注意：%0 永远不应用于触发器（会导致所有内容被响应）。
 
 > 语法：#alias {名称} {命令} {优先级}
 
-#alias 别名命令可用于缩短长时间或经常使用的命令。  
+#Alias 别名命令可用于缩短长时间或经常使用的命令。  
 当使用别名时，%1-%99 变量从参数中被替换，表示第 1 到 99 个单词，这些单词可以在别名的命令部分使用。  
 优先级部分是可选的，并用来确定别名的优先级，默认为 5。
 
@@ -589,7 +590,7 @@ k blue smurf with battle axe
 或 
 #unalias {\%*}。
 ```
-或者，您可以将别名包装在分类 #class 中，然后在不再需要别名时清除该类。
+或者，您可以将别名包装在分类 `#class` 中，然后在不再需要别名时清除该类。
 
 另可参见: [Cursor](#cursor), [History](#history), [Keypad](#keypad), [Macro](#macro), [Speedwalk](#speedwalk) and [Tab](#tab).
 
@@ -659,7 +660,10 @@ k blue smurf with battle axe
 
 > 语法: #break
 
-#break 中断命令可用于中断 `#foreach 、 #loop 、 #parse 、 #switch 和 #while `命令。当发现 #break 时，tintin将移动到命令的末尾，并从那里继续。
+#Break 中断命令可用于中断 `#foreach、#loop、#parse、#switch、#while` 命令。  
+
+当脚本执行到 `#break` 时，TinTin 将跳到命令的末尾并继续执行。  
+
 ```
 示例:
 #math cnt 0;
@@ -668,70 +672,102 @@ k blue smurf with battle axe
   #math cnt $cnt + 1;
   #if {$cnt == 20}
   {
-    #break
-  }
-}
+    #break;
+  };
+};
 ```
+
 另可参见: [Continue](#continue), [Foreach](#foreach), [List](#list), [Loop](#loop), [Parse](#parse), [Repeat](#repeat), [Return](#return) and [While](#while).
 
 ## Buffer
-```
-语法: 
-#buffer {home|up|down|end|find|get|lock|write|info}
-```
-#Buffer 缓冲区命令有各种操作 `scrollback buffer`的选项。
+
+> 语法：#buffer {home|up|down|end|find|get|lock|clear|jump|refresh|write|info}
+
+#Buffer 缓冲区命令有各种操作终端回滚缓冲区的选项。
+
+可以使用 `#config buffer_size <size>` 配置回滚缓冲区的大小，  
+大小必须是 100、1000、10000、100000 或者 1000000 行。
+
+在滚动回滚缓冲区时传入的文本不显示，  
+可以使用 `#config scroll_lock off` 禁用滚动锁定。
+
+当收到手动输入时，滚动锁定会自动禁用，随后，`#buffer {up|down}` 只能在宏或鼠标事件中工作。
+
+> #buffer {clear} {[lower bound]} {[upper bound]}
+
+如果没有参数，这将清除整个回滚缓冲区。否则它将清除给定的范围。  
+正数是从回滚缓冲区开头计量的，负数从末尾开始。
+
+> #buffer {jump} {\<location>}
+
+将缓冲区移动到给定位置。  
+正数从回滚缓冲区的开头移动，负数从末尾开始。
+
+> #buffer {refresh}
+
+将缓冲区标记为需要刷新，仅在垂直分割模式有用。
 
 > #buffer {home}
 
-将您移动到 scrollback 缓冲区的顶部并显示页面。启用滚动锁定模式。在宏中使用时最有用。
+将您移动到回滚缓冲区的顶部并显示该页。启用滚动锁定模式。在 `#macro` 中很有用。
 
-> #buffer {up}
+> #buffer {up} [lines]
 
-将 scrollback 缓冲区向上移动一页并显示该页。启用滚动锁定模式。在宏中使用时最有用。
+将回滚缓冲区向上移动一页并显示该页。启用滚动锁定模式。在 `#macro` 中很有用。  
+你可以使用 `#buffer {up} {1}` 将回滚缓冲区向上移动 1 行。
 
-> #buffer {down}
+> #buffer {down} [lines]
 
-将 scrollback 缓冲区向下移动一页并显示该页。启用滚动锁定模式。在宏中使用时最有用。
+将回滚缓冲区向下移动一页并显示该页。启用滚动锁定模式。在 `#macro` 中很有用。  
+如果提供了一个行数，它将向下滚动给定的行数。
 
 > #buffer {end}
 
-将您移动到 scrollback 缓冲区的末尾并显示页面。禁用滚动锁定模式。在宏中使用时最有用。
+将您移动到回滚缓冲区的末尾并显示该页。禁用滚动锁定模式。在 `#macro` 中很有用。
 
-> #buffer {find} {[number]} {\<string>}
+> #buffer {find} {[number]} {\<string>} {[variable]}
 
-将缓冲区移动到可以包含正则表达式的给定字符串。或者，您可以提供要跳过的匹配数，允许您在缓冲区中进一步跳转。
+将缓冲区移动到可以包含正则表达式的给定字符串。  
+或者，您可以提供要跳过的匹配数，允许您在缓冲区中进一步跳转。  
+正数从缓冲区开头搜索，负数从尾部开始。  
+如果你提供一个变量，位置将会被储存，不发生跳转。
 
 > #buffer {get} {\<variable>} {\<lower bound>} {[upper bound]}
 
-允许您将 `scrollback buffer` 中的一行或几行 (包括颜色代码) 存储到变量中。下限和上限必须在 1 到缓冲区大小之间。如果省略上限，则将给定行存储为标准变量。如果给定上限，两个边界之间的线将存储为列表。
+允许您将回滚缓冲区中的一行或几行 (包括颜色代码) 存储到变量中。  
+下限和上限必须在 1 到缓冲区大小之间。  
+如果省略上限，则将给定行存储为标准变量。  
+如果给定上限，两个边界之间的线将存储为列表。
 
-> #buffer {lock}
+> #buffer {lock} {on|off}
 
-切换 scrollback 缓冲区上锁。当锁定时，不会显示新传入的文本，任何命令都将禁用锁定，通过几个缓冲区命令将重新启用锁定。解锁时，它会将您移动到 `scrollback buffer` 的末尾并显示页面。
+切换回滚缓冲区锁定状态。  
+当锁定时，不会显示新传入的文本，任何命令都将禁用锁定。  
+通过多个缓冲区命令将重新启用锁定。  
+解锁时，它会将您移动到回滚缓冲区的末尾并显示该页。
 
 > #buffer {write} {\<filename>}
 
-将 scrollback 缓冲区写入给定文件名。  
-写入不带颜色编码的文本：
-`#config log plain`。
+将回滚缓冲区写入给定文件名。  
+想要写入不带颜色编码的文本，请设置 `#config log plain`。
 
-> #buffer {info}
+> #buffer {info} {[save]} {[variable]}
 
-显示 `scrollback buffer` 用于节省内存的共享字符串内存系统的一些统计数据。
+显示回滚缓冲区信息，并可以选择将信息写入到变量。
 
 ```
 示例: 
 #macro {(press ctrl-v)(press F1)} {#buffer end}
-```
-将 ctrl-v 与 F1 键与 “将缓冲区滚动到其末尾” 命令相关联。
-```
+
+示例：
+#macro {\e[F} {#buffer end}
+
 示例:
 #act {^[Exits: %1]}
 {
     #loop 2 20 loop
     {
         #buffer get name $loop;
-
         #if {"$name" == "\e[1;33m%*"}
         {
             #var roomname &1;
@@ -739,8 +775,8 @@ k blue smurf with battle axe
         }
     }
 }
+--当退出时，循环浏览缓冲区的最后 20 行，寻找粗体黄色 (\e[1;33m) 的房间名称。当地图绘制时，知道你所在房间的名称可能会很有用。
 ```
-当退出时: line 出现在上部，循环浏览缓冲区的最后 20 行，寻找粗体黄色 `(\e[1;33m)` 房间名称。当地图绘制时，知道你所在房间的名称可能会很有用。
 
 另可参见: [Echo](#echo), [Grep](#grep) and [Showme](#showme).
 
@@ -749,12 +785,14 @@ k blue smurf with battle axe
 > 语法：#button {square} {commands} {priority}
 
 #Button 按钮命令可用于当在指定的空间区域内收到鼠标单击动作时响应一个或多个命令。  
+
 鼠标单击的坐标存储在 %0-%3 中，可以用于按钮的命令部分。
 
 空间部分应存在两个坐标，定义左上角和右下角，使用行、列、行、列语法。  
 空间参数应该用空格、分号或括号。
 
-默认情况下，该按钮设置为响应鼠标点击动作，要响应其他按键，你必须定义一个5th的参数。您可以启用 `#info button on` 查看发生的按钮事件及其类型。
+默认情况下，该按钮设置为响应鼠标点击动作，要响应其他按钮动作，你必须添加第 5 个参数到定义按钮类型的空间。  
+您可以启用 `#info button on` 查看发生的按钮事件及其类型。
 
 优先级部分是可选的，默认为 5。
 
@@ -766,10 +804,12 @@ k blue smurf with battle axe
 例如: 
 #button {1;1;2;2} {#showme 你点击了左上角.}
 ```
-按钮按字母顺序排序，一次只会触发一个按钮。要更改顺序，您可以分配优先级，默认5，较低的数字表示更高的优先级。优先级可以是浮点数。
+按钮按字母顺序排序，一次只会触发一个按钮。  
+要更改顺序，您可以分配优先级，默认 5，较低的数字表示更高的优先级。  
+优先级可以是浮点数。
 
-注释：要查看按钮点击触发器，请使用 `#info button on`。  
-注释：您可以使用 #unbutton 命令删除按钮。
+注：要查看按钮点击触发器，请使用 `#info button on`。  
+注：您可以使用 `#unbutton` 命令删除按钮。
 
 另可参见：[Delay](#delay),[Event](#event) and [Ticker](#ticker).
 
