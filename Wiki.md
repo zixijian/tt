@@ -303,7 +303,7 @@ TinTin++ 不检查递归别名！您可以通过转义整行来避免递归。
 语法: #action {action-text} {commands}
 
 使用此命令定义当屏幕上出现特定文本时要执行的操作。  
-在 action-text 中，有 99 个变量可以用作匹配。  
+在 `action-text` 中，有 99 个变量可以用作匹配。  
 这些变量是 %1，%2...%9，%10...%99。  
 
 ```
@@ -387,7 +387,7 @@ ssw2n
 
 - **命令文件**
 
-当您使用命令 TinTin++ 读取文件时，它会解析文件中的所有文本。  
+当您使用 TinTin++ 读取命令文件时，它会解析文件中的所有文本。  
 
 你可以使用命令文件来保存别名/动作，登录到一个 MUDs (名称、密码等)。  
 基本上各种命令都可以加载。
@@ -419,7 +419,7 @@ ssw2n
 
 - **历史回溯**
 
-TinTin++ 具有 csh 历史回溯特性的有限子集，可以通过上下箭头来选择输入过的内容。
+TinTin++ 具有 `csh` 历史回溯特性的有限子集，可以通过上下箭头来选择输入过的内容。
 
 !  -- 重复最后一个命令。  
 !cast -- 重复以 cast 开头的最后一个命令。  
@@ -484,7 +484,7 @@ help 帮助命令是你的最忠实的朋友，它包含所有可用 TinTin 命�
 
 > 语法：#action {文本} {命令} {优先级}
 
-#Action 触发器命令可用于用一个或多个命令响应服务器发送的特定消息。  
+`#Action` 触发器命令可用于用一个或多个命令响应服务器发送的特定消息。  
 从文本消息中替换 %1-%99 个变量，并可以在触发器的命令部分使用。  
 优先级部分是可选的，用来确定操作的优先级，默认为 5。
 
@@ -514,7 +514,7 @@ __注意：%0 永远不应用于触发器（会导致所有内容被响应）。
 {#showme {--用粗体白色显示: %1}}
 ```
 
-有关模式匹配的信息，请参见正则表达式 [Regular Expressions'](#regular-expressions) 一节。
+有关模式匹配的信息，请参见正则表达式 [Regular Expressions](#regular-expressions) 一节。
 
 ```
 示例: 
@@ -537,17 +537,17 @@ __注意：%0 永远不应用于触发器（会导致所有内容被响应）。
 #unaction {\%*}
 ```
 
-或者，您可以将动作包装在分类 #class 中，然后在不再需要触发器动作时清除该分类。
+或者，您可以将动作封装在分类 `#class` 中，然后在不再需要触发器动作时清除该分类。
 
 注: 您可以使用 `#unaction` 命令删除触发器。  
 
-另可参见: [Gag](#gag), [Highlight](#highlight), [Prompt](#prompt) and [Substitute](#substitude).
+另可参见: [Gag](#gag)， [Highlight](#highlight)，[Prompt](#prompt)， [Substitute](#substitude)。
 
 ## Alias
 
 > 语法：#alias {名称} {命令} {优先级}
 
-#Alias 别名命令可用于缩短长时间或经常使用的命令。  
+`#Alias` 别名命令可用于缩短长时间或经常使用的命令。  
 当使用别名时，%1-%99 变量从参数中被替换，表示第 1 到 99 个单词，这些单词可以在别名的命令部分使用。  
 优先级部分是可选的，并用来确定别名的优先级，默认为 5。
 
@@ -592,13 +592,13 @@ k blue smurf with battle axe
 ```
 或者，您可以将别名包装在分类 `#class` 中，然后在不再需要别名时清除该类。
 
-另可参见: [Cursor](#cursor), [History](#history), [Keypad](#keypad), [Macro](#macro), [Speedwalk](#speedwalk) and [Tab](#tab).
+另可参见: [Cursor](#cursor)， [History](#history)，[Keypad](#keypad)， [Macro](#macro)， [Speedwalk](#speedwalk)，[Tab](#tab)。
 
 ## All
 
 > 语法: #all {commands}
 
-如果您在一个终端中有多个会话，您可以使用 #all 在所有会话 (不包括启动会话) 中执行命令。
+如果您在一个终端中有多个会话，您可以使用 `#all` 在所有会话 (不包括启动会话) 中执行命令。
 
 ```
 示例: 
@@ -606,7 +606,7 @@ k blue smurf with battle axe
 --会在所有会话中执行 quit。
 ```
 
-另可参见: [Port](#port), [Run](#run), [Session](#session), [Session Name](#session-name), [Snoop](#snoop), [SSL](#ssl) and [Zap](#zap).
+另可参见: [Port](#port)，[Run](#run)，[Session](#session)，[Session Name](#session-name)，[Snoop](#snoop)，[SSL](#ssl)，[Zap](#zap)。
 
 ## Bell
 
@@ -654,7 +654,7 @@ k blue smurf with battle axe
   };
 };
 ```
-另可参见: [Screen](#screen).
+另可参见: [Screen](#screen)。
 
 ## Break
 
@@ -677,13 +677,13 @@ k blue smurf with battle axe
 };
 ```
 
-另可参见: [Continue](#continue), [Foreach](#foreach), [List](#list), [Loop](#loop), [Parse](#parse), [Repeat](#repeat), [Return](#return) and [While](#while).
+另可参见: [Continue](#continue)，[Foreach](#foreach)，[List](#list)， [Loop](#loop)，[Parse](#parse)，[Repeat](#repeat)，[Return](#return)，[While](#while)。
 
 ## Buffer
 
 > 语法：#buffer {home|up|down|end|find|get|lock|clear|jump|refresh|write|info}
 
-#Buffer 缓冲区命令有各种操作终端回滚缓冲区的选项。
+`#Buffer` 缓冲区命令有各种操作终端回滚缓冲区的选项。
 
 可以使用 `#config buffer_size <size>` 配置回滚缓冲区的大小，  
 大小必须是 100、1000、10000、100000 或者 1000000 行。
@@ -762,6 +762,8 @@ k blue smurf with battle axe
 示例：
 #macro {\e[F} {#buffer end}
 
+注：在终端中按下 ctrl-v，随后按下的按键会转换为键码，可以用在 #macro 中。
+
 示例:
 #act {^[Exits: %1]}
 {
@@ -778,13 +780,13 @@ k blue smurf with battle axe
 --当退出时，循环浏览缓冲区的最后 20 行，寻找粗体黄色 (\e[1;33m) 的房间名称。当地图绘制时，知道你所在房间的名称可能会很有用。
 ```
 
-另可参见: [Echo](#echo), [Grep](#grep) and [Showme](#showme).
+另可参见: [Echo](#echo)，[Grep](#grep)，[Showme](#showme)。
 
 ## Button
 
 > 语法：#button {square} {commands} {priority}
 
-#Button 按钮命令可用于当在指定的空间区域内收到鼠标单击动作时响应一个或多个命令。  
+`#Button` 按钮命令可用于当在指定的空间区域内收到鼠标单击动作时响应一个或多个命令。  
 
 鼠标单击的坐标存储在 %0-%3 中，可以用于按钮的命令部分。
 
@@ -792,6 +794,7 @@ k blue smurf with battle axe
 空间参数应该用空格、分号或括号。
 
 默认情况下，该按钮设置为响应鼠标点击动作，要响应其他按钮动作，你必须添加第 5 个参数到定义按钮类型的空间。  
+
 您可以启用 `#info button on` 查看发生的按钮事件及其类型。
 
 优先级部分是可选的，默认为 5。
@@ -809,39 +812,20 @@ k blue smurf with battle axe
 优先级可以是浮点数。
 
 注：要查看按钮点击触发器，请使用 `#info button on`。  
+
 注：您可以使用 `#unbutton` 命令删除按钮。
 
-另可参见：[Delay](#delay),[Event](#event) and [Ticker](#ticker).
+另可参见：[Delay](#delay)，[Event](#event)，[Ticker](#ticker)。
 
 ## Case
 
 > 语法: #case {条件} {参数}
 
-必须在 `switch` 命令中使用 `case` 命令。当 case 命令的条件参数与 switch 命令的条件参数匹配时，执行 case 的主体。
+必须在 `#switch` 命令中使用 `#case` 命令。  
+
+当 case 命令的条件参数与 switch 命令的条件参数匹配时，执行 case 的主体。
 
 当比较字符串时，`switch` 和 `case` 写参数必须用引号包围。
-
-```
-示例:
-#function {bar_color}
-{
-	switch {10 * %1 / %2}
-	{
-		#case  0 #return ;
-		#case  1 #return ;
-		#case  2 #return ;
-		#case  3 #return ;
-		#case  4 #return ;
-		#case  5 #return ;
-		#case  6 #return ;
-		#case  7 #return ;
-		#case  8 #return ;
-		#case  9 #return ;
-		#case 10 #return 
-	}
-}
-```
-如果最大健康度为 100，当前健康度为 44，您使用 `@bar_color{44;100}`，它将返回 `<fea>`。
 
 ```
 示例:
@@ -859,53 +843,63 @@ k blue smurf with battle axe
 }
 ```
 
-这个函数返回相反的方向。<br>
-`@Reverse_direction{north}`将回返`south`。
+这个函数返回相反的方向。`@reverse_direction{north}` 将返回 `south`。
 
-另可参见: [Default](#default), [Else](#else), [Elseif](#elseif), [If](#if), [Switch](#switch) and [Regex](#regex).
+另可参见: [Default](#default)， [Else](#else)，[Elseif](#elseif)，[If](#if)，[Switch](#switch)，[Regex](#regex)。
 
 ## Cat
 
-> 语法： #cat {variable} {argument}
+> 语法：#cat {variable} {argument}
 
-Cat 命令将参数连接到给定变量。
+`#Cat` 命令将参数连接到给定变量。
 
-另可参见: [Format](#format), [Function](#function), [Local](#local), [Math](#math), [Replace](#replace) [Script](#script) and [Variable](#variable).
+另可参见: [Format](#format)，[Function](#function)，[Local](#local), [Math](#math)，[Replace](#replace)，[Script](#script)，[Variable](#variable)。
 
 ## Characters
 
-TinTin++定义了以下特殊字符:
+TinTin++ 定义了以下特殊字符:
 
-`#` Hashtag 是启动命令的默认字符，下面会称为命令字符或tintin字符。  
-加载命令文件时，命令字符设置为文件中的第一个字符。字符也可以使用 `#config` 重新定义。
+`#` Hashtag 是启动命令的默认字符，下面会称为命令字符或 tintin 字符。   
+加载命令文件时，命令字符设置为文件中的第一个字符。  
+可以使用 `#config` 重新定义该字符。
 
-`;` 分号作为命令分离器可用于分开两个命令。多个命令可以串在一起。读取脚本文件时忽略尾随分号是一个常见的错误。
+`;` 分号作为命令分离器可用于分开两个命令。多个命令可以串在一起。  
+读取脚本文件时忽略尾随分号是一个常见的错误。
 
-`{}` 花括号 (又名大括号) 用于分隔多个单词、命令、参数、嵌套命令和嵌套变量。大括号不容易被转义，并且必须总是成对使用。
+`{}` 花括号 (又名大括号) 用于分隔多个单词、命令、参数、嵌套命令和嵌套变量。  
+大括号不容易被转义，并且必须总是成对使用。
 
-`" "` 引号字符用于 #math，#if，#switch 和 #case 命令中的字符串。建议使用额外一组大括号 {} 来定义字符串。
+`" "` 引号字符用于 `#math、#if、#switch、#case` 命令中的字符串。  
+建议使用额外一组大括号 `{}` 来定义字符串。
 
-`!` 感叹号用于重复命令，请参阅 #help history。  
-可以使用 #config 重新定义该字符。
+`!` 感叹号用于重复命令，请参阅 `#help history`。  
+可以使用 `#config` 重新定义该字符。
 
 `\` 发送到服务器时以反斜杠开头的输入行是原样发送的。  
-可以使用 #config 重新定义该字符。
+可以使用 `#config` 重新定义该字符。
 
-另可参见：[Colors](#colors),[Escape](#escape-codes),[Mathematics](#mathematics) and [PCRE](#pcre).
+另可参见：[Colors](#colors)，[Escape codes](#escape-codes)，[Mathematics](#mathematics)，[PCRE](#pcre)。
 
 ## Chat
 
 > 语法: #chat {命令} {参数}
 
-`#chat` 命令用于创建与其他 mud 客户端的点对点连接，通常用于聊天和发送文件。这是一个分散的聊天系统，这意味着为了连接到其他用户，你必须与他们交换 ip地址和端口号。
+`#Chat` 命令用于创建与其他 mud 客户端的点对点连接，通常用于聊天和发送文件。  
+这是一个分散的聊天系统，要连接到其他用户，你必须与他们交换 ip 地址和端口号。
 
-> #chat {initialize} {port}
+> #chat {initialize|init} {port}
 
-聊天初始化启动您的聊天服务器。端口号是可选的，默认情况下，4050 用作您的端口。使用此命令后，其他人可以使用您的 ip地址和端口号连接到您的聊天服务器，然后您可以连接到其他人。
+聊天初始化启动您的聊天服务器。  
+端口号是可选的，默认情况下，4050 用作您的端口。  
+使用此命令后，其他人可以使用您的 ip 地址和端口号连接到您的聊天服务器，您也可以反过来连接到其他人。
+
+> #chat {uninitialize}
+
+卸载聊天端口。
 
 > #chat {name} {your name}
 
-默认情况下，你的名字被设置为tintin，但是如果已经有人连接了tintin，大多数服务器都会拒绝你, 所以你想做的第一件事就是改变你的聊天名称。你的名字可以包括颜色代码。tt++ 聊天服务器不接受一些名字，比如 “all” 这个名字和超过 20 个字符的名字。
+默认情况下，你的聊天名字被设置为 TinTin，但是如果已经有人使用了该名字，大多数服务器都会拒绝你连接， 所以你要做的第一件事就是改变你的聊天名称。聊天名字可以包含颜色代码。tt++ 聊天服务器不接受一些名字，比如 “all” 这个名字和超过 20 个字符的名字。
 
 > #chat {call} {ip address} {port}
 
@@ -915,9 +909,9 @@ TinTin++定义了以下特殊字符:
 
 默认聊天颜色为粗体红色，您可以使用 `#chat color` 命令来更改此颜色，例如: `#chat color bold yellow` 粗体黄色，或者使用 256 颜色代码: `#chat color <cde>`。
 
-> #chat {message} {user|all} {text}
+> #chat {message} {buddy|all} {text}
 
-这是用于通信的主命令。如果您使用 `#chat message all`，则该消息被标记为公共消息，并发送给您连接的每个人。
+这是用于通信的主要命令。如果您使用 `#chat message all`，则该消息被标记为公共消息，并发送给您连接的每个人。
 
 > #chat {emote} {user|all} {text}
 
@@ -929,11 +923,11 @@ TinTin++定义了以下特殊字符:
 
 > #chat {reply} {text}
 
-`#chat reply`聊天回复，回复你收到私人信息的最后一个人。
+`#chat reply` 聊天回复，回复你收到私人信息的最后一个人。
 
-> #chat {send} {user|all}
+> #chat {send} {user|all} {text}
 
-此命令向另一个人发送原始数据字符串，这需要了解聊天协议 [Mud Master Chat Protocol](https://tintin.sourceforge.io/manual/chatprotocol.php)才能使用。
+此命令向另一个人发送原始数据字符串，这需要了解聊天协议[「Mud Master Chat Protocol」](https://tintin.sourceforge.io/manual/chatprotocol.php)才能使用。
 
 > #chat dnd
 
@@ -941,11 +935,11 @@ DND 代表 “不打扰”，此命令切换 DND 状态。启用后，所有新�
 
 > #chat {ip} {address}
 
-此命令设置默认情况下未设置的 ip地址，并在连接到另一个 mud 客户端时发送。TinTin++ 忽略了其他 mud 客户端报告的知识产权，只需获取套接字地址，但是其他 mud 客户端可能需要设置它。
+此命令设置默认情况下未设置的 ip地址，并在连接到另一个 mud 客户端时发送。TinTin++ 忽视了其他 mud 客户端报告的知识产权，只需获取套接字地址，但是其他 mud 客户端可能需要设置它。
 
 > #chat {who}
 
-`#chat who`，显示你联系的所有人。第一列显示连接的参考号，当向某人发送消息时，可以使用该参考号而不是连接的名称。第二列显示连接的名称。第三列显示为连接设置的标志，(P)rivate，(I)gnore，(S)erve，(F)orward 到 user，以及 (f)or以下列显示 ip 、端口和 mud 客户端名称。
+`#chat who` 显示你联系的所有人。第一列显示连接的参考号，当向某人发送消息时，可以使用该参考号而不是连接的名称。第二列显示连接的名称。第三列显示为连接设置的标志，(P)rivate，(I)gnore，(S)erve，(F)orward (from|to) user，下一列列显示 ip 、端口和 mud 客户端名称。
 
 > #chat {info}
 
@@ -953,7 +947,7 @@ DND 代表 “不打扰”，此命令切换 DND 状态。启用后，所有新�
 
 > #chat {ignore} {user}
 
-这个命令将忽略给定的用户，他们不会被告知你忽略了他们，或者他们的消息不再通过。
+这个命令将忽视给定的用户，他们不会被告知你忽视了他们，或者不再接收他们的消息。
 
 > #chat {private} {user|all}
 
@@ -985,7 +979,7 @@ DND 代表 “不打扰”，此命令切换 DND 状态。启用后，所有新�
 
 > #chat {forwardall} {user}
 
-此命令将保存到 scrollback 缓冲区中的所有内容作为 snoop 数据转发给给定用户。
+此命令将保存到回滚缓冲区中的所有内容作为 snoop 数据转发给给定用户。
 
 > #chat {serve} {user}
 
@@ -999,9 +993,9 @@ DND 代表 “不打扰”，此命令切换 DND 状态。启用后，所有新�
 
 此命令允许您向给定用户发送文件，他们必须在传输开始前接受该文件。
 
-> #chat {accept} {user}
+> #chat {accept} {buddy} {boost}
 
-在用户提供发送文件后接受文件传输。
+在用户提供发送文件后接受文件传输。速率是可选的，必须是介于 1-1000 之间的值。
 
 > #chat {decline} {user}
 
@@ -1015,48 +1009,83 @@ DND 代表 “不打扰”，此命令切换 DND 状态。启用后，所有新�
 
 显示当前正在进行的文件传输的信息。
 
-> #chat {downloaddir} {directory}
+> #chat {download} {directory}
 
-此命令设置新下载的目录。
+此命令设置新的下载目录。
 
-有关更多信息，请参见描述 `#chat` 使用的基础协议 MMCP 规范：[MMCP Specification](https://tintin.sourceforge.io/manual/chatprotocol.php)。
+有关更多信息，请参见描述 `#chat` 使用的基础协议 MMCP 规范：[「MMCP Specification」](https://tintin.sourceforge.io/manual/chatprotocol.php)。
+
+另可参见：[Port](#port)。
 
 ## Class
 
-> 语法: <br> 
-#class {name} {open|close|read filename|write filename|kill}
+> 语法: #class {name} {open|close|read filename|write filename|kill}
 
-Class命令可以方便的管理成组的列表。
+`#Class` 命令可以方便的管理和封装成组的列表。
+
+注： `Class` 在其他语言中通常被称为类，在 `tt++` 中称为分类或分组更适合。
 
 > #class {\<classname>} {open}
 
-{Open} 选项将打开一个类，并自动关闭以前打开的类 (如果有的话)，之后创建的所有触发器和变量都将被分配给这个类，直到它关闭。
+{Open} 选项将类标记为开始，并自动将以前打开的类标记为结束 (如果有)，之后创建的所有触发器和变量都将被分配给这个类，直到被标记结束。
 
 > #class {\<classname>} {close}
 
-{Close} 选项将关闭当前打开的类。
+{Close} 选项将当前打开的类标记为结束，并打开最后一个标记为开始的类 (如果有)。
 
 > #class {\<classname>} {read} {\<filename>}
 
-{Read} 选项将打开提供的类，读取给定文件，并在读取后关闭类。
+{Read} 选项将类标记为开始，读取给定文件，并在读取后将类标记为结束。
 
 > #class {\<classname>} {write} {\<filename>}
 
-{Write} 选项将给定类的所有触发器写入文件。此选项可以通过将变量分配给属于特定类来存储数据。
+{Write} 选项将给定类的所有触发（#action、#var...）写入文件。  
+此选项可以通过将变量分配给属于特定类来存储数据。
 
 > #class {\<classname>} {kill}
 
-{Kill} 选项将删除给定类的所有触发器。
+{Kill} 选项将删除给定的类。
 
-没有启用或禁用类的选项。要禁用一个类，你必须杀死它，要启用它，你必须从文件中重新加载它。或者，您可以使用变量来打开或关闭功能，或者如果要最小化文件访问，可以使用别名来重新创建触发器。
+> #class {\<name>} {clear}
 
-另请参见: [Debug](#debug), [Ignore](#ignore), [Info](#info), [Kill](#kill) and [Message](#message)。
+{Clear} 选项将删除与给定类关联的所有触发（#action、#var...）。
+
+> #class {\<name>} {list}
+
+{List} 选项将列出与给定类关联的所有触发（#action、#var...）。
+
+> #class {\<name>} {load}
+
+{Load} 选项将从内存加载已保存的类副本。
+
+> #class {\<name>} {save}
+
+{Save} 选项将将把给定类的所有触发（#action、#var...）保存到内存中。
+
+> #class {\<name>} {assign} {\<argument>}
+
+将在给定类打开的情况下执行参数。
+
+> #class {\<name>} {size} {\<variable>}
+
+将类的大小存储在变量中。
+
+```
+示例：
+#class extra kill;#class extra read extra.tin
+--删除 “extra” 类
+--读取 “extra.tin” 文件
+--加载的所有触发（#action、#var...）都将分配给新的 “extra” 类。
+```
+
+另请参见: [Debug](#debug)，[Ignore](#ignore)，[Info](#info)，[Kill](#kill)，[Message](#message)。
 
 ## Colors
 
-**ANSI Colors**
+* **ANSI Colors**
 
-> 语法: \<abc> with a, b, c 是参数
+> 语法: <abc>  
+-- a, b, c 是参数
 
 参数 'a': VT100 code
 ```
@@ -1080,75 +1109,91 @@ Class命令可以方便的管理成组的列表。
 4 - Blue   蓝色  9 - Default 默认
 ```
 
-**Xterm 256 Colors**
+* **Xterm 256 Colors**
 
-对于 xterm 256 颜色支持：
+对于 xterm 256 色支持：
 
-对于 RGB 前景色使用 `<aaa>到<fff>`，<br>
-对于 RGB 背景色使用 `<AAA>到<FFF>`。
+对于 RGB 前景色使用 `<aaa> 到 <fff>`  
+对于 RGB 背景色使用 `<AAA> 到 <FFF>`  
 
-对于灰度前景色，使用 `<g00>到<g23>`; <br>
-对于灰度背景色，使用 `<G00>到<G23>`。
+对于灰度前景色，使用 `<g00> 到 <g23>`  
+对于灰度背景色，使用 `<G00> 到 <G23>`  
+
 ```
 示例:
 #showme <034>T<025>i<016>n<007>T<043>i<052>n<061>+<070>+<088>
-```
-在 TinTin++ 中执行此操作，以查看实际结果。
-```
+
 示例:
 #showme <fca> orange <cfa> lime <caf> indigo <acf> azure <fac> crimson
+
+示例：
+#show <acf>Azure    <afc>Jade     <caf>Violet
+#show <cfa>Lime     <fac>Pink     <fca>Orange
 ```
 
-在 TinTin++ 中执行此操作，要查看实际结果，您的终端必须支持 `xterm 256 color`。
+在 TinTin++ 中执行示例，以查看实际结果。
 
-**Truecolor**
+* **Truecolor**
 
-对于 12 位 truecolor 真彩色，<br>
-前景色使用 `<F000>到<FFFF>`，<br>
-背景色使用 `<B000>到<BFFF>`。<br>
-第一个字符表示 F (前景) 或 B (背景)，接下来的三个字符是十六进制 RGB 值。这允许 4096 种不同的颜色。**请记住，并非所有终端都支持 truecolor**。
+对于 12 位 truecolor 真彩色：
 
-对于 24 位 truecolor 前景色，使用`\e[38;2;R;G;Bm`，其中 RGB 是 0 到 255 之间的红色/绿色/蓝色强度。<br>
-例如: `\e[37;2;50;100;150m`。
+前景色使用 `<F000> 到 <FFFF>`  
+背景色使用 `<B000> 到 <BFFF>`  
 
-对于 24 位 truecolor 背景颜色，<br>
-请使用 `\e[48;2;R;G;Bm`。
+第一个字符表示 F (前景) 或 B (背景)，接下来的三个字符是十六进制 RGB 值。  
 
-另可参见: [ Escape Codes ](#escape-codes), [Mathematics](#mathematics) and [Regular Expressions](#regular-expressions)
+这允许 4096 种不同的颜色。
+
+**注：请记住，并非所有终端都支持 truecolor 真彩色**。
+
+对于 24 位 truecolor 前景色：  
+
+前景色使用 `<F000000> 到 <FFFFFFF>`  
+背景色使用 `<B000000> 到 <BFFFFFF>`  
+
+如果颜色代码超出您配置的颜色模式，它将会降级到最接近的匹配项。
+
+另可参见: [Escape Codes](#escape-codes)， [Mathematics](#mathematics)，[Regular Expressions](#regular-expressions)。
 
 ## Commands
 
-> 语法: #commands {abbreviation}
+> 语法: #commands {regex}
 
 如果没有参数，此命令将显示所有命令，否则将显示与缩写匹配的所有命令。
 
-**Command 语法**
+* **Command 语法**
 
-所有 TinTin++ 命令都以 “#” 开头，可以使用 `#config {TINTIN CHAR}` 更改。例如，键入时，可以缩写所有 tintin 命令。全名 #variable，您可以使用 #var。
+所有 TinTin++ 命令都以 “#” 开头，可以使用 `#config {TINTIN CHAR}` 更改。
+
+键入时，所有 tintin 命令都可以缩写。  
+
+例如：`#variable` 可以缩写为 `#var`。
 
 可以使用 `#<session name>` 激活会话，也可以使用 `#<session name> {commands}` 在不激活会话的情况下执行命令。
 
-`#<Number> {commands}` 可用于执行给定命令的 “number” 次。
+`#<number> {commands}` 可用于执行给定命令 “number” 次。
 
-您可以通过将命令封装在一组大括号中，并用分号分隔每个命令来执行几个命令，例如，显示您将使用的 “hello” 和 “world” 4 次:
+您可以通过将命令封装在一组大括号中，并用分号分隔每个命令来执行几个命令。  
+
+例如，显示 “hello” 和 “world” 4 次:
 ```
 示例:
 #4 {#showme Hello;#showme World}
 ```
-**Commands Seperator**
 
-如果你想发送文字 “;”，你可以使用 `\;` 来发送。要按原样发送整行内容，您将以 `\'`开头
+* **Commands Seperator**
+
+如果你想发送文字 “;”，你可以使用 `\;` 来发送。  
+
+要按原样发送整行内容，使用 `\` 开头。
 
 ```
 示例: \Hello ;) 
 -- tintin 不解析以 “\” 开头的行。
-
 示例: say Hello \;) 
 -- '\'不解析后面的字符。
-
 示例: #config verbatim on 
 -- 除非以 “#” 开头，否则所有内容都是按原样整行发送的。
-
 示例: #line substitute secure {say Hello ;)} 
 -- 自动排除特殊字符。
 ```
@@ -1162,30 +1207,44 @@ chat n;w;s;e 这样是不行的，
 你可以 chat n\;w\;s\;e，
 也可以 chat {n;w;s;e}。
 \ 的意思就是不再解析。
-{} 的意思就是延迟解析
+{} 的意思就是延迟解析。
 ```
 
-**Carriage Return**
+* **Carriage Return**
 
 当您发出命令时，系统会自动添加换行/回车。要更改此行为，请以 “\” 结尾。
 
-> 示例: #showme hi\
+```
+示例: 
+#showme hi\
+#send look\
+```
 
-> #send look\
+* **Command Files**
 
-**Command Files**
+可以将命令放在文件中，这些文件被称为命令文件。  
 
-可以将命令放在文件中，这些文件随后被称为命令文件。您可以使用读取read、会话session、端口port、运行run和 ssl 命令读取命令文件。
+您可以使用读取(read)、会话(session)、端口(port)、运行(run)和 (ssl) 命令读取命令文件。
 
-您可以使用 `“tt++ <filename>”` 启动 TinTin++，以在启动时加载命令文件。如果使用会话命令提供文件名，则只有当会话成功连接到主机时，命令文件才会被读取。
+您可以使用 `tt++ <filename>` 启动 TinTin++，以在启动时加载命令文件。
+
+如果使用会话命令提供文件名，则只有当会话成功连接到主机时，命令文件才会被读取。
 
 默认的命令字符是 `#` 。TinTin++ 将命令字符设置为命令文件中找到的第一个字符。
 
-如果您想在读取文件时看到更多信息，请使用: `#config {verbose} {on}`
+如果您想在读取文件时看到更多信息，请使用: `#config {verbose} {on}`。
 
-请记住，文件中使用的每个开口大括号 {必须与闭合大括号} 相匹配。如果不这样做会失败，您将收到错误消息，并且文件不会加载。
+请记住，文件中使用的每个开口大括号 {必须与闭合大括号} 相匹配。  
 
-您可以保存使用 `#write` 命令创建的触发器、变量和设置。请记住，并非所有设置都已保存。您可以使用 `#event {PROGRAM START}` 或 `#event {SESSION CREATED}` 来添加初始化命令，并用`#Write`保存。
+如果不这样做会失败，您将收到错误消息，并且文件不会加载。
+
+您可以保存使用 `#write` 命令创建的触发器、变量和设置。  
+
+请记住，并非所有设置都已保存。  
+
+您可以使用 `#event {PROGRAM START}` 或 `#event {SESSION CREATED}` 来添加初始化命令，并用 `#Write` 保存。
+
+另可参见：[Help](#help)，[Info](#info)，[Statements](#statements)。
 
 ## Config
 
