@@ -1300,10 +1300,20 @@ chat n;w;s;e 这样是不行的，
 
 > 语法: #config {option} {argument}
 
-当 TinTin++ 启动时，它将生成一个配置文件，可以用 config 命令修改它。键入没有参数的 config 将显示当前配置，这些配置可以用 `#write` 命令写入文件方便以后加载。
+如果您配置了全局会话 (启动时看到的会话），所有启动的会话都将继承这些设置。
+
+如果你不喜欢默认设置，建议使用配置文件启动。
+
+当 `TinTin++` 启动时，它将生成一个配置文件，可以用 `#config` 命令修改它。 
+ 
+键入没有参数的 `#config` 将显示当前配置，这些配置可以用 `#write` 命令写入文件方便以后加载。
 
 ***
 默认情况下不启用以下配置选项:
+
+> #CONFIG {CHILD LOCK}   {ON|OFF}
+
+启用或禁用命令输入。
 
 > #config {CONVERT META} {ON|OFF}
 
@@ -1311,30 +1321,102 @@ chat n;w;s;e 这样是不行的，
 
 > #config {DEBUG TELNET} {ON|OFF}
 
-此选项将显示大多数 telnet negotiations。创建 telnet 事件时很有用。
+此选项将显示大多数 `telnet 子选项协商`。创建 `telnet` 事件时很有用。
 
 > #config {INHERITANCE} {ON|OFF}
 
-设置为 OFF 时，触发器不会从启动会话继承。仍将继承配置设置。
+会话触发继承开关。
 
 > #config {LOG LEVEL} {LOW|HIGH}，
 
-The low setting logs mud output before triggers,默认值为高。
+日志级别 LOW 是原始日志，只记录和服务器的交互。  
+
+日志级别 HIGH 是 buffer 日志，记录屏幕上的内容，默认值为高。
 
 > #config {MCCP} {ON|OFF}
 
-默认情况下启用此选项，可用于关闭 MCCP 支持。对于 MCCP 支持中断的 MUDs 很有用。
+默认情况下启用，可用于开关 `MCCP` 支持。
 
 ***
 以下配置选项需要进一步说明:
 
 > #config {COLOR PATCH} {ON|OFF}
 
-此选项修复了某些 muds 上的拆分模式下的颜色代码使用，最明显的是 Achaea。默认情况下，它是关闭的，启用时可能会影响颜色触发器。
+此选项用于修复某些 muds 上的分屏模式下的颜色代码。  
+
+默认情况下，它是关闭的，启用时可能会影响颜色触发器。
 
 > #config {PACKET PATCH} {ON|OFF}
 
-如果您的mud没有使用 MCCP，将数据包补丁设置为 0.5 到 1.0 之间的值将有助于处理损坏的数据包。如果这导致在显示提示之前出现小延迟，您可以使用 #split 并使用 `#prompt` 命令将提示放在拆分行上来解决这个问题。一些 MUDs 允许启用 EOR 或 GA，这也将消除延迟。
+如果您的 mud 没有使用 MCCP，将数据包补丁设置为 0.5 到 1.0 之间的值将有助于处理损坏的数据包。
+
+如果这导致在显示提示之前出现小延迟，您可以使用 `#split` 并使用 `#prompt` 命令将提示放在拆分行上来解决这个问题。
+
+一些 MUDs 允许启用 EOR 或 GA，这也可以消除延迟。
+
+***
+
+可用的设置选项：  
+
+|  选项 | 参数 | 释义 |
+| :--- | ---: | :--- |
+|AUTO TAB     |                         5000| TAB 自动补全行数 |
+|BUFFER SIZE  |                        10000| 缓冲区存储大小 |
+|CHARSET      |                        GBK-1| 编码设置 |
+|COLOR MODE   |                         TRUE| 颜色代码模式 |
+|COLOR PATCH  |                      ON\|OFF| 颜色修正模式 |
+|COMMAND COLOR|                     \e[0;37m| 命令颜色 |
+|COMMAND ECHO |                      ON\|OFF| 分屏模式指令显示 |
+|CONNECT RETRY|                          0.0| 会话重连间隔时间 |
+|HISTORY SIZE |                         1000| 命令历史存储大小 |
+|LOG MODE     |                          RAW| 日志文件数据格式 |
+|LOG LEVEL    |                    LOW\|HIGH| 日志等级 |
+|MOUSE        |                      ON\|OFF| 鼠标事件 |
+|PACKET PATCH |                         0.80| 修补损坏数据包时间 |
+|RANDOM SEED  |                         AUTO| 随机数种子 |
+|REPEAT CHAR  |                            !| 重复指令符号 |
+|REPEAT ENTER |                      ON\|OFF| 重复发送最后一个指令 |
+|SCREEN READER|                      ON\|OFF| 屏幕阅读器模式 |
+|SCROLL LOCK  |                      ON\|OFF| 卷轴锁定 |
+|SPEEDWALK    |                      ON\|OFF| 快速行走 |
+|TAB WIDTH    |                            8| TAB 占用空格数 |
+|TELNET       |                      ON\|OFF| TELNET 支持 |
+|TINTIN CHAR  |                            #| 命令字符 |
+|VERBATIM     |                      ON\|OFF| 解析键盘输入 |
+|VERBATIM CHAR|                           \\| 解析字符 |
+|VERBOSE      |                      ON\|OFF| 静默读取脚本 |
+|WORDWRAP     |                      ON\|OFF| 包装服务器输出 |
+
+```
+参数补充说明：
+
+颜色模式：
+#CONFIG {COLOR MODE} <ON|OFF|ANSI|256|TRUE>
+
+日志格式：
+#CONFIG LOG <HTML|PLAIN|RAW>
+
+随机数种子：
+#SYNTAX: #CONFIG {RANDOM SEED} <AUTO|NUMBER>
+
+编码：
+#CONFIG {CHARSET} <AUTO|ASCII|BIG-5|BIG5TOUTF8|CP1251TOUTF8|CP949|CP949TOUTF8|FANSI|GBK-1|GBK1TOUTF8|ISO1TOUTF8|ISO2TOUTF8|KOI8TOUTF8|UTF-8>
+
+卷轴锁定：
+#CONFIG SCROLL LOCK {ON|OFF}
+参数 ON 在滚动时看不到服务器输出，
+参数 OFF 在滚动时可以看到服务器输出。
+```
+
+注：要查看每个选项的具体语法，请键入任意完全不匹配的字符。
+
+```
+例如：
+#config {mouse} 担子炮最牛逼！炮爷救我！
+#SYNTAX: #CONFIG {MOUSE} <ON|OFF|DEBUG|INFO|PIXELS>
+```
+
+另可参见：[Class](#class)，[Line](#line)。
 
 ## Continue
 
