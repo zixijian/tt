@@ -1327,7 +1327,7 @@ chat n;w;s;e 这样是不行的，
 
 会话触发继承开关。
 
-> #config {LOG LEVEL} {LOW|HIGH}，
+> #config {LOG LEVEL} {LOW|HIGH}
 
 日志级别 LOW 是原始日志，只记录和服务器的交互。  
 
@@ -1358,34 +1358,34 @@ chat n;w;s;e 这样是不行的，
 
 可用的设置选项：  
 
-|  选项 | 参数 | 释义 |
-| :--- | ---: | :--- |
-|AUTO TAB     |                         5000| TAB 自动补全行数 |
-|BUFFER SIZE  |                        10000| 缓冲区存储大小 |
-|CHARSET      |                        GBK-1| 编码设置 |
-|COLOR MODE   |                         TRUE| 颜色代码模式 |
-|COLOR PATCH  |                      ON\|OFF| 颜色修正模式 |
-|COMMAND COLOR|                     \e[0;37m| 命令颜色 |
-|COMMAND ECHO |                      ON\|OFF| 分屏模式指令显示 |
-|CONNECT RETRY|                          0.0| 会话重连间隔时间 |
-|HISTORY SIZE |                         1000| 命令历史存储大小 |
-|LOG MODE     |                          RAW| 日志文件数据格式 |
-|LOG LEVEL    |                    LOW\|HIGH| 日志等级 |
-|MOUSE        |                      ON\|OFF| 鼠标事件 |
-|PACKET PATCH |                         0.80| 修补损坏数据包时间 |
-|RANDOM SEED  |                         AUTO| 随机数种子 |
-|REPEAT CHAR  |                            !| 重复指令符号 |
-|REPEAT ENTER |                      ON\|OFF| 重复发送最后一个指令 |
-|SCREEN READER|                      ON\|OFF| 屏幕阅读器模式 |
-|SCROLL LOCK  |                      ON\|OFF| 卷轴锁定 |
-|SPEEDWALK    |                      ON\|OFF| 快速行走 |
-|TAB WIDTH    |                            8| TAB 占用空格数 |
-|TELNET       |                      ON\|OFF| TELNET 支持 |
-|TINTIN CHAR  |                            #| 命令字符 |
-|VERBATIM     |                      ON\|OFF| 解析键盘输入 |
-|VERBATIM CHAR|                           \\| 解析字符 |
-|VERBOSE      |                      ON\|OFF| 静默读取脚本 |
-|WORDWRAP     |                      ON\|OFF| 包装服务器输出 |
+选项          | 参数                        | 释义 
+ :---        | ---:                        | :--- 
+AUTO TAB     |                         5000| TAB 自动补全行数
+BUFFER SIZE  |                        10000| 缓冲区存储大小 
+CHARSET      |                        GBK-1| 编码设置
+COLOR MODE   |                         TRUE| 颜色代码模式
+COLOR PATCH  |                      ON\|OFF| 颜色修正模式
+COMMAND COLOR|                     \e[0;37m| 命令颜色
+COMMAND ECHO |                      ON\|OFF| 分屏模式指令显示
+CONNECT RETRY|                          0.0| 会话重连间隔时间
+HISTORY SIZE |                         1000| 命令历史存储大小
+LOG MODE     |                          RAW| 日志文件数据格式
+LOG LEVEL    |                    LOW\|HIGH| 日志等级
+MOUSE        |                      ON\|OFF| 鼠标事件
+PACKET PATCH |                         0.80| 修补损坏数据包时间
+RANDOM SEED  |                         AUTO| 随机数种子
+REPEAT CHAR  |                            !| 重复指令符号
+REPEAT ENTER |                      ON\|OFF| 重复发送最后一个指令
+SCREEN READER|                      ON\|OFF| 屏幕阅读器模式
+SCROLL LOCK  |                      ON\|OFF| 卷轴锁定
+SPEEDWALK    |                      ON\|OFF| 快速行走
+TAB WIDTH    |                            8| TAB 占用空格数
+TELNET       |                      ON\|OFF| TELNET 支持
+TINTIN CHAR  |                            #| 命令字符
+VERBATIM     |                      ON\|OFF| 解析键盘输入
+VERBATIM CHAR|                          \\ | 解析字符
+VERBOSE      |                      ON\|OFF| 静默读取脚本
+WORDWRAP     |                      ON\|OFF| 包装服务器输出
 
 ```
 参数补充说明：
@@ -1408,7 +1408,7 @@ chat n;w;s;e 这样是不行的，
 参数 OFF 在滚动时可以看到服务器输出。
 ```
 
-注：要查看每个选项的具体语法，请键入任意完全不匹配的字符。
+注：要查看每个选项的具体语法，请键入任意与参数完全不匹配的字符。
 
 ```
 例如：
