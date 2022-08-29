@@ -298,7 +298,7 @@ TinTin++ 不检查递归别名！您可以通过转义整行来避免递归。
 示例: #send put %1 in %2
 ```
 
-- **触发**
+- **触发器**
 
 > 命令: #action  
 语法: #action {action-text} {commands}
@@ -1403,7 +1403,7 @@ WORDWRAP     |                      ON\|OFF| 包装服务器输出
 #CONFIG {CHARSET} <AUTO|ASCII|BIG-5|BIG5TOUTF8|CP1251TOUTF8|CP949|CP949TOUTF8|FANSI|GBK-1|GBK1TOUTF8|ISO1TOUTF8|ISO2TOUTF8|KOI8TOUTF8|UTF-8>
 
 卷轴锁定：
-#CONFIG SCROLL LOCK {ON|OFF}
+#CONFIG {SCROLL LOCK} {ON|OFF}
 参数 ON 在滚动时看不到服务器输出，
 参数 OFF 在滚动时可以看到服务器输出。
 ```
@@ -1420,9 +1420,15 @@ WORDWRAP     |                      ON\|OFF| 包装服务器输出
 
 ## Continue
 
-> 语法: #continue
+> 命令: #continue
 
-可以使用 “继续” 命令跳过` #foreach 、 #loop 、 #parse 、 #switch 和 #while `命令中的命令。当发现 `#continue` 时，TinTin++ 将移动到循环的末尾，并像往常一样继续。
+`#Continue(继续)` 可以用于 `#foreach`、`#loop`、`#parse`、`#switch`、`#while`。  
+
+当发现 `#continue` 时，TinTin++ 将移动到循环的末尾，并继续执行。
+
+这可能会反复执行命令。
+
+
 ```
 示例:
 #loop 1 10 cnt
@@ -1433,51 +1439,166 @@ WORDWRAP     |                      ON\|OFF| 包装服务器输出
   };
   say $cnt
 }
+--此处将 $cnt 做整数模运算求余数。
 ```
 另可参见: [Break](#break), [Foreach](#foreach), [List](#list), [Loop](#loop), [Parse](#parse), [Repeat](#repeat), [Return](#return) and [While](#while).
 
 ## Coordinates
 
-当 0,0 坐标位于左上角时，TinTin++ 使用 y,x / rows,cols 表示。  
-当 0,0 坐标位于左下角时，TinTin++ 使用 x,y / cols/rows 表示。
+当 `0,0` 坐标位于左上角时，TinTin++ 使用 y,x / rows,cols 记法。  
+此时 `1,1` 表示左上角，`-1,-1` 表示右下角。  
+此类参数由 `#showme` 使用。
+
+当 `0,0` 坐标位于左下角时，TinTin++ 使用 x,y / cols,rows 记法。  
+此类参数由 `#map jump` 使用。
 
 定义空间坐标时，通过使用四个坐标指定空间的左上角和空间的右下角。
 
-绝大多数的 tintin 命令使用 row,col 表示法。
+绝大多数的 tintin 命令使用 `row,col` 记法，主要是因为这种记法是 "VT100 标准" 在终端仿真使用的。
 
-另可参见：[Characters](#characters),[Colors](#colors),[Escape](#escape),[Mathematics](#mathematics) and [PCRE](#pcre).
+注：此处可参考笛卡尔坐标系相关资料。
+
+***
+
+* Squares
+
+`Squares(正方形)` 参数采用 2 个坐标。
+
+第一个坐标定义左上角，第二个坐标定义右下角。
+
+终端的左上角定义为 1,1，右下角为 -1,-1。
+
+此类参数由 `#draw`、`#button` 和 `#map offset` 使用。
+
+* Panes
+
+`Pane(窗格)` 参数采用 4 个尺寸值，即: 顶部窗格、底部窗格，左窗格，右窗格。  
+
+当提供负值时是用最大尺寸减去该值。
+
+此类参数由 `#split` 命令使用。
+
+* Ranges
+
+`Range(范围)` 参数采用 2 个值，称为上限和下限。
+
+上限 (第一个值) 定义范围开头，下限 (第二个值) 定义范围结束。
+
+第一个索引范围定义为 1。当提供负值时最后一个索引定义为 -1。
+
+此类参数由 `#buffer` 和 `#variable` 使用。
+
+***
+
+另可参见：[Characters](#characters)，[Colors](#colors)，[Escape](#escape)，[Mathematics](#mathematics) ，[PCRE](#pcre)。
 
 ## Cr
 
-> 语法: #cr
+> 命令: #cr
 
-此命令向mud服务器发送回车。这是过时的，应该避免。
+此命令向会话发送回车符。在 `#alias` 需要返回额外的回车符时很有用。
 
-#Cr 如果启用了重复输入配置选项，并且在不重复最后一个命令的情况下需要输入，则很有用。
+如果启用了 `REPEAT ENTER` ，并且在不重复最后一个命令的情况下需要输入时很有用。
 
-一个很好的选择是在没有参数的情况下使用 #send，或者使用命令分隔符 `;` 插入 enter。
+此命令已过时，可以选择在没有参数的情况下使用 `#send`，或者使用命令分隔符 `;` 插入回车符。
 
 如果你想在 DikuMUD 服务器上发送多个返回，最好使用 `#send {\n \n}` (空格是有意的)，因为许多 DikuMUD 服务器将连续的返回视为一次返回。
 
 ```
 示例: 
 #ticker {idle} {#send} {300}
-
-这将每 300 秒 (5 分钟) 向mud发送一次回车，这将阻止大多数mud和网络因不活动而断开您的连接。
+--这将每 300 秒 (5 分钟) 向 mud 发送一次回车符来保持在线状态。
 ```
 
-另可参见: [Bell](#bell)and [Forall](#forall).
+另可参见: [Bell](#bell)，[Forall](#forall)。
 
 ## Cursor
 
-> 语法: #cursor {option}
+> 语法: #cursor {option} {argument}
 
-键入 #cursor 时，如果没有选项，将显示所有可用的光标选项。Cursor 命令的主要目标是使用宏添加可定制的输入编辑。
+键入 `#cursor` 时，如果没有输入选项，将显示所有可用的光标选项和它们的默认绑定，以及对其功能的解释。
+
+`#Cursor` 命令的主要目标是为 `#macro` 添加可定制的输入编辑。
+
+可用选项如下：
+
+选项 | 绑定 | 释义
+:--- | :--- |:---
+BACKSPACE         | \b      | 退格删除
+BRACE             |         | \<OPEN\|CLOSE\> 插入大括号符号
+BACKWARD          | \cb     | 前移光标
+CLEAR             | \cc     | 清除输入行
+CLEAR LEFT        | \cu     | 从光标左侧清除
+CLEAR RIGHT       | \ck     | 从光标右侧清除
+CONVERT META      | \cv     | 转换下一个字符为元字符
+CTRL DELETE       | \cd     | 删除一个字符,在空行上退出
+DELETE            | \e3~    | 删除光标处的字符
+DELETE WORD LEFT  | \cw     | 向前删除到空格
+DELETE WORD RIGHT | \e3;5~  | 向后删除到空格
+DOWN              | \eB     | 下移光标
+END               | \ce     | 移动光标到输入行尾部
+ENTER             |         | 执行输入行
+FLAG              |         | 设置输入行 echo/insert 标签
+FORWARD           | \cf     | 后移光标
+GET               |         | 复制输入行到变量
+HISTORY NEXT      | \cn     | 选择下一个历史命令
+HISTORY PREV      | \cp     | 选择上一个历史命令
+HISTORY SEARCH    | \cr     | 搜索历史命令
+HOME              | \ca     | 移动光标到输入行首
+NEXT WORD         | \ef     | 移动光标到下一个单词
+MACRO             |         | \<PRESERVE\|RESET\>
+PAGE              |         | \<DOWN\|END\|HOME\|LOCK\|UP\>
+PASTE BUFFER      | \cy     | 粘贴以前删除的输入文本
+POSITION          |         | 移动光标位置到指定列
+PREV WORD         | \eb     | 移动光标到前一个单词
+REDRAW INPUT      | \cl     | 重绘输入行
+SET               |         | 复制给定字符串到输入行
+SOFT ENTER        | \e13;2u| 在编辑模式新建行
+SUSPEND           | \cz     | 挂起程序，用 fg 返回
+TAB               |         | \<LIST\|SCROLLBACK\> \<BACKWARD\|FORWARD\>
+UP                | \eA     | 上移光标
+
+
+许多光标命令仅在以下情况才能正常工作在 `#macro` 或 `#event` 中。
+
+* #cursor flag
+
+选项 | 释义
+:---|:---
+EOL         |行结束符  
+ECHO        |开关回显标记  
+INSERT      |切换插入\|替换  
+OVERTYPE    |改写模式  
+
+```
+设置换行符的格式：
+#CURSOR {FLAG} {EOL} {CR|LF|CRLF|CRNUL|OFF}
+```
+* #cursor macro
+
+选项 | 释义
+:---|:---
+PRESERVE    |不从宏输入缓冲区中擦除宏
+RESET       |擦除宏输入缓冲区  
+
+* #cursor tab
+
+选项 | 释义
+:---|:---
+CASELESS    |使自动补全不区分大小写  
+COMPLETE    |使自动补全在编辑时工作  
+DICTIONARY  |在字典上执行自动补全  
+SCROLLBACK  |在回滚缓冲区执行自动补全  
+BACKWARD    |指定自动补全向后  
+FORWARD     |指定自动补全向前  
+
+大多数选项可以/必须一次性设定。
+
 ```
 示例: 
 #macro {\e\e[3~} {#cursor clear right}
+--当按下 alt-delete 时，光标右侧的所有输入都被清除，默认情况下，该输入被设置为 ctrl-k。
 ```
-当按下 alt-delete 时，光标右侧的所有输入都被清除，默认情况下，该输入被设置为 ctrl-k。
 
 另可参见: [Alias](#alias), [History](#history), [Keypad](#keybord), [Macro](#macro), [Speedwalk](#speedwalk) and [Tab](#tab).
 
