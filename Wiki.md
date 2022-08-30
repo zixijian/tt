@@ -112,11 +112,17 @@
 
 - **关于 TinTin++ Mud 客户端**
 
-TinTin++ (或称tt++) 是适用于 Android,iOS,Linux,macOS,Windows 的 free（自由）Mud 客户端。  
+TinTin++ (或称 tt++) 是适用于 Android,iOS,Linux,macOS,Windows 的 `free(自由)` Mud 客户端。  
 
 TinTin ++ 具有高级自动程序、脚本语言和 VT100 接口。  
 
-名为 WinTin++ 的 Windows 桌面程序（使用 PuTTY 派生的 mintty 终端）适用于不使用 Cygwin（Windows的 Linux/Unix 模拟器）的用户。
+WinTin++ Windows 桌面程序适用于不使用 Cygwin 的用户。
+
+Windows 还可以使用 WSL 来体验原汁原味的 Linux TinTin++。
+
+--WinTin++（使用 PuTTY 派生的 mintty 终端）  
+--Cygwin（Windows 的 Linux/Unix 模拟器）  
+--WSL（Windows 10 以上的 Linux 子系统）  
 
 - **关于 TinTin++ 手册**
 
@@ -140,7 +146,8 @@ WinTin++ Windows 桌面程序可作为安装程序使用。
 
 要在[「安卓」](https://tintin.mudhalla.net/android.php)或 ChromeOS 上运行客户端，需要 Termux（一个安卓终端模拟器和 Linux 环境，它也在 Chromebook 和 Kindle Fire 平板电脑上运行）。  
 
-要在 iPhone 和 iPad 上运行客户端，需要 iSH（相当于 iOS 上的 Termux）。  
+要在 iPhone 和 iPad 上运行客户端，需要 iSH（相当于 iOS 上的 Termux）。 
+ 
 也可以在 macOS、Linux、Unix 计算机上运行 ssh 守护程序，无论您使用 ssh 客户端还是 web 浏览器，都可以远程访问脚本和客户端。
 
 - **TinTin++ 特性**
@@ -1516,16 +1523,16 @@ WORDWRAP     |                      ON\|OFF| 包装服务器输出
 
 > 语法: #cursor {option} {argument}
 
-键入 `#cursor` 时，如果没有输入选项，将显示所有可用的光标选项和它们的默认绑定，以及对其功能的解释。
+键入不带参数的 `#cursor` 时，将显示所有可用的光标选项和它们的默认绑定、介绍。
 
-`#Cursor` 命令的主要目标是为 `#macro` 添加可定制的输入编辑。
+`#Cursor` 命令的主要目标是为 `#macro` 添加可定制的输入编辑，其工作的主要方式是基于光标位置进行的操作。
 
 可用选项如下：
 
 选项 | 绑定 | 释义
 :--- | :--- |:---
 BACKSPACE         | \b      | 退格删除
-BRACE             |         | \<OPEN\|CLOSE\> 插入大括号符号
+BRACE             |         | 插入大括号
 BACKWARD          | \cb     | 前移光标
 CLEAR             | \cc     | 清除输入行
 CLEAR LEFT        | \cu     | 从光标左侧清除
@@ -1538,7 +1545,7 @@ DELETE WORD RIGHT | \e3;5~  | 向后删除到空格
 DOWN              | \eB     | 下移光标
 END               | \ce     | 移动光标到输入行尾部
 ENTER             |         | 执行输入行
-FLAG              |         | 设置输入行 echo/insert 标签
+FLAG              |         | 设置输入行状态
 FORWARD           | \cf     | 后移光标
 GET               |         | 复制输入行到变量
 HISTORY NEXT      | \cn     | 选择下一个历史命令
@@ -1546,18 +1553,19 @@ HISTORY PREV      | \cp     | 选择上一个历史命令
 HISTORY SEARCH    | \cr     | 搜索历史命令
 HOME              | \ca     | 移动光标到输入行首
 NEXT WORD         | \ef     | 移动光标到下一个单词
-MACRO             |         | \<PRESERVE\|RESET\>
-PAGE              |         | \<DOWN\|END\|HOME\|LOCK\|UP\>
+MACRO             |         | 宏缓冲区
+PAGE              |         | 翻页
 PASTE BUFFER      | \cy     | 粘贴以前删除的输入文本
 POSITION          |         | 移动光标位置到指定列
 PREV WORD         | \eb     | 移动光标到前一个单词
 REDRAW INPUT      | \cl     | 重绘输入行
 SET               |         | 复制给定字符串到输入行
-SOFT ENTER        | \e13;2u| 在编辑模式新建行
+SOFT ENTER        | \e[13;2u| 在编辑模式新建行
 SUSPEND           | \cz     | 挂起程序，用 fg 返回
-TAB               |         | \<LIST\|SCROLLBACK\> \<BACKWARD\|FORWARD\>
+TAB               |         | 自动补全
 UP                | \eA     | 上移光标
 
+注：请键入 `#cursor <子选项>` 查看子选项的语法。
 
 许多光标命令仅在以下情况才能正常工作在 `#macro` 或 `#event` 中。
 
@@ -1600,46 +1608,75 @@ FORWARD     |指定自动补全向前
 --当按下 alt-delete 时，光标右侧的所有输入都被清除，默认情况下，该输入被设置为 ctrl-k。
 ```
 
-另可参见: [Alias](#alias), [History](#history), [Keypad](#keybord), [Macro](#macro), [Speedwalk](#speedwalk) and [Tab](#tab).
+另可参见: [Alias](#alias)，[History](#history)，[Keypad](#keybord)， [Macro](#macro)，[Speedwalk](#speedwalk)，[Tab](#tab)。
 
 ## Daemon
 
 > 语法：#daemon {attach|detach|kill|list} [name]
 
-#daemon 守护程序提供类似于 screen 和 tmux 的功能。  
+`#Daemon` 提供类似于 `screen` 和 `tmux` 的守护进程功能。  
 
 - #daemon attach [name]  
-attach 附加选项将尝试找到一个守护中的 tintin 实例，并且接管控制权。Name 参数是可选的。  
+`attach` 重连选项将尝试找到一个守护中的 tintin 实例，并且接管控制权。Name 参数是可选的。  
 - #daemon detach [name]  
-detach 分离选项将屏蔽tintin，将其变成后台进程。Name 参数是可选的，如果您有
-几个守护中的 tt++ 实例正在运行，可以用来将它们分开。  
+`detach` 分离选项将守护 tintin 进程，将其变成后台进程。Name 参数是可选的，如果您有几个守护中的 tt++ 实例正在运行，可以用来区分它们。  
 - #daemon kill [name]  
-杀死所有或具有匹配名称的守护程序。  
+杀死所有或具有匹配名称的守护进程。  
 - #daemon list [name]  
-列出所有或具有匹配名称的守护程序。
+列出所有或具有匹配名称的守护进程。
 
-另可参见：[Script](#script),[System](#system) and [Run](#run).
+另可参见：[Script](#script)，[System](#system)，[Run](#run)。
 
 
 ## Debug
 
-> 语法: #debug {listname} {argument}
+> 语法: #debug {listname} {on|off|log}
 
-如果没有参数，debug 将显示您可以切换的列表。如果没有给出参数，它将切换指定的列表标志。您可以使用 ON 、 OFF 或 LOG 作为参数更具体地更改调试标志。
+打开或关闭对列表的调试。
 
-如果设置了日志标志，并且您正在使用 #LOG 命令记录会话，调试信息将被写入文件。
+没有给出参数时，将显示当前设置，以及可以调试的列表名称。
 
-> 示例: #debug action on
+可调试列表如下：
+*  ACTIONS
+*  ALIASES
+*  BUTTONS
+*  CLASSES
+*  COMMANDS
+*  CONFIGS
+*  DELAYS
+*  EVENTS
+*  FUNCTIONS
+*  GAGS
+*  HIGHLIGHTS
+*  MACROS
+*  PATHS
+*  PATHDIRS
+*  PROMPTS
+*  SUBSTITUTES
+*  TABS
+*  TICKERS
+*  VARIABLES
 
-当触发时，操作将生成一条消息，解析器将向您显示操作执行的具体命令。
+```
+示例: 
+#debug action on
+--当 action 被触发时，将会得到调试信息。
 
-另可参见: [Class](#class), [Ignore](#ignore), [Info](info), [Kill](#kill) and [Message](#message).
+#debug {listname} {log}   
+--将调试信息静默写入日志文件，您必须为这项工作按顺序记录。
+```
+
+并非每个列表都有调试支持。
+
+另可参见: [Class](#class)，[Ignore](#ignore)，[Info](info)，[Kill](#kill)，[Message](#message)。
 
 ## Default
 
 > 语法: #default {commands}
 
-只能在 switch 命令中使用默认命令。当没有一个 case 命令的条件参数与 switch 命令的条件语句相匹配时，执行默认命令。
+只能在 `#switch` 命令中使用 `#default(默认)` 命令。
+
+当没有 `#case` 命令的条件参数与 `#switch` 命令的条件参数相匹配时，将会执行 `default(默认)` 命令。
 
 ```
 示例:
@@ -1650,38 +1687,56 @@ detach 分离选项将屏蔽tintin，将其变成后台进程。Name 参数是�
   #default giggle
 }
 ```
-另可参见: [Case](#case), [Default](#default), [Else](#else), [Elseif](#elseif), [If](#if), [Switch](#switch) and [Regex](#regex).
+
+另可参见: [Case](#case)，[Default](#default)，[Else](#else)，[Elseif](#elseif)，[If](#if)，[Switch](#switch)，[Regex](#regex)。
 
 ## Delay
 
-> 语法:#delay {秒} {命令}
+> 语法：#delay {second} {command}
 
-> 语法:#delay {name} {命令} {秒}
+> 语法：#delay {name} {command} {second}
 
-延迟命令允许您在执行给定命令之前让 tintin 等待给定的秒数。秒字段以毫秒精度采用浮点数字。
+`#Delay(延迟执行)` 命令允许您在执行给定命令之前让 tintin 等待给定的秒数。
 
-根据参数的数量，delay 命令的工作方式不同。对于三个参数，#delay 具有与 #tick 命令相同的语法，允许您命名延迟。如果您使用命名延迟，并且当前正在等待具有完全相同名称的延迟，它将被删除，并且永远不会执行。使用命名延迟还可以更容易地使用 #undelay 命令。
+允许纳秒级浮点精度，延迟执行命令将在 0.01 秒间隔内动作。
+
+命名后的延迟执行被视为一次性定时器，请参见 `#help ticker`。
+
+为延迟执行命名可以更容易地使用 `#undelay` 命令，注意这会改变语法。
+
+请记住，如果命名使用数字，那么具有相同数字名称的延迟执行不会被覆写。
+
 ```
+示例：
+#delay {1} {#show 第二};#show 第一
+--这将先输出"第一"，然后输出"第二"。
+
 示例: 
 #delay {600} {#showme 检查通脉情况}
-```
-这将在 600 秒后通知您检查通脉情况。
+--这将在 600 秒后通知您检查通脉情况。
 
-```
 示例: 
 #delay {checkdz} {#showme 检查通脉情况} {600}
+--与上面相同，只是为延迟执行命名。
 ```
-与上面相同，只是是使用命名延迟。
 
-另可参见: [Event](#event) and [Ticker](#ticker).
+另可参见: [Event](#event)，[Ticker](#ticker)。
 
 ## Draw
 
-> 语法：#draw [color] [options] \<type> \<square> {text}
+> 语法：#draw [line color] [options] \<type> \<square> {text}
 
-`Draw` 绘制命令允许您在屏幕上绘制各种类型的线和形状。当您在没有参数的情况下键入 #draw 时提供常见的选项和类型和简要说明。
+`Draw(绘制)` 命令允许您在屏幕上绘制各种类型的线条和形状。
 
-空间参数应该存在两个坐标，定义左上角和右下角使用行、列、行、列语法。
+当您在没有参数的情况下键入 `#draw` 时提供常见的选项和类型和简要说明。
+
+`<square>` 空间参数应该存在两个坐标定义左上角和右下角，使用 `row, col, row, col` 语法。
+
+`<square>` 空间参数可以是负数，在这种情况下坐标从屏幕的另一侧计算。
+
+在这种情况下，在一个 80 列宽度的屏幕上绘制 `#draw box 1 60 10 70` 等效于 `#draw box 1 -21 10 -11`。
+
+但是在不同宽度的屏幕上，盒子会被绘制在不同的位置。
 
 您可以使用颜色代码或颜色名称为选项添加前缀来给线条和形状上色。
 
@@ -1690,6 +1745,7 @@ detach 分离选项将屏蔽tintin，将其变成后台进程。Name 参数是�
 前缀|说明
 :-|:- 
 ASCII|将在 ASCII 模式下绘制。
+BALIGN|将文本底部对齐。
 BLANKED|将绘制空白线条和角。
 BOLD|将用粗体字母绘制文本。
 BOTTOM|如果可能的话，将在底部绘制。
@@ -1697,58 +1753,76 @@ BUMPED|将在绘制之前输入一个enter。
 CIRCLED|将绕着角。
 CONVERT|将使用元转换绘制文本。
 CROSSED|将越过角。
-CURSIVE|将用草书字母绘制文本。
+CURSIVE|将用花体字母绘制文本。
+FAT|将使用胖字母绘制文本。
 FILLED|将填满圆圈和菱形。
+FOREGROUND|即使会话未激活也会绘制。
 GRID|将表格绘制为网格。
 HORIZONTAL|如果可能的话，将水平绘制。
 HUGE|将用巨大的字母绘制文本。
 JEWELED|将在角绘制菱形。
 JOINTED|将绘制角。
+LALIGN|将左对齐文本。
 LEFT|如果可能的话，将在左侧绘制。
 NUMBERED|将绘制编号，主要用于调试。
 PRUNED|将修剪角。
 RIGHT|如果可能的话，将在右侧绘制。
 ROUNDED|将绕过角。
+SANSSERIF|将用无衬线字母绘制文本。
+SCALED|将使正方形适合文本大小。
 SCROLL|将在滚动区域中绘制。
 SHADOWED|将给大文本加阴影。
+TALIGN|将大文本顶部对齐。
 TEED|将在角绘制T型。
 TRACED|将追踪大文本。
 TOP|如果可能的话，将在顶部绘制。
 TUBED|将绘制管而不是线。
+UALIGN|将打开并重新包装文本。
 UNICODE|将在 unicode 模式下绘制。
 VERTICAL|如果可能的话，将垂直绘制。
 
-有以下几种类型可用。
+有以下几种类型可用：
 
-__[ASCII|UNICODE|HUGE] BOX {[TEXT1]} {[TEXT2]}__  
-将绘制一个盒子。
+* __[HORIZONTAL] BAR {\<MIN>;\<MAX>;[COLOR]}__  
+绘制一个条，使用两个 256 颜色代码进行颜色渐变。
 
-__[BLANKED|CIRCLED|CROSSED|JEWELED|ROUNDED|TEED|PRUNED] CORNER__  
-将绘制一个角。
+* __[BOXED|FOREGROUND] BUFFER__  
+绘制回滚缓冲区。
 
-__[BLANKED|HORIZONTAL|NUMBERED|TUBED|VERTICAL] LINE {[TEXT]}__  
-将绘制线条。
+* __[BOXED] MAP__  
+绘制地图。
 
-__RAIN {\<VARIABLE\>} {[SPAWN]} {[FADE]} {[LEGEND]}__  
-将绘制数字雨。
+* __[ASCII|UNICODE|HUGE] BOX {[TEXT1]} {[TEXT2]}__  
+绘制一个盒子。
 
-__[JOINTED|TOP|LEFT|BOTTOM|RIGHT] SIDE__  
-将绘制一个盒子的一个或多个边。
+* __[BLANKED|CIRCLED|CROSSED|JEWELED|ROUNDED|TEED|PRUNED] CORNER__  
+绘制一个角。
 
-__[GRID] TABLE {[LIST1]} {[LIST2]}__  
-将绘制一个表格。
+* __[BLANKED|HORIZONTAL|NUMBERED|TUBED|VERTICAL] LINE {[TEXT]}__  
+绘制线条。
 
-__[HUGE] TILE {[TEXT1]} {[TEXT2]}__  
-会绘制一块瓷砖。
+* __RAIN {\<VARIABLE\>} {[SPAWN]} {[FADE]} {[LEGEND]}__  
+绘制数字雨。
 
-当已定义了足够大的有效空间，所有绘图类型都采用可选的文本参数。文本自动进行文字包装。
+* __[JOINTED|TOP|LEFT|BOTTOM|RIGHT] SIDE__  
+绘制一个盒子的一个或多个边。
+
+* __[GRID] TABLE {[LIST1]} {[LIST2]}__  
+绘制一个表格。
+
+* __[HUGE] TILE {[TEXT1]} {[TEXT2]}__  
+绘制一块瓷砖。
+
+所有绘图类型都采用可选的文本参数，只要定义了足够大的有效空间。
+
+文本自动进行文字包装，可以使用 `CALIGN`、`LALIGN`、`RALIGN`、`UALIGN` 等选项定制。
 
 ```
-例如：
+示例：
 #draw Blue box 1 1 3 20 {Hello world!}
 ```
 
-另可参见：[Buffer](#buffer),[Echo](#echo),[Grep](#grep) and [Showme](#showme).
+另可参见：[Buffer](#buffer)，[Echo](#echo)，[Grep](#grep)，[Showme](#showme)。
 
 ## Echo
 
