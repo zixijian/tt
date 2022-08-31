@@ -31,8 +31,10 @@
 |[ Draw ](#draw)|  
 |[ Echo ](#echo)
 |[ Else ](#else)
+|[ Edit](#edit)
+|[ Editing ](#editing)|  
 |[ Elseif ](#elseif)
-|[ End ](#end)|  
+|[ End ](#end)
 |[ Escape Codes ](#escape-codes)
 |[ Event ](#event)|  
 |[ Forall ](#forall)
@@ -1826,50 +1828,147 @@ VERTICAL|如果可能的话，将垂直绘制。
 
 ## Echo
 
-> 语法: #echo {format} {arguments}
+> 语法: #echo {format} {argument1} {argument2} {etc}
 
-> #echo {{format} {row}} {arguments}
+`#Echo(显示)` 在屏幕上显示带有格式选项的文本，请使用 `#help format` 查看更多信息。
 
-Echo 在屏幕上显示文本，格式选项与 #format 命令相同。与 showme 命令不同，echo 命令不会触发操作。就像 #showme 命令一样，您可以在格式中添加第二个参数，该参数指定该行应该打印的屏幕行，与 #prompt 命令相同。
+与 `#showme` 命令不同，`#echo` 命令不会触发 `#action`。
 
-有关更多信息，请参见[Format](#format) 和 [Prompt](#prompt)的帮助文件。
+与 `#showme` 命令一样，您可以将 {format} 参数拆分为两个大括号参数，第二个参数是行号。
+
+有关更多信息，请参见 [Format](#format) 和 [Prompt](#prompt) 的帮助文件。
 
 ```
 示例: 
-#echo {现在时间 %t.} {%Y-%m-%d %H:%M:%S}
+#echo {The current date is %t.} {%Y-%m-%d %H:%M:%S}
+#echo {[%38s][%-38s]} {Hello World} {Hello World}
+#echo {{this is %s on the top row} {1}} {printed}
 ```
-另可参见: [Buffer](#buffer), [Grep](#grep) and [Showme](#showme).
+另可参见: [Buffer](#buffer)，[Grep](#grep)，[Showme](#showme)。
 
+## Edit
+
+> 语法：#edit {option} [argument]
+
+`#Edit(编辑)` 命令可用于将默认行编辑器转换为文本编辑器。
+
+* #edit create \<arguments>  
+创建编辑器，使用提供的参数进行初始化。
+* #edit load \<variable>  
+创建编辑器，使用提供的列表变量进行初始化。
+* #edit read \<filename>  
+创建编辑器，使用提供的文件初始化。
+* #edit resume  
+挂起后恢复编辑。
+* #edit save \<variable>  
+将编辑器保存到指定的变量。
+* #edit suspend  
+挂起编辑，类似于按回车键，除了没有触发事件。
+* #edit write \<filename>
+将编辑器内容写入文件。
+
+```
+示例：
+#edit create {bli}{bla}{blo}
+```
+
+另可参见：[Cursor](#cursor)，[Macro](#macro)。
+
+## Editing
+
+下表展示了默认快捷键绑定功能。
+
+快捷键           | 功能
+:---            | :---
+alt b           | 光标移到单词左侧
+alt f           | 光标移到单词右侧
+ctrl a          | 光标移到开头
+ctrl b          | 光标向后
+ctrl c          | 清除行
+ctrl d          | 删除或退出
+ctrl e          | 光标移到尾部
+ctrl f          | 光标向前
+ctrl g          | null
+ctrl h          | backspace
+ctrl i          | tab
+ctrl j          | enter
+ctrl k          | 向光标右删除
+ctrl l          | 重绘输入行
+ctrl m          | enter
+ctrl n          | 选择下一条历史命令
+ctrl o          | null
+ctrl p          | 选择上一条历史命令
+ctrl q          | null
+ctrl r          | 进入反向历史搜索
+ctrl s          | null
+ctrl t          | 锁定回滚缓冲区
+ctrl u          | 向光标左侧删除
+ctrl v          | 转换元字符
+ctrl w          | 向单词左侧删除
+ctrl x          | null
+ctrl y          | 粘贴
+ctrl z          | 挂起
+arrow left      | 光标向左
+arrow right     | 光标向右
+arrow up        | 上一个输入行
+arrow down      | 下一个输入行
+ctrl arrow left | 光标移到单词左侧
+ctrl arrow right| 光标移到单词右侧
+backspace       | backspace
+alt backspace   | 向左清除
+ctrl backspace  | 清除行
+delete          | 删除
+ctrl delete     | 向单词右侧删除
+end             | 光标移到尾部
+ctrl end        | 回滚缓冲区尾部
+enter           | enter
+shift-enter     | soft enter
+home            | 光标移到开头
+ctrl home       | 回滚缓冲区开头
+page up         | 回滚缓冲区向上翻页
+page down       | 回滚缓冲区向下翻页
+tab             | 向后补全单词
+shift-tab       | 向前补全单词
+
+另可参见：[Cursor](#cursor)，[Edit](#edit)，[Macro](#macro)。
 
 ## Else
 
 > 语法: #else {commands}
 
-Else 语句应该遵循 #IF 或 #ELSEIF 语句，并且只有在前面的 #if 或 #ELSEIF 为 false 时才被调用。
+`#Else(否则)` 语句应该跟随 `#IF` 或 `#ELSEIF` 语句使用，并且只有在前面的 `#IF` 或 `#ELSEIF` 语句为 `false` 时才被调用。
+
 ```
 示例:
 #if {1d2 == 1} {
-  smile};
-#else {cry}
+  smile
+};
+#else {
+  cry
+};
 ```
-另可参见: [Case](#case), [Default](#default), [Elseif](#elseif), [If](#if), [Switch](#switch) and [Regex](#regex).
+另可参见: [Case](#case)，[Default](#default)，[Elseif](#elseif)，[If](#if)，[Switch](#switch)，[Regex](#regex)。
 
 ## Elseif
 
-> 语法: #elseif {commands}
+> 语法: #elseif {conditional} {commands}
 
-Elseif 语句应该遵循 #IF 或 #ELSEIF 语句，并且仅在语句为 true 且前面的 #IF 和 #ELSEIF 语句为 false 时才调用。
+`#Elseif` 语句应该跟随 `#IF` 或 `#ELSEIF` 语句使用，并且仅在语句为 `true` 且前面的 `#IF` 和 `#ELSEIF` 语句为 `false` 时才调用。
 
 ```
 示例: 
 #if {1d3 == 1} {
-  smirk};
+  smirk
+};
 #elseif {1d2 == 1} {
-  snicker};
-#else {laugh}
+  snicker
+};
+#else {
+  laugh
+};
 ```
 
-另可参见: [Case](#case), [Default](#default), [Else](#else), [If](#if), [Switch](#switch) and [Regex](#regex).
+另可参见: [Case](#case)，[Default](#default)，[Else](#else)，[If](#if)，[Switch](#switch)，[Regex](#regex)。
 
 ## End
 
@@ -1880,32 +1979,37 @@ Elseif 语句应该遵循 #IF 或 #ELSEIF 语句，并且仅在语句为 true �
 通常：结束当前会话可使用 ctrl-d。  
 清除已输入的内容可使用 ctrl-c。
 
-消息在终止前立即打印。  
-如果消息是 `\tintin`，将被无声地终止。
+消息在 tintin 终止前立即打印。  
+如果消息是 `#end {\}`，tintin 将被无声地终止。
 
 另可参见: [Zap](#zap)。
 
 ## Escape Codes
 
-Tintin 中的 escape 字符是反斜杠: \，可以与几个字符组合使用来创建 escape 代码。
+Tintin 中的 escape 字符是反斜杠: `\`，可以与几个字符组合使用来创建 escape 代码。
 
 字符  |释义
 :-   |:-
-\a   |会在终端发出嘟嘟声
+\a   |会在终端发出嘟嘟声。
 \c   |将发送 ctrl-a 的控制字符 \ca。
-\e   |将开始一个escape序列。
-\n   |将发送线路馈送。
-\r   |将发送回车。
-\t   |将发送tab。
-\x   |例如\xFF将打印十六进制字符值。
+\e   |将开始一个 escape 序列。
+\f   |将发送换页。
+\n   |将发送换行。
+\r   |将发送回车符。
+\t   |将发送水平制表符。
+\x   |将打印十六进制 8 位符号，如\xFF。
 \x7B |将发送 “{” 字符。
 \x7D |将发送 “}” 字符。
-\0   |例如\\077将打印 6 位 octal 字符值。
-\\\ |将打印单个 \ 。
+\u   |打印 16位 unicode 字符，如：\uFFFD。
+\u{} |打印 8-21位 unicode 字符，如：\u{2AF21}。
+\U   |打印 21位 unicode 字符，如：\U02AF21。
+\v   |打印垂直制表符。
+\\\  |将打印单个 \ 。
 
-当使用 #showme 、 #send 或 #line 时，以 \ 结尾的行将停止 tintin 追加换行符。
+当使用 `#showme`、`#send` 或 `#line` 时，以 \ 结尾的行将停止 tintin 追加换行符。
 
-要在触发或别名中转义参数，请使用 `%%0 %%1 %%2`等。
+要在触发器或别名中转义参数，请使用 `%%0 %%1 %%2`等。
+
 ```
 来自dzp@pkuxkx的释义：
 
@@ -1942,17 +2046,51 @@ hello xgg
 你说道：「dzp: hello xgg」
 ```
 
-另可参见: [Colors](#colors), [Mathematics](#mathematics) and [Regular Expressions](#regular-expressions).
+另可参见: [Characters](#characters)，[Colors](#colors)，[Coordinates](#coordinates)，[Mathematics](#mathematics)，[Regular Expressions](#regular-expressions)。
 
 ## Event
 
-> 语法: #event {event name} {命令}
+> 语法：#event {event type} {commands}
 
-事件命令允许为预定的客户端事件创建触发器。使用没有参数的 #event 将列出大多数可能的事件，并进行简要描述。使用 `#event %*` 将显示所有定义的事件。大多数事件都会设置参数。
+`#Event(事件)` 命令允许为预定的客户端事件创建触发器。
+
+使用没有参数的 `#event` 将列出大多数可用的事件，及其简要描述。
+
+使用 `#event %*` 将显示所有已定义的事件。
+
+使用 #info {events} {on} 查看事件抛出信息。
+
+事件如同一般触发器一样需要区分大小写和事件名称，必须全部使用大写字母来定义。
+
+每种事件类型只能定义一个事件。
+
+要启用鼠标事件，请使用 `#config mouse_trace on`。  
+
+要查看鼠标事件，使使用 `#config mouse_trace info`。
+
+### CATCH EVENTS
+
+`CATCH <EVENT>`  
+一些事件可以用 `CATCH` 为前缀来中断默认行为。
+
+### CLASS EVENTS
+
+CLASS ACTIVATED [CLASS]  
+CLASS_CLEAR [CLASS]  
+CLASS CREATED [CLASS]  
+CLASS DEACTIVATED [CLASS]  
+CLASS DESTROYED [CLASS]  
+CLASS_LOAD [CLASS]  
+%0 class name
+
+### GAG EVENTS
+
+`GAG <EVENT>`  
+一些事件可以用 `GAG` 为前缀，用来 gag 默认系统消息。
 
 **Chronological Events**
 
-所有按时间顺序排列的事件设置以下参数:<br> 
+所有按时间顺序排列的事件设置以下参数:  
 %0-year使用 4 位数字填充，%1-month使用 2 个零填充数字，%2-week使用 2 个零填充数字，%3-day在month中使用 2 个零填充数字， %4-hour，使用 2 个零填充数字，%5-minute使用 2 个零填充数字，%6-second使用 2 个零填充数字。
 
 **DATE <MONTH-DAY> [HOUR:MINUTE]**
