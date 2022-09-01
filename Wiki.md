@@ -1,5 +1,8 @@
 # TINTIN++中文手册
 
+> 日拱一卒，功不唐捐。  
+技术交流 QQ 群：951665549。
+
 # 导航
 
 |[ 总览 ](#总览)
@@ -112,7 +115,7 @@
 
 # 总览
 
-- **关于 TinTin++ Mud 客户端**
+## 关于 TinTin++ Mud 客户端
 
 TinTin++ (或称 tt++) 是适用于 Android,iOS,Linux,macOS,Windows 的 `free(自由)` Mud 客户端。  
 
@@ -126,7 +129,7 @@ Windows 还可以使用 WSL 来体验原汁原味的 Linux TinTin++。
 --Cygwin（Windows 的 Linux/Unix 模拟器）  
 --WSL（Windows 10 以上的 Linux 子系统）  
 
-- **关于 TinTin++ 手册**
+## 关于 TinTin++ 手册
 
 手册中描述了大多数 TinTin++ 命令，如果需要帮助，您可能需要先浏览一下。  
 
@@ -136,7 +139,7 @@ TinTin++ 还提供内部帮助文件，可通过 `#help` 命令访问。
 
 对于错误报告、问题、请求和建议，您可以访问 [「Github论坛」](https://github.com/scandum/tintin/discussions)或[「Discord」](https://discord.gg/gv7a37n)频道。
 
-- **安装 TinTin++ Mud 客户端**
+## 安装 TinTin++ Mud 客户端
 
 [「安装说明」](https://tintin.mudhalla.net/install.php)介绍如何在多个操作系统上安装 TinTin++。  
 
@@ -152,7 +155,7 @@ WinTin++ Windows 桌面程序可作为安装程序使用。
  
 也可以在 macOS、Linux、Unix 计算机上运行 ssh 守护程序，无论您使用 ssh 客户端还是 web 浏览器，都可以远程访问脚本和客户端。
 
-- **TinTin++ 特性**
+## TinTin++ 特性
 
 虽然 TinTin++ 主要用作 Mud 客户端，但它也可以用作 Unix shell 命令语言、多路复用程序、自动程序。  
 
@@ -187,7 +190,7 @@ TinTin++ 具有快速而强大的基于 JIT(即时编译) 实现的内置脚本�
 
 其他命令可以在本页面各个详细介绍部分找到，也可以通过 `#help <指令>` 查看。
 
-- **启动及结束**
+## 启动及结束
 
 启动 TinTin++ 的语法是:   
 > ./tt++ <配置文件名>
@@ -204,7 +207,7 @@ cd ~/tt && screen tt++ init.tt
 
 对于 WinTin++ 用户，会选择文本时时自动复制，使用 shift-insert 进行粘贴。
 
-- **程序的基本特性**
+## 程序的基本特性
 
 首先，我将解释一些非常基本和重要的功能:
 
@@ -240,7 +243,7 @@ TinTin++ 的所有命令可以缩写。
 除非以 '#' 开头，所有语句都会被原样整行发送。
 ```
 
-- **连接至 MUDs 服务端**
+## 连接至 MUDs 服务端
 
 > 命令: #session {会话名} {网址或 ip} {端口}  
 示例: #session pku mud.pkuxkx.com 8080
@@ -258,7 +261,7 @@ TinTin++ 的所有命令可以缩写。
 -- MCCP 会话 (MUDs 客户端压缩协议) 标记为 (mccp)。
 ```
 
-- **分屏**
+## 分屏
 
 > 命令: #split
 
@@ -268,7 +271,7 @@ TinTin++ 的所有命令可以缩写。
 
 要取消拆分界面，您可以使用 `#unsplit` 将终端设置恢复为默认设置。
 
-- **别名**
+## 别名
 
 > 命令: #alias  
 语法: #alias {name} {commands}
@@ -307,7 +310,7 @@ TinTin++ 不检查递归别名！您可以通过转义整行来避免递归。
 示例: #send put %1 in %2
 ```
 
-- **触发器**
+## 触发器
 
 > 命令: #action  
 语法: #action {action-text} {commands}
@@ -337,7 +340,7 @@ TinTin++ 不检查递归别名！您可以通过转义整行来避免递归。
 
 您可以使用 `#unaction` 命令删除触发器操作。
 
-- **高亮显示**
+## 高亮显示
 
 > 命令: #highlight (记住你可以缩写命令：#high)  
 语法: #high {text} {color}
@@ -357,7 +360,7 @@ TinTin++ 不检查递归别名！您可以通过转义整行来避免递归。
 
 可以使用 `#unhigh` 删除高亮显示。
 
-- **快速行走**
+## 快速行走
 
 如果您键入仅由字母和数字以及 `e 、 s 、 w 、 n 、 u 、 d` 组成的命令，则此命令可以解释为一系列移动命令。
 
@@ -375,7 +378,7 @@ ssw2n
 指令：#config speedwalk on/off
 ```
 
-- **定时器**
+## 定时器
 
 > 命令: #ticker {name} {命令} {秒}
 
@@ -395,7 +398,7 @@ ssw2n
 
 你可以用 `#untick` 删除定时器。
 
-- **命令文件**
+## 命令文件
 
 当您使用 TinTin++ 读取命令文件时，它会解析文件中的所有文本。  
 
@@ -413,7 +416,7 @@ ssw2n
 -- 将当前会话已知的所有触发/别名/替换等写入文件。
 ```
 
-- **重复命令**
+## 重复命令
 
 > 语法:#number <指令>  
 -- 可以重复一个命令
@@ -427,7 +430,7 @@ ssw2n
 -- 重复这两个命令 10 次。
 ```
 
-- **历史回溯**
+## 历史回溯
 
 TinTin++ 具有 `csh` 历史回溯特性的有限子集，可以通过上下箭头来选择输入过的内容。
 
@@ -435,7 +438,7 @@ TinTin++ 具有 `csh` 历史回溯特性的有限子集，可以通过上下箭�
 !cast -- 重复以 cast 开头的最后一个命令。  
 Ctrl-r -- 组合键进入反向历史搜索模式。  
 
-- **路径记录**
+## 路径记录
 
 如果使用了 `#path new` 命令，TinTin++ 会跟踪你的移动轨迹。  
 
@@ -480,7 +483,7 @@ Path 的子命令:
 还可以建立别名，这可以节省不少时间。
 ```
 
-- **地图命令**
+## 地图命令
 
 TinTin++ 有一个强大的高度可配置的自动地图绘制器。
 
@@ -492,7 +495,7 @@ TinTin++ 有一个强大的高度可配置的自动地图绘制器。
 -- 创建地图。
 
 > #map goto 1  
-转到地图中默认创建的第一个房间。
+--转到地图中默认创建的第一个房间。
 
 > #map map  
 -- 显示地图。
@@ -527,7 +530,7 @@ TinTin++ 有一个强大的高度可配置的自动地图绘制器。
 
 当你四处移动时，地图会自动创建。
 
-- **帮助**
+## 帮助
 
 > 命令: #help <指令>
 
@@ -539,7 +542,7 @@ help 帮助命令是你的最忠实的朋友，它包含所有可用 TinTin 命�
 **享受 MUDs 带来的乐趣吧！**
 ***
 
-## Action
+# Action
 
 > 语法：#action {文本} {命令} {优先级}
 
@@ -602,7 +605,7 @@ __注意：%0 永远不应用于触发器（会导致所有内容被响应）。
 
 另可参见: [Gag](#gag)， [Highlight](#highlight)，[Prompt](#prompt)， [Substitute](#substitude)。
 
-## Alias
+# Alias
 
 > 语法：#alias {名称} {命令} {优先级}
 
@@ -653,7 +656,7 @@ k blue smurf with battle axe
 
 另可参见: [Cursor](#cursor)， [History](#history)，[Keypad](#keypad)， [Macro](#macro)， [Speedwalk](#speedwalk)，[Tab](#tab)。
 
-## All
+# All
 
 > 语法: #all {commands}
 
@@ -667,7 +670,7 @@ k blue smurf with battle axe
 
 另可参见: [Port](#port)，[Run](#run)，[Session](#session)，[Session Name](#session-name)，[Snoop](#snoop)，[SSL](#ssl)，[Zap](#zap)。
 
-## Bell
+# Bell
 
 > 语法：#bell {flash|focus|margin|ring|volume} {argument}
 
@@ -715,7 +718,7 @@ k blue smurf with battle axe
 ```
 另可参见: [Screen](#screen)。
 
-## Break
+# Break
 
 > 语法: #break
 
@@ -738,7 +741,7 @@ k blue smurf with battle axe
 
 另可参见: [Continue](#continue)，[Foreach](#foreach)，[List](#list)， [Loop](#loop)，[Parse](#parse)，[Repeat](#repeat)，[Return](#return)，[While](#while)。
 
-## Buffer
+# Buffer
 
 > 语法：#buffer {home|up|down|end|find|get|lock|clear|jump|refresh|write|info}
 
@@ -841,7 +844,7 @@ k blue smurf with battle axe
 
 另可参见: [Echo](#echo)，[Grep](#grep)，[Showme](#showme)。
 
-## Button
+# Button
 
 > 语法：#button {square} {commands} {priority}
 
@@ -876,7 +879,7 @@ k blue smurf with battle axe
 
 另可参见：[Delay](#delay)，[Event](#event)，[Ticker](#ticker)。
 
-## Case
+# Case
 
 > 语法: #case {条件} {参数}
 
@@ -906,7 +909,7 @@ k blue smurf with battle axe
 
 另可参见: [Default](#default)， [Else](#else)，[Elseif](#elseif)，[If](#if)，[Switch](#switch)，[Regex](#regex)。
 
-## Cat
+# Cat
 
 > 语法：#cat {variable} {argument}
 
@@ -914,7 +917,7 @@ k blue smurf with battle axe
 
 另可参见: [Format](#format)，[Function](#function)，[Local](#local), [Math](#math)，[Replace](#replace)，[Script](#script)，[Variable](#variable)。
 
-## Characters
+# Characters
 
 TinTin++ 定义了以下特殊字符:
 
@@ -939,7 +942,7 @@ TinTin++ 定义了以下特殊字符:
 
 另可参见：[Colors](#colors)，[Escape codes](#escape-codes)，[Mathematics](#mathematics)，[PCRE](#pcre)。
 
-## Chat
+# Chat
 
 > 语法: #chat {命令} {参数}
 
@@ -1076,7 +1079,7 @@ DND 代表 “不打扰”，此命令切换 DND 状态。启用后，所有新�
 
 另可参见：[Port](#port)。
 
-## Class
+# Class
 
 > 语法: #class {name} {open|close|read filename|write filename|kill}
 
@@ -1139,7 +1142,7 @@ DND 代表 “不打扰”，此命令切换 DND 状态。启用后，所有新�
 
 另请参见: [Debug](#debug)，[Ignore](#ignore)，[Info](#info)，[Kill](#kill)，[Message](#message)。
 
-## Colors
+# Colors
 
 * **ANSI Colors**
 
@@ -1214,13 +1217,13 @@ DND 代表 “不打扰”，此命令切换 DND 状态。启用后，所有新�
 
 另可参见: [Escape Codes](#escape-codes)， [Mathematics](#mathematics)，[Regular Expressions](#regular-expressions)。
 
-## Commands
+# Commands
 
 > 语法: #commands {regex}
 
 如果没有参数，此命令将显示所有命令，否则将显示与缩写匹配的所有命令。
 
-* **Command 语法**
+## Command 语法
 
 所有 TinTin++ 命令都以 “#” 开头，可以使用 `#config {TINTIN CHAR}` 更改。
 
@@ -1240,7 +1243,7 @@ DND 代表 “不打扰”，此命令切换 DND 状态。启用后，所有新�
 #4 {#showme Hello;#showme World}
 ```
 
-* **Commands Seperator**
+## Commands Seperator
 
 如果你想发送文字 “;”，你可以使用 `\;` 来发送。  
 
@@ -1269,7 +1272,7 @@ chat n;w;s;e 这样是不行的，
 {} 的意思就是延迟解析。
 ```
 
-* **Carriage Return**
+## Carriage Return
 
 当您发出命令时，系统会自动添加换行/回车。要更改此行为，请以 “\” 结尾。
 
@@ -1279,7 +1282,7 @@ chat n;w;s;e 这样是不行的，
 #send look\
 ```
 
-* **Command Files**
+## Command Files
 
 可以将命令放在文件中，这些文件被称为命令文件。  
 
@@ -1305,7 +1308,7 @@ chat n;w;s;e 这样是不行的，
 
 另可参见：[Help](#help)，[Info](#info)，[Statements](#statements)。
 
-## Config
+# Config
 
 > 语法: #config {option} {argument}
 
@@ -1427,7 +1430,7 @@ WORDWRAP     |                      ON\|OFF| 包装服务器输出
 
 另可参见：[Class](#class)，[Line](#line)。
 
-## Continue
+# Continue
 
 > 命令: #continue
 
@@ -1452,7 +1455,7 @@ WORDWRAP     |                      ON\|OFF| 包装服务器输出
 ```
 另可参见: [Break](#break), [Foreach](#foreach), [List](#list), [Loop](#loop), [Parse](#parse), [Repeat](#repeat), [Return](#return) and [While](#while).
 
-## Coordinates
+# Coordinates
 
 当 `0,0` 坐标位于左上角时，TinTin++ 使用 y,x / rows,cols 记法。  
 此时 `1,1` 表示左上角，`-1,-1` 表示右下角。  
@@ -1501,7 +1504,7 @@ WORDWRAP     |                      ON\|OFF| 包装服务器输出
 
 另可参见：[Characters](#characters)，[Colors](#colors)，[Escape](#escape)，[Mathematics](#mathematics) ，[PCRE](#pcre)。
 
-## Cr
+# Cr
 
 > 命令: #cr
 
@@ -1521,7 +1524,7 @@ WORDWRAP     |                      ON\|OFF| 包装服务器输出
 
 另可参见: [Bell](#bell)，[Forall](#forall)。
 
-## Cursor
+# Cursor
 
 > 语法: #cursor {option} {argument}
 
@@ -1612,7 +1615,7 @@ FORWARD     |指定自动补全向前
 
 另可参见: [Alias](#alias)，[History](#history)，[Keypad](#keybord)， [Macro](#macro)，[Speedwalk](#speedwalk)，[Tab](#tab)。
 
-## Daemon
+# Daemon
 
 > 语法：#daemon {attach|detach|kill|list} [name]
 
@@ -1630,7 +1633,7 @@ FORWARD     |指定自动补全向前
 另可参见：[Script](#script)，[System](#system)，[Run](#run)。
 
 
-## Debug
+# Debug
 
 > 语法: #debug {listname} {on|off|log}
 
@@ -1672,7 +1675,7 @@ FORWARD     |指定自动补全向前
 
 另可参见: [Class](#class)，[Ignore](#ignore)，[Info](info)，[Kill](#kill)，[Message](#message)。
 
-## Default
+# Default
 
 > 语法: #default {commands}
 
@@ -1692,7 +1695,7 @@ FORWARD     |指定自动补全向前
 
 另可参见: [Case](#case)，[Default](#default)，[Else](#else)，[Elseif](#elseif)，[If](#if)，[Switch](#switch)，[Regex](#regex)。
 
-## Delay
+# Delay
 
 > 语法：#delay {second} {command}
 
@@ -1724,7 +1727,7 @@ FORWARD     |指定自动补全向前
 
 另可参见: [Event](#event)，[Ticker](#ticker)。
 
-## Draw
+# Draw
 
 > 语法：#draw [line color] [options] \<type> \<square> {text}
 
@@ -1826,7 +1829,7 @@ VERTICAL|如果可能的话，将垂直绘制。
 
 另可参见：[Buffer](#buffer)，[Echo](#echo)，[Grep](#grep)，[Showme](#showme)。
 
-## Echo
+# Echo
 
 > 语法: #echo {format} {argument1} {argument2} {etc}
 
@@ -1846,7 +1849,7 @@ VERTICAL|如果可能的话，将垂直绘制。
 ```
 另可参见: [Buffer](#buffer)，[Grep](#grep)，[Showme](#showme)。
 
-## Edit
+# Edit
 
 > 语法：#edit {option} [argument]
 
@@ -1864,7 +1867,7 @@ VERTICAL|如果可能的话，将垂直绘制。
 将编辑器保存到指定的变量。
 * #edit suspend  
 挂起编辑，类似于按回车键，除了没有触发事件。
-* #edit write \<filename>
+* #edit write \<filename>  
 将编辑器内容写入文件。
 
 ```
@@ -1874,7 +1877,7 @@ VERTICAL|如果可能的话，将垂直绘制。
 
 另可参见：[Cursor](#cursor)，[Macro](#macro)。
 
-## Editing
+# Editing
 
 下表展示了默认快捷键绑定功能。
 
@@ -1932,7 +1935,7 @@ shift-tab       | 向前补全单词
 
 另可参见：[Cursor](#cursor)，[Edit](#edit)，[Macro](#macro)。
 
-## Else
+# Else
 
 > 语法: #else {commands}
 
@@ -1949,7 +1952,7 @@ shift-tab       | 向前补全单词
 ```
 另可参见: [Case](#case)，[Default](#default)，[Elseif](#elseif)，[If](#if)，[Switch](#switch)，[Regex](#regex)。
 
-## Elseif
+# Elseif
 
 > 语法: #elseif {conditional} {commands}
 
@@ -1970,7 +1973,7 @@ shift-tab       | 向前补全单词
 
 另可参见: [Case](#case)，[Default](#default)，[Else](#else)，[If](#if)，[Switch](#switch)，[Regex](#regex)。
 
-## End
+# End
 
 > 语法: #end {message}
 
@@ -1984,9 +1987,9 @@ shift-tab       | 向前补全单词
 
 另可参见: [Zap](#zap)。
 
-## Escape Codes
+# Escape Codes
 
-Tintin 中的 escape 字符是反斜杠: `\`，可以与几个字符组合使用来创建 escape 代码。
+TinTin 中的 escape 字符是反斜杠: `\`，可以与几个字符组合使用来创建 escape 代码。
 
 字符  |释义
 :-   |:-
@@ -2006,7 +2009,7 @@ Tintin 中的 escape 字符是反斜杠: `\`，可以与几个字符组合使用
 \v   |打印垂直制表符。
 \\\  |将打印单个 \ 。
 
-当使用 `#showme`、`#send` 或 `#line` 时，以 \ 结尾的行将停止 tintin 追加换行符。
+当使用 `#showme`、`#send` 或 `#line` 时，以 `\` 结尾的行将停止 tintin 追加换行符。
 
 要在触发器或别名中转义参数，请使用 `%%0 %%1 %%2`等。
 
@@ -2048,7 +2051,7 @@ hello xgg
 
 另可参见: [Characters](#characters)，[Colors](#colors)，[Coordinates](#coordinates)，[Mathematics](#mathematics)，[Regular Expressions](#regular-expressions)。
 
-## Event
+# Event
 
 > 语法：#event {event type} {commands}
 
@@ -2058,7 +2061,7 @@ hello xgg
 
 使用 `#event %*` 将显示所有已定义的事件。
 
-使用 #info {events} {on} 查看事件抛出信息。
+使用 `#info {events} {on}` 查看事件抛出信息。
 
 事件如同一般触发器一样需要区分大小写和事件名称，必须全部使用大写字母来定义。
 
@@ -2068,39 +2071,298 @@ hello xgg
 
 要查看鼠标事件，使使用 `#config mouse_trace info`。
 
-### CATCH EVENTS
+***
+
+下面展示了一些事件的详细参数。
+
+## CATCH EVENTS
 
 `CATCH <EVENT>`  
 一些事件可以用 `CATCH` 为前缀来中断默认行为。
 
-### CLASS EVENTS
+## CLASS EVENTS
 
-CLASS ACTIVATED [CLASS]  
-CLASS_CLEAR [CLASS]  
-CLASS CREATED [CLASS]  
-CLASS DEACTIVATED [CLASS]  
-CLASS DESTROYED [CLASS]  
-CLASS_LOAD [CLASS]  
+`CLASS ACTIVATED [CLASS]`  
+`CLASS_CLEAR [CLASS]`  
+`CLASS CREATED [CLASS]`  
+`CLASS DEACTIVATED [CLASS]`  
+`CLASS DESTROYED [CLASS]`  
+`CLASS_LOAD [CLASS]`  
+
 %0 class name
 
-### GAG EVENTS
+## GAG EVENTS
 
 `GAG <EVENT>`  
-一些事件可以用 `GAG` 为前缀，用来 gag 默认系统消息。
+一些事件可以用 `GAG` 为前缀来消除默认系统消息显示。
 
-**Chronological Events**
+## INPUT EVENTS
+
+`EDIT STARTED`  `EDIT FINISHED`  
+%0 name  %1 lines %2 size %3 data
+
+`RECEIVED KEYPRESS` `PROCESSED KEYPRESS`  
+%0 character  %1 unicode index  %2 edit row  %3 edit column
+
+`RECEIVED INPUT [NAME]`  
+%0 raw text
+
+`RECEIVED INPUT CHARACTER`  
+%0 character  %1 unicode index  %2 size  %3 width
+
+`SEND OUTPUT`  
+%0 raw text %1 size
+
+`SENT OUTPUT`  
+%0 raw text %1 size
+
+## MAP EVENTS
+
+`END OF PATH`  `END OF RUN` `MAP UPDATED VTMAP`  
+这些事件没有额外的参数。
+
+`MAP CREATE EXIT` `MAP DELETE EXIT`  
+%0 vnum  %1 exit name  %2 exit cmd  %3 exit vnum
+
+`MAP CREATE ROOM`  `MAP DELETE ROOM`  
+%0 vnum  %1 name
+
+`MAP CREATE ROOM`  `MAP DELETE ROOM`  
+%0 vnum
+
+`MAP ENTER ROOM [VNUM]`  
+%0 new vnum  %1 old vnum %2 direction
+
+`MAP EXIT ROOM [VNUM]`  
+%0 old vnum  %1 new vnum %2 direction
+
+`MAP FOLLOW MAP`  
+%0 old vnum  %1 new vnum  %2 exit name
+
+`MAP REGION <MOUSE>`  `MAP ROOM <MOUSE>`  
+%0 row  %1 col  %2 -row  %3 -col  %5 vnum  %6 info
+
+## MOUSE EVENTS
+
+鼠标行为                 | 释义
+:---                    |:----
+DOUBLE-CLICKED \<MOUSE> | 双击鼠标
+LONG-CLICKED \<MOUSE>   | 长点鼠标
+MOVED \<MOUSE>          | 移动鼠标 
+PRESSED \<MOUSE>        | 按下的鼠标
+SHORT-CLICKED \<MOUSE>  | 短点鼠标
+RELEASED \<MOUSE>       | 释放鼠标
+SCROLLED \<MOUSE>       | 滚动鼠标
+TRIPLE-CLICKED \<MOUSE> | 点击三次鼠标
+
+鼠标事件参数：%0 row %1 col %2 -row %3 -col %4 word %5 line。
+
+`MAP <MOUSE EVENT>`  
+鼠标事件可以以 `MAP` 为前缀，仅当事件发生在 VT100 地图区域内才会触发。
+
+`SWIPED [DIR]`  
+%0 dir  %1 button  %2 row  %3 col  %4 -row  %5 -col  
+%6 row  %7 col  %8 -row  %9 -col %10 rows %11 cols
+
+## OUTPUT EVENTS
+
+`BUFFER UPDATE`  `DISPLAY UPDATE`  
+这些事件没有额外的参数。
+
+`RECEIVED LINE`        
+%0 raw text %1 plain text  
+
+`RECEIVED OUTPUT`  
+%0 raw text  
+
+`RECEIVED PROMPT`  
+%0 raw text %1 plain text  
+
+## PORT EVENTS
+
+`CHAT MESSAGE`  `PORT MESSAGE`  
+%0 raw text  %1 plain text
+
+`PORT CONNECTION`  
+%0 name %1 ip %2 port
+
+`PORT DISCONNECTION`  
+%0 name %1 ip %2 port
+
+`PORT LOG MESSAGE`  
+%0 name %1 ip %2 port %3 data %4 plain data
+
+`PORT RECEIVED MESSAGE`
+%0 name %1 ip %2 port %3 data %4 plain data
+
+## SCAN EVENTS
+
+`SCAN CSV HEADER`  
+`SCAN CSV LINE`  
+`SCAN TSV HEADER`
+`SCAN TSV LINE`  
+
+%0 all args %1 arg1 %2 arg3 .. %99 arg99
+
+## SCREEN EVENTS
+
+`SCREEN FOCUS`  
+%0 focus (0 or 1)
+
+`SCREEN LOCATION`  
+%0 rows %1 cols  %2 height %3 width
+
+`SCREEN MOUSE LOCATION`  
+%0 row  %1 col  %2 -row  %3 -col  %4 pix row  %5 pix col  
+%6 -pix row  %7 -pix col  %8 location
+
+`SCREEN RESIZE`  
+%0 rows %1 cols %2 height %3 width
+
+`SCREEN SPLIT`  
+%0 top row %1 top col %2 bot row %3 bot col
+
+`SCREEN UNSPLIT`  
+%0 top row %1 top col %2 bot row %3 bot col
+
+## SESSION EVENTS
+
+`SESSION ACTIVATED`  
+%0 name
+
+`SESSION CONNECTED`  
+%0 name %1 host %2 ip %3 port %4 file
+
+`SESSION CREATED`  
+%0 name %1 host %2 ip %3 port %4 file
+
+`SESSION DEACTIVATED`
+%0 name
+
+`SESSION DISCONNECTED`  
+%0 name %1 host %2 ip %3 port
+
+`SESSION TIMED OUT`  
+%0 name %1 host %2 ip %3 port
+
+## SYSTEM EVENTS
+
+`DAEMON ATTACHED`
+%0 file %1 pid
+
+`DAEMON DETACHED`  
+%0 file %1 pid
+
+`PROGRAM START`  
+%0 startup arguments
+
+`PROGRAM TERMINATION`  
+%0 goodbye message
+
+`READ ERROR`  
+%0 filename %1 error message
+
+`READ FILE`  
+%0 filename
+
+`WRITE ERROR`  
+%0 filename %1 error message
+
+`WRITE FILE`  
+%0 filename
+
+`SYSTEM CRASH`  
+%0 message
+
+`SYSTEM ERROR`  
+%0 name %1 system msg %2 error %3 error msg
+
+`UNKNOWN COMMAND`  
+%0 raw text
+
+`SIGUSR`  
+%0 signal
+
+## TELNET EVENTS
+
+`IAC <EVENT>`  
+可使用 `#config telnet info` 来查看 IAC TELNET 事件信息。
+
+IAC 事件                  | 参数
+:---                     |:---
+`IAC SB GMCP [MODULE]`   |%0 module    %1 data  %2 plain data
+`IAC SB MSSP`            |%0 variable  %1 data
+`IAC SB MSDP`            |%0 variable  %1 data  %2 plain data
+`IAC SB MSDP [VAR]`      |%0 variable  %1 data  %2 plain data
+`IAC SB NEW-ENVIRON`     |%0 variable  %1 data  %2 plain data
+`IAC SB ZMP <VAR>`       |%0 variable  %1 data
+`IAC SB <VAR>`           |%0 variable  %1 raw data  %2 plain data
+
+## TIME EVENTS
+
+`DATE <MONTH-DAY OF MONTH> [HOUR:MINUTE]`  
+`DAY [DAY OF MONTH]`  
+`HOUR [HOUR]`  
+`MONTH [DAY OF MONTH]`  
+`TIME <HOUR:MINUTE>[:SECOND]`  
+`WEEK [DAY OF WEEK]`  
+`YEAR [YEAR]`  
+
+%0 year  %1 month  %2 day of week  %3 day of month  %4 hour %5 minute  %6 second
+
+## VARIABLE EVENTS
+
+`VARIABLE UPDATE <VAR>`  
+%0 name %1 new value %2 path
+
+`VARIABLE UPDATED <VAR>`  
+%0 name %1 new value %2 path
+
+## VT100 EVENTS
+
+`VT100 SCROLL REGION`  
+%0 top row %1 bot row %2 rows %3 cols %4 wrap
+
+***
+
+要查看所有事件触发器，请使用 `#event info on`。
+
+这样就可以得到一些有用的信息，来消除一些事件信息的显示。
+
+```
+示例：
+#event {SESSION CONNECTED} {#read mychar.tin}
+```
+
+注：您可以使用 `#unevent` 命令删除事件。
+
+***
+
+下面是一些事件的详细说明：
+
+**Chronological Events**  
 
 所有按时间顺序排列的事件设置以下参数:  
-%0-year使用 4 位数字填充，%1-month使用 2 个零填充数字，%2-week使用 2 个零填充数字，%3-day在month中使用 2 个零填充数字， %4-hour，使用 2 个零填充数字，%5-minute使用 2 个零填充数字，%6-second使用 2 个零填充数字。
+%0-year 使用 4 位数字填充，  
+%1-month 使用 2 个零填充数字，  
+%2-week 使用 2 个零填充数字，  
+%3-day 在 month 中使用 2 个零填充数字，   
+%4-hour 使用 2 个零填充数字，  
+%5-minute 使用 2 个零填充数字 
+%6-second 使用 2 个零填充数字。
 
 **DATE <MONTH-DAY> [HOUR:MINUTE]**
 
-在给定的日期和时间触发事件。必须提供日期，时间是可选的。如果没有时间，它会在午夜触发。
+在给定的日期和时间触发事件。  
+必须提供日期，时间是可选的。  
+如果没有时间，它会在午夜触发。
+
 ```
 示例: 
 #event {DATE 12-31 23:59}
 {#showme 再过一分钟新年就要到来了!}
 ```
+
 **DAY [DAY]**
 
 触发每月的每一天或某一天。
@@ -2135,36 +2397,55 @@ CLASS_LOAD [CLASS]
 
 **CHAT MESSAGE**
 
-收到 #chat 消息时触发。%0 包含原始数据，%1 包含修改后的数据。
+收到 `#chat` 消息时触发。  
+
+%0 包含原始数据，%1 包含修改后的数据。
 
 **END OF PATH**
 
-当使用 #path walk 到达路径末端时，此事件触发一次。
+当使用 `#path walk` 到达路径末端时，此事件触发一次。
 
 **IAC**
 
-此事件触发所有 `telnet negotiations`。使用 `#config {debug telnet} {on}` 查看 telnet 事件发生时的正确名称。如果为通常由 mud 客户端 (如 IAC SB TTYPE) 处理的 `telnet negotiations`创建 telnet 事件，则只执行该事件，自动响应将被阻止。
+此事件触发所有 `telnet negotiations`。  
+
+使用 `#config {debug telnet} {on}` 查看 telnet 事件发生时的正确名称。  
+
+如果为通常由 mud 客户端 (如 IAC SB TTYPE) 处理的 `telnet negotiations`创建 telnet 事件，则只执行该事件，自动响应将被阻止。
 
 **IAC [DO|DON'T|WILL|DON'T] [OPTION]**
 
-当触发 `DO, DON'T, WILL or WON't` 选项时，这将阻止TinTin自动处理该选项，你必须自己处理。
+当触发 `DO, DON'T, WILL or WON't` 选项时，这将阻止 TinTin 自动处理该选项，你必须自己处理。
 
 **IAC SB GMCP <MODULE> IAC SE**
 
-GMCP (通用 Mud 通信协议) 上触发此事件。%0 参数包含模块名称，%1 参数包含 JSON 数据。JSON 数据被转换为TinTin的内部变量系统，因此可以使用 `#variable {gmcp [%0]}{%1}` 直接存储数据。原始 JSON 数据存储在 %2 参数中。
+GMCP (通用 Mud 通信协议) 上触发此事件。  
+
+%0 参数包含模块名称，%1 参数包含 JSON 数据。  
+
+JSON 数据被转换为 TinTin 的内部变量系统，因此可以使用 `#variable {gmcp [%0]}{%1}` 直接存储数据。  
+
+原始 JSON 数据存储在 %2 参数中。
 
 **IAC SB MSDP [VARIABLE]**
 
-此事件触发 [MSDP](https://tintin.sourceforge.io/scripts/msdp.php) (Mud Server 数据协议) 子协商。%0 参数包含变量的名称，%1 参数包含变量的值。值转换为TinTin的内部变量系统，因此可以使用 `#variable {msdp [%0]} {%1}` 直接存储数据。
+此事件触发 [MSDP](https://tintin.sourceforge.io/scripts/msdp.php) (Mud Server 数据协议) 子协商。  
+
+%0 参数包含变量的名称，%1 参数包含变量的值。  
+
+值转换为 TinTin 的内部变量系统，因此可以使用 `#variable {msdp [%0]} {%1}` 直接存储数据。
 
 **IAC [DO|DON'T|WILL|DON'T] MSP**
 
-此事件在 [MSP](https://tintin.sourceforge.io/scripts/msp.php) (MUD声音协议) 子协商上触发。
-
+此事件在 [MSP](https://tintin.sourceforge.io/scripts/msp.php) (MUD 声音协议) 子协商上触发。
 
 **IAC SB MSSP [VARIABLE]**
 
-此事件在 MSSP (Mud 服务器状态协议) 子协商上触发。%0 参数包含变量的名称，%1 参数包含变量的值。如果变量作为数组发送，则为每个索引生成名称/值事件。
+此事件在 MSSP (Mud 服务器状态协议) 子协商上触发。  
+
+%0 参数包含变量的名称，%1 参数包含变量的值。  
+
+如果变量作为数组发送，则为每个索引生成名称/值事件。
 
 **IAC [DO|DON'T|WILL|DON'T] MXP**
 
@@ -2172,15 +2453,27 @@ MXP (Mud 扩展协议) 子协商上触发此事件。
 
 **IAC SB NEW-ENVIRON <IS|INFO|SEND> [VAR|USR]**
 
-此事件触发新环境子协商。根据协商类型，您必须将发送、是或信息附加到事件名称，如使用 `#config {debug telnet} {on}` 时所示。%0 参数包含变量的名称，%1 参数包含变量的值。
+此事件触发新环境子协商。  
+
+根据协商类型，您必须将发送、是或信息附加到事件名称，如使用 `#config {debug telnet} {on}` 时所示。  
+
+%0 参数包含变量的名称，%1 参数包含变量的值。
 
 **IAC SB ZMP**
 
-ZMP 子协商上触发此事件。根据 ZMP 包，您必须将包附加到事件名称，如使用 `#config {debug telnet} {on}` 时所示。%0 参数包含 ZMP 包数据。
+ZMP 子协商上触发此事件。  
+
+根据 ZMP 包，您必须将包附加到事件名称，如使用 `#config {debug telnet} {on}` 时所示。  
+
+%0 参数包含 ZMP 包数据。
 
 **IAC SB**
 
-任何未定义的子协商都会触发此事件。一些 telnet 选项将被命名，其他选项将是一个数字，如使用 `#config {debug telnet} {on}` 时所示。%0 参数将包含子协商内的数据。
+任何未定义的子协商都会触发此事件。  
+
+一些 telnet 选项将被命名，其他选项将是一个数字，如使用 `#config {debug telnet} {on}` 时所示。  
+
+%0 参数将包含子协商内的数据。
 
 **MAP ENTER MAP**
 
@@ -2188,7 +2481,9 @@ ZMP 子协商上触发此事件。根据 ZMP 包，您必须将包附加到事�
 
 **MAP ENTER ROOM [VNUM]**
 
-在自动映射程序中进入新房间后，此事件立即触发。房间号是 vnum。%0 参数包含房间的 vnum，%1 包含分区房间的 vnum。
+在自动映射程序中进入新房间后，此事件立即触发。房间号是 vnum。  
+
+%0 参数包含房间的 vnum，%1 包含分区房间的 vnum。
 
 **MAP EXIT MAP**
 
@@ -2196,27 +2491,37 @@ ZMP 子协商上触发此事件。根据 ZMP 包，您必须将包附加到事�
 
 **MAP EXIT ROOM [VNUM]**
 
-此事件在退出自动映射程序中的当前房间之前立即触发。房间号是 vnum。%0 参数包含房间的 vnum，%1 包含目标房间的 vnum。
+此事件在退出自动映射程序中的当前房间之前立即触发。房间号是 vnum。  
+
+%0 参数包含房间的 vnum，%1 包含目标房间的 vnum。
 
 **PORT CONNECTION**
 
-当进行新的套接字连接时，此事件会触发。%0 包含套接字号，%1 ip地址，%2 端口号 (对于传入连接，设置为 0)。
+当进行新的套接字连接时，此事件会触发。  
+
+%0 包含套接字号，%1 ip 地址，%2 端口号 (对于传入连接，设置为 0)。
 
 **PORT DISCONNECTION**
 
-当套接字断开时，此事件触发。%0 包含套接字号，%1 ip地址，%2 端口号 (对于传入连接，设置为 0)。
+当套接字断开时，此事件触发。  
+
+%0 包含套接字号，%1 ip 地址，%2 端口号 (对于传入连接，设置为 0)。
 
 **PORT MESSAGE**
 
-当套接字发送数据时，这甚至会触发。%0 包含套接字号，%1 ip地址，%2 端口号 (对于传入连接，设置为 0)，%3 包含剥离的数据, %4 包含原始数据。
+当套接字发送数据时，这甚至会触发。  
+
+%0 包含套接字号，%1 ip 地址，%2 端口号 (对于传入连接，设置为 0)，%3 包含剥离的数据, %4 包含原始数据。
 
 **PROGRAM START**
 
-这个事件在TinTIN++ 的启动过程结束时触发。%0 包含客户端名称，%1 包含客户端版本。
+这个事件在 TinTIN++ 的启动过程结束时触发。  
+
+%0 包含客户端名称，%1 包含客户端版本。
 
 **PROGRAM TERMINATION**
 
-此事件在启动会话中TinTin++ 终止进程结束时触发。
+此事件在启动会话中 TinTin++ 终止进程结束时触发。
 
 **RECEIVED INPUT**
 
@@ -2224,23 +2529,33 @@ ZMP 子协商上触发此事件。根据 ZMP 包，您必须将包附加到事�
 
 **RECEIVED LINE**
 
-当接收到新输出时，多行输出被分解成单行输出。在执行任何触发器之前，此事件会触发来自服务器的每一行输出。%0 参数包含原始行，%1 参数包含纯行，去掉所有颜色代码，始终包含单行。
+当接收到新输出时，多行输出被分解成单行输出。  
+
+在执行任何触发器之前，此事件会触发来自服务器的每一行输出。  
+
+%0 参数包含原始行，%1 参数包含纯行，去掉所有颜色代码，始终包含单行。
 
 **RECEIVED OUTPUT**
 
-在将输出分成单行之前，当接收到新输出时触发。%0 包含可以包含多行的原始输出。
+在将输出分成单行之前，当接收到新输出时触发。  
+
+%0 包含可以包含多行的原始输出。
 
 **SCREEN RESIZE**
 
-当程序启动时，每当屏幕调整大小时，此事件都会触发一次。%0 包含屏幕宽度，%1 包含屏幕高度。
+当程序启动时，每当屏幕调整大小时，此事件都会触发一次。  
+
+%0 包含屏幕宽度，%1 包含屏幕高度。
 
 **SEND OUTPUT**
 
-此事件在命令行发送到服务器后立即触发。% 0参数包含原始命令行。
+此事件在命令行发送到服务器后立即触发。%0 参数包含原始命令行。
 
 **SESSION CREATED**
 
-创建会话时触发。%0 参数包含会话名称，%1 参数包含主机名，%2 参数包含数字ip地址，%3 参数包含端口号。
+创建会话时触发。  
+
+%0 参数包含会话名称，%1 参数包含主机名，%2 参数包含数字 ip 地址，%3 参数包含端口号。
 
 **SESSION ACTIVATED**
 
@@ -2248,7 +2563,9 @@ ZMP 子协商上触发此事件。根据 ZMP 包，您必须将包附加到事�
 
 **SESSION CONNECTED**
 
-会话连接到服务器后，此事件立即触发。%0 参数包含会话名称，%1 参数包含主机名，%2 参数包含数字ip地址，%3 参数包含端口号。
+会话连接到服务器后，此事件立即触发。  
+
+%0 参数包含会话名称，%1 参数包含主机名，%2 参数包含数字 ip 地址，%3 参数包含端口号。
 
 **SESSION DEACTIVATED**
 
@@ -2256,64 +2573,70 @@ ZMP 子协商上触发此事件。根据 ZMP 包，您必须将包附加到事�
 
 **SESSION DISCONNECTED**
 
-会话与服务器断开连接后，此事件立即触发。%0 参数包含会话名称，%1 参数包含主机名，%2 参数包含数字ip地址，%3 参数包含端口号。
+会话与服务器断开连接后，此事件立即触发。  
+
+%0 参数包含会话名称，%1 参数包含主机名，%2 参数包含数字 ip 地址，%3 参数包含端口号。
 
 **SESSION TIMED OUT**
 
-当会话无法连接时，此事件会触发。%0 参数包含会话名称，%1 参数包含主机名，%2 参数包含数字ip地址，%3 参数包含端口号。
+当会话无法连接时，此事件会触发。  
+
+%0 参数包含会话名称，%1 参数包含主机名，%2 参数包含数字ip地址，%3 参数包含端口号。
 
 **VARIABLE UPDATE \<VARIABLE\>**
 
-当创建或更新变量时，此事件会触发。%0 参数包含变量名，%1 参数包含变量值。
+当创建或更新变量时，此事件会触发。  
+
+%0 参数包含变量名，%1 参数包含变量值。
 
 **VT100 [CPR|DA|DECID|DSR|ENQ]**
 
-当接收到终端识别码时，这些事件会触发。它们记录不良，很少使用，通常可以忽略。
+当接收到终端识别码时，这些事件会触发。  
 
-另可参见: [Delay](#delay) and [Ticker](#ticker).
+它们记录不良，很少使用，通常可以忽略。
 
-## Forall
+***
 
-> #forall 已经过时. 
+另可参见: [Button](#button)，[Delay](#delay)，[Ticker](#ticker)。
 
-> #foreach 替代使用.
+# Forall
+
+> #forall 已经过时。  
+#foreach 替代使用。
 
 ```
 来自xgg@pkuxkx的提示：
 这个命令在新版本中已被移除，
-使用#foreach代替，
+使用 #foreach 代替，
 旧版本逍遥行路径显示列表时用的到，
-现在已用foreach重写。
+现在已用 foreach 重写。
 ```
-另可参见: [Foreach](#foreach),[Bell](#bell) and [Cr](#cr).
+另可参见: [Foreach](#foreach)，[Bell](#bell)，[Cr](#cr)。
 
-## Foreach
+# Foreach
 
-> 语法: <br>
-#foreach {list} {variable} {commands}
+> 语法：#foreach {list} {variable} {commands}
 
-Foreach 命令就像一个简化的循环。列表中的每个单词将在执行时存储在变量中，并可以在命令部分中使用。
+`#Foreach(遍历数组)` 命令就像一个简化的循环。  
 
-所提供列表中的项目必须使用分号`;`分隔，或者用大括号将它们括起来。
+列表中的每个项目将在执行时存储在变量中，并可以在命令部分中使用。
+
+所提供列表中的项目必须使用分号 `;` 分隔，或者用大括号将它们括起来。
 
 ```
 示例: 
 #foreach {Bob;Jim;Tom} {name} {say Hello $name!}
-
-示例: 
 #foreach {{Bob}{Jim}{Tom}} {name} {say Hello $name!}
+--相当于：hello Bob!hello Jim!hello Tom!
 ```
 
-相当于：hello Bob!hello Jim!hello Tom!
+要使用 foreach 命令循环遍历列表 (或嵌套变量) 中的所有项目，请使用 `$<list>[%*]`，新版本中请用 `*<list>[]`。
 
-要使用 foreach 命令循环遍历列表 (或嵌套变量) 中的所有项目，请使用 `$<list>[%*]`，新版本中请用`*<list>[]`。
+另可参见: [Break](#break)，[Continue](#continue)，[List](#list)， [Loop](#loop)，[Parse](#parse)，[Repeat](#repeat)，[Return](#return)，[While](#while)。
 
-另可参见: [Break](#break), [Continue](#continue), [List](#list), [Loop](#loop), [Parse](#parse), [Repeat](#repeat), [Return](#return) and [While](#while).
+# Format
 
-## Format
-
-> 语法: <br>
-#format {variable} {format} {argument1} {argument2} {etc}
+> 语法：#format {variable} {format} {argument1} {argument2} {etc}
 
 此命令允许您像 C 中的 sprintf 函数一样格式化文本。结果将存储在给定的变量中。格式部分可以包含文本和参数变量。在参数部分，你最多可以给出最多 20 个参数。另请参见 sprintf 上的 linux man 文件。
 
@@ -2363,7 +2686,7 @@ epoch 就是 E 纪元，也称为 Unix 纪元。
 ```
 另可参见: [Function](#function), [Local](#local), [Math](#math), [Replace](#replace), [Script](#script) and [Variable](#variable).
 
-## Function
+# Function
 
 > 语法: #function {name} {commands}
 
@@ -2402,7 +2725,7 @@ epoch 就是 E 纪元，也称为 Unix 纪元。
 
 另可参见: [Format](#format), [Local](#local), [Math](#math), [Replace](#replace), [Script](#script) and [Variable](#variable).
 
-## Gag
+# Gag
 
 > 语法: #gag {message}
 
@@ -2428,7 +2751,7 @@ epoch 就是 E 纪元，也称为 Unix 纪元。
 
 另可参见: [Action](#action), [Highlight](#highlight), [Prompt](#prompt) and [Substitute](#substitute).
 
-## Greeting
+# Greeting
 
 > 语法: #help greeting
 
@@ -2436,7 +2759,7 @@ epoch 就是 E 纪元，也称为 Unix 纪元。
 
 这实际上不是一个命令，因为你只能通过 #help 访问它。
 
-## Grep
+# Grep
 
 > 语法:#grep {[页码]} {关键字}
 
@@ -2448,7 +2771,7 @@ epoch 就是 E 纪元，也称为 Unix 纪元。
 
 另可参见: [Buffer](#buffer), [Echo](#echo) and [Showme](#showme).
 
-## Help
+# Help
 
 > 语法: #help {subject}
 
@@ -2469,7 +2792,7 @@ epoch 就是 E 纪元，也称为 Unix 纪元。
 #buffer write help.txt
 ````
 
-## Highlight
+# Highlight
 
 > 语法: #highlight {message} {color}
 
@@ -2499,7 +2822,7 @@ Highlight 命令将向 highlight 列表中添加一条消息。如果消息匹�
 
 另可参见: [Action](#action), [Gag](#gag), [Prompt](#prompt) and [Substitute](#substitute).
 
-## History
+# History
 
 > 语法:#history {command} {参数}
 
@@ -2537,7 +2860,7 @@ Highlight 命令将向 highlight 列表中添加一条消息。如果消息匹�
 
 另可参见: [Alias](#alias), [Cursor](#cursor), [Keypad](#keypad), [Macro](#macro), [Speedwalk](#speedwalk) and [Tab](#tab).
 
-## If
+# If
 
 > 语法: #if {condition} {true} {false}
 
@@ -2567,7 +2890,7 @@ Highlight 命令将向 highlight 列表中添加一条消息。如果消息匹�
 
 另可参见: [Case](#case), [Default](#default), [Else](#else), [Elseif](#elseif), [Switch](#switch) and [Regex](#regex).
 
-## Ignore
+# Ignore
 
 > 语法: #ignore {listname} {argument}
 
@@ -2581,7 +2904,7 @@ Highlight 命令将向 highlight 列表中添加一条消息。如果消息匹�
 
 另可参见: [Class](#class), [Debug](#debug), [Info](#info), [Kill](#kill) and [Message](#message).
 
-## Info
+# Info
 
 > 语法: #info
 
@@ -2593,7 +2916,7 @@ Info 命令将显示每个列表类型的节点数量，以及每个列表的忽
 
 另可参见: [Class](#class), [Debug](#debug), [Ignore](#ignore), [Kill](#kill) and [Message](#message).
 
-## Keypad
+# Keypad
 
 当 Tintin++ 启动时，它会向终端发送 \e= 以启用终端的应用小键盘模式，使用 #showme {\e>} 可以禁用该模式。
 
@@ -2658,7 +2981,7 @@ Mac OS X 终端要求在终端-> 窗口设置-> 仿真中启用 "strict vt100 ke
 
 另可参见: [Alias](#alias), [Cursor](#cursor), [History](#history), [Macro](#macro), [Speedwalk](#speedwalk) and [Tab](#tab).
 
-## Kill
+# Kill
 
 > 语法: #kill {trigger type} {argument}
 
@@ -2674,7 +2997,7 @@ Mac OS X 终端要求在终端-> 窗口设置-> 仿真中启用 "strict vt100 ke
 
 另可参见: [Class](#class), [Debug](#debug), [Ignore](#ignore), [Info](#info) and [Message](#message).
 
-## Line
+# Line
 
 > 语法: #line {option} {argument}
 
@@ -2785,7 +3108,7 @@ Secure安全: 避开所有大括号、变量、函数和命令分隔符
 ```
 上面的示例将所有 tells 记录到 tells.log 文件中，除非发件人在忽略列表中，否则在这种情况下，tell 会被屏蔽。
 
-## List
+# List
 
 > 语法：#list {variable} {option} {argument}
 
@@ -2820,7 +3143,7 @@ Secure安全: 避开所有大括号、变量、函数和命令分隔符
 
 另可参见：[Break](#break), [Continue](#continue), [Foreach](#foreach), [Loop](#loop), [Parse](#parse), [Repeat](#repeat), [Return](#return) and [While](#while).
 
-## Lists
+# Lists
 
 TinTin有几种不同类型的列表，它们的行为方式相当普遍。为了正确解释列表，在讨论更复杂的类型之前，首先解释最基本的变量类型是最容易的。
 
@@ -3130,7 +3453,7 @@ TinTin++ 表在保持在 100 个项目下时速度非常快。一旦表的长度
 
 另可参见: [Break](#break), [Continue](#continue), [Foreach](#foreach), [Loop](#loop), [Parse](#parse), [Repeat](#repeat), [Return](#return) and [While](#while).
 
-## Local
+# Local
 
 > 语法: #local {variable name} {string}
 
@@ -3149,7 +3472,7 @@ Local 命令设置局部变量。与常规变量不同，局部变量只会在�
 ```
 另可参见: [Format](#format), [Function](#function), [Math](#math), [Replace](#replace), [Script](#script) and [Variable](#variable).
 
-## Log
+# Log
 
 > 语法：#log {APPEND|OVERWRITE|OFF} {filename}
 
@@ -3180,7 +3503,7 @@ Log 命令将滚动区域中接收到的所有数据记录到指定的文件名�
 
 另可参见: [Read](#read), [Scan](#scan), [Textin](#textin) and [Write](#write).
 
-## Loop
+# Loop
 
 > 语法: #loop {min} {max} {variable} {commands}
 
@@ -3192,7 +3515,7 @@ Log 命令将滚动区域中接收到的所有数据记录到指定的文件名�
 
 另可参见: [Break](#beak), [Continue](#continue), [Foreach](#foreach), [List](#list), [Parse](#parse), [Repeat](#repeat), [Return](#return) and [While](#while).
 
-## Macro
+# Macro
 
 > 语法: #macro {key sequence} {commands}
 
@@ -3227,7 +3550,7 @@ Macro 宏命令使 tintin 可以响应按键。
 
 另可参见: [Alias](#alias), [Cursor](#cursor), [History](#history), [Keypad](#keypad), [Speedwalk](#speedwalk) and [Tab](#tab).
 
-## Map
+# Map
 
 > 语法: #map {option} {argument}
 
@@ -3595,7 +3918,7 @@ ROOMWEIGHT.
 
 另可参见: [Path](#path) and [Pathdir](#pathdir).
 
-## Math
+# Math
 
 > 语法: #math {variable} {mathematical expression}
 
@@ -3633,7 +3956,7 @@ D 代表骰子，2d6 相当于投掷两个 6 面骰子。如果你需要 1 到 1
 
 另可参见: [Format](#format), [Function](#function), [Local](#local), [Replace](#replace), [Script](#script) and [Variable](#variable).
 
-## Mathematics
+# Mathematics
 
 数学表达式用于计算和boolean if 检查。TinTin++ 支持全套 C 操作和一些额外的操作。以下是用于数值运算的运算符的优先级列表。
 
@@ -3681,7 +4004,7 @@ d	   |01|整数掷骰子随机
 
 另可参见: [Colors](#colors), [Escape Codes](#escape-codes) and [Regular Expressions](#regular-expressions).
 
-## Message
+# Message
 
 > 语法: #message {listname} {argument}
 
@@ -3699,7 +4022,7 @@ d	   |01|整数掷骰子随机
 
 另可参见: [Class](#class), [Debug](#debug), [Ignore](#ignore), [Info](#info) and [Kill](#kill).
 
-## Metric System
+# Metric System
 
 名称|符号|因数
 :-|:-|:-
@@ -3710,7 +4033,7 @@ d	   |01|整数掷骰子随机
 
 另可参见：[Echo](#echo),[Format](#format) and [Math](#math).
 
-## MSDP
+# MSDP
 
 MSDP 是 #port 功能的一部分。请参阅 `#help event` 附加文档，因为所有 MSDP 事件都可以作为常规事件。
 
@@ -3718,7 +4041,7 @@ MSDP 是 #port 功能的一部分。请参阅 `#help event` 附加文档，因�
 
 另可参见：[Event](#event),[Port](#port).
 
-## MSLP
+# MSLP
 
 TinTin++ 支持MSLP（Mud服务器链接协议)。请参阅 `#help event` 附加文档，因为所有 MSLP 事件都可以作为常规事件使用。
 
@@ -3727,7 +4050,7 @@ TinTin++ 支持MSLP（Mud服务器链接协议)。请参阅 `#help event` 附加
 
 另可参见：[Event](#event),[Port](#port).
 
-## Nop
+# Nop
 
 > 语法: #nop
 
@@ -3741,7 +4064,7 @@ TinTin++ 支持MSLP（Mud服务器链接协议)。请参阅 `#help event` 附加
 
 > 示例: #nop {这是一条注释。}
 
-## Parse
+# Parse
 
 > 语法: #parse {string} {variable} {commands}
 
@@ -3783,7 +4106,7 @@ say h!;say e!;say l!;say l!;say o!
 ```
 另可参见: [Break](#break), [Continue](#continue), [Foreach](#foreach), [List](#list), [Loop](#loop), [Repeat](#repeat), [Return](#return) and [While](#while).
 
-## Path
+# Path
 
 > 语法:   
 #path {del|end|ins|load|map|new|save|run|walk} {argument}
@@ -3848,7 +4171,7 @@ $return
 ```
 另可参见: [Map](#map) and [Pathdir](#pathdir).
 
-## Pathdir
+# Pathdir
 
 > 语法: #pathdir {forward direction} {backward direction} {coord}
 
@@ -3871,7 +4194,7 @@ $return
 
 另可参见: [Map](#map) and [Path](#path).
 
-## Port
+# Port
 
 > 语法: #port {command} {argument}
 
@@ -3962,7 +4285,7 @@ $return
 
 另可参见: [All](#all), [Run](#run), [Session](#session), [Session Name](#session-name), [Snoop](#snoop), [SSL](#ssl) and [Zap](#zap).
 
-## Prompt
+# Prompt
 
 > 语法: #prompt {text} {new text} {row #} {col #}
 
@@ -4004,7 +4327,7 @@ prompt 是 [#split](#split) 分割窗口模式的一项特性功能，
 
 另可参见: [Action](#action), [Gag](#gag), [Highlight](#highlight) and [Substitute](#substitute).
 
-## Read
+# Read
 
 > 语法: #read {filename}
 
@@ -4022,7 +4345,7 @@ TinTin++ 将命令字符设置为命令文件中找到的第一个字符，默�
 
 另可参见: [Log](#log), [Scan](#scan), [Textin](#textin) and [Write](#write).
 
-## Regex
+# Regex
 
 > 语法: #regex {string} {expression} {true} {false}
 
@@ -4090,7 +4413,7 @@ $lastid = {@_@)。(xgg}
 
 另可参见: [Case](#case), [Default](#default), [Else](#else), [Elseif](#elseif), [If](#if) and [Switch](#switch).
 
-## Regular Expressions
+# Regular Expressions
 
 Regular Expressions、Regex或Regexp是定义搜索模式的字符序列。自从 1980 以后，就有了编写正则表达式的不同语法，其中使用最广泛的是 POSIX 语法和类似但更高级的 Perl 标准。TinTin++ 支持被称为 PCRE (Perl 兼容正则表达式) 的 Perl 标准。
 
@@ -4257,7 +4580,7 @@ PCRE	|描述	|POSIX
 
 另可参见: [Colors](#colors), [Escape Codes](#escape-codes) and [Mathematics](#mathematics).
 
-## Repeat
+# Repeat
 
 > 语法: #[number] {commands}
 
@@ -4269,7 +4592,7 @@ PCRE	|描述	|POSIX
 
 另可参见: [Break](#break), [Continue](#continue), [Foreach](#foreach), [List](#list), [Loop](#loop), [Parse](#parse), [Return](#return) and [While](#while).
 
-## Replace
+# Replace
 
 > 语法: #replace {variable} {oldtext} {newtext}
 
@@ -4288,7 +4611,7 @@ PCRE	|描述	|POSIX
 
 另可参见: [Format](#format), [Function](#function), [Local](#local), [Math](#math), [Script](#script) and [Variable](#variable).
 
-## Return
+# Return
 
 > 语法: #return {text}
 
@@ -4298,7 +4621,7 @@ PCRE	|描述	|POSIX
 
 另可参见: [Break](#break), [Continue](#continue), [Foreach](#foreach), [List](#list), [Loop](#loop), [Parse](#parse), [Repeat](#repeat) and [While](#while).
 
-## Run
+# Run
 
 > 语法: #run {session name} {shell commands} {file}
 
@@ -4325,7 +4648,7 @@ print "cmd #showme <118>Hello World!"
 
 另可参见: [All](#all), [Port](#port), [Session](#session), [Session Name](#session-name), [Snoop](#snoop), [SSL](#ssl) and [Zap](#zap).
 
-## Scan
+# Scan
 
 > 语法: #scan {abort|read}
 
@@ -4335,7 +4658,7 @@ Scan 命令读取文件名并将其发送到屏幕上，就好像它是MUDs输�
 
 另可参见: [Log](#log), [Read](#read), [Scan](#scan), [Textin](#textin) and [Write](#write).
 
-## Screen
+# Screen
 
 > 语法：#screen {option} {argument}
 
@@ -4364,7 +4687,7 @@ Screen 屏幕命令提供了各种屏幕操作命令和实用程序。
 
 另可参见：[Bell](#bell).
 
-## Screen Reader
+# Screen Reader
 
 > 语法：#config {SCREEN READER} {ON|OFF}
 
@@ -4374,7 +4697,7 @@ Screen 屏幕命令提供了各种屏幕操作命令和实用程序。
 
 另可参见：[Config](#config).
 
-## Script
+# Script
 
 > 语法: #script {variable} {shell commands}
 
@@ -4411,7 +4734,7 @@ Screen 屏幕命令提供了各种屏幕操作命令和实用程序。
 
 另可参见: [Format](#format), [Function](#function), [Local](#local), [Math](#)math, [Replace](#replace) and [Variable](#variable).
 
-## Send
+# Send
 
 > 语法: #send {text}
 
@@ -4421,7 +4744,7 @@ Screen 屏幕命令提供了各种屏幕操作命令和实用程序。
 
 另可参见：[Textin](#textin).
 
-## Session
+# Session
 
 > 语法: #session {name} {address} {port} {file}
 
@@ -4436,7 +4759,7 @@ Screen 屏幕命令提供了各种屏幕操作命令和实用程序。
 
 另可参见: [All](#all), [Port](#port), [Run](#run), [Session Name](#session-name), [Snoop](#snoop), [SSL](#ssl) and [Zap](#zap).
 
-## Session name
+# Session name
 
 > 语法: #[sessionname] {commands}
 
@@ -4454,7 +4777,7 @@ Screen 屏幕命令提供了各种屏幕操作命令和实用程序。
 
 另可参见: [All](#all), [Port](#port), [Run](#run), [Session](#session), [Snoop](#snoop), [SSL](#ssl) and [Zap](#zap).
 
-## Showme
+# Showme
 
 > 语法: #show {string} {row} {col}
 
@@ -4479,7 +4802,7 @@ show 命令显示的消息可以被触发，并且可以用于调试操作、替
 
 另可参见: [Buffer](#buffer), [Echo](#echo) and [Grep](#grep).
 
-## Snoop
+# Snoop
 
 > 语法: #snoop {sessionname}
 
@@ -4487,7 +4810,7 @@ show 命令显示的消息可以被触发，并且可以用于调试操作、替
 
 另可参见: [All](#all), [Port](#port), [Run](#run), [Session](#session), [Session Name](#session-name), [SSL](#ssl) and [Zap](#zap).
 
-## Speedwalk
+# Speedwalk
 
 Speedwalking 允许您键入不以分号分隔的多个方向，现在它允许您用数字为方向加前缀，以表示前进该方向的次数。您可以使用 #config 打开/关闭它。
 
@@ -4526,7 +4849,7 @@ Speedwalking 允许您键入不以分号分隔的多个方向，现在它允许�
 ```
 另可参见: [Alias](#alias), [Cursor](#cursor), [History](#history), [Keypad](#keypad), [Macro](#macro) and [Tab](#tab).
 
-## Split
+# Split
 
 > 语法: #split {top bar} {bottom bar} {left bar} {right bar} {input bar}
 
@@ -4590,7 +4913,7 @@ split 命令允许创建顶部状态栏，左右状态条，滚动区域，底�
 #parse eewssdeeeunnweewssdeeeunwesnewnssdeeeunnsewsnwesdwwwunw tmp #map move $tmp
 ```
 
-## SSL
+# SSL
 
 > 语法: #ssl {name} {address} {port} {file}
 
@@ -4604,7 +4927,7 @@ split 命令允许创建顶部状态栏，左右状态条，滚动区域，底�
 
 另可参见: [All](#all), [Port](#port), [Run](#run), [Session Name](#session-name), [Snoop](#snoop), [SSL](#ssl) and [Zap](#zap).
 
-## Statements
+# Statements
 
 TinTin++ 理解以下声明。
 
@@ -4624,7 +4947,7 @@ TinTin++ 理解以下声明。
 
 另可参见：[Commands](#commands),[Help](#help) and [Info](#info).
 
-## Substitute
+# Substitute
 
 > 语法: #substitute {message} {newmessage} {priority}
 
@@ -4645,13 +4968,13 @@ TinTin++ 理解以下声明。
 
 另可参见: [Action](#action), [Gag](#gag), [Highlight](#highlight) and [Prompt](#prompt).
 
-## Suspend
+# Suspend
 
 > 语法: #suspend
 
 这将在后台放置TinTin++，您将返回到 shell。按 ctrl-z 会做同样的事情。你可以通过键入 fg 来返回TinTin++。
 
-## Switch
+# Switch
 
 > 语法: #switch {condition} {arguments}
 
@@ -4668,7 +4991,7 @@ TinTin++ 理解以下声明。
 ```
 另可参见: [Case](#case), [Default](#default), [Else](#else), [Elseif](#elseif), [If](#if) and [Regex](#regex).
 
-## System
+# System
 
 > 语法: #system {commands}
 
@@ -4682,7 +5005,7 @@ TinTin++ 理解以下声明。
 
 另可参见: [Script](#script) and [Run](#run).
 
-## Tab
+# Tab
 
 > 语法: #tab {completionword}
 
@@ -4698,7 +5021,7 @@ Tab 命令将完成 word 添加到选项卡完成列表中。按下 “tab” �
 
 另可参见: [Alias](#alias), [Cursor](#curse), [History](#history), [Keypad](#keypad), [Macro](#macro) and [Speedwalk](#speedwalk).
 
-## Textin
+# Textin
 
 > 语法: #textin {filename} {delay}
 
@@ -4710,7 +5033,7 @@ Tab 命令将完成 word 添加到选项卡完成列表中。按下 “tab” �
 
 另可参见: [Log](#log), [Read](#read), [Scan](#scan) and [Write](#write).
 
-## Ticker
+# Ticker
 
 > 语法: #ticker {name} {commands} {interval}
 
@@ -4724,7 +5047,7 @@ Tab 命令将完成 word 添加到选项卡完成列表中。按下 “tab” �
 
 另可参见: [Delay](#delay) and [Event](#event).
 
-## Time
+# Time
 
 > 语法：#format {variable} {%t} {argument}
 
@@ -4771,7 +5094,7 @@ Tab 命令将完成 word 添加到选项卡完成列表中。按下 “tab” �
 
 另可参见：[Echo](#echo),[Event](#event) and [Format](#format).
 
-## Variable
+# Variable
 
 > 语法: #variable {name} {string}
 
@@ -4820,7 +5143,7 @@ chat I was on ${cool website!} yesterday!
 
 另可参见: [Format](#format), [Function](#function), [Local](#local), [Math](#math), [List](#list), [Replace](#replace) and [Script](#script).
 
-## While
+# While
 
 > 语法: #while {variable} {commands}
 
@@ -4833,7 +5156,7 @@ While 命令的工作方式类似于 c 中的 while 命令。一旦条件等于 
 ```
 另可参见: [Break](#break), [Continue](#continue), [Foreach](#foreach), [List](#list), [Loop](#loop), [Parse](#parse), [Repeat](#repeat) and [Return](#return).
 
-## Wildcards
+# Wildcards
 
 在 TinTin++ 中，所有的通配符/globs 都是由正则表达式处理的。许多命令以某种形式或方式支持通配符。
 ```
@@ -4850,7 +5173,7 @@ While 命令的工作方式类似于 c 中的 while 命令。一旦条件等于 
 ```
 另可参见: [Regular Expressions](#regular-expressions).
 
-## Write
+# Write
 
 > 语法: #write {filename}
 
@@ -4869,7 +5192,7 @@ While 命令的工作方式类似于 c 中的 while 命令。一旦条件等于 
 ```
 另可参见: [Log](#log), [Read](#read), [Scan](#scan) and [Textin](#textin).
 
-## Zap
+# Zap
 
 > 语法: #zap {session}
 
@@ -4883,10 +5206,10 @@ While 命令的工作方式类似于 c 中的 while 命令。一旦条件等于 
 
 # 关于
 ***
-**文档来自[TinTin++官网](https://tintin.sourceforge.io/)**<br>
+**文档来自[「TinTin++ 官网」](https://tintin.sourceforge.io/)**  
 
-**翻译者：xgg@pkuxkx**<br>
-**贡献者：dzp@pkuxkx**<br>
+**翻译者：xgg@pkuxkx**  
+**贡献者：dzp@pkuxkx**  
 
 **继续阅读:[ 返回导航 ](#导航)**
 ***
