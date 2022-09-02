@@ -2325,7 +2325,7 @@ IAC 事件                  | 参数
 
 ***
 
-要查看所有事件触发器，请使用 `#event info on`。
+要查看所有事件触发器，请使用 `#info event on`。
 
 这样就可以得到一些有用的信息，来消除一些事件信息的显示。
 
@@ -2348,7 +2348,7 @@ IAC 事件                  | 参数
 %2-week 使用 2 个零填充数字，  
 %3-day 在 month 中使用 2 个零填充数字，   
 %4-hour 使用 2 个零填充数字，  
-%5-minute 使用 2 个零填充数字 
+%5-minute 使用 2 个零填充数字，  
 %6-second 使用 2 个零填充数字。
 
 **DATE <MONTH-DAY> [HOUR:MINUTE]**
@@ -2515,7 +2515,7 @@ ZMP 子协商上触发此事件。
 
 **PROGRAM START**
 
-这个事件在 TinTIN++ 的启动过程结束时触发。  
+这个事件在 TinTin++ 的启动过程结束时触发。  
 
 %0 包含客户端名称，%1 包含客户端版本。
 
@@ -2581,7 +2581,7 @@ ZMP 子协商上触发此事件。
 
 当会话无法连接时，此事件会触发。  
 
-%0 参数包含会话名称，%1 参数包含主机名，%2 参数包含数字ip地址，%3 参数包含端口号。
+%0 参数包含会话名称，%1 参数包含主机名，%2 参数包含数字 ip 地址，%3 参数包含端口号。
 
 **VARIABLE UPDATE \<VARIABLE\>**
 
@@ -2605,11 +2605,11 @@ ZMP 子协商上触发此事件。
 #foreach 替代使用。
 
 ```
-来自xgg@pkuxkx的提示：
+来自 xgg@pkuxkx 的提示：
 这个命令在新版本中已被移除，
 使用 #foreach 代替，
 旧版本逍遥行路径显示列表时用的到，
-现在已用 foreach 重写。
+现在已用 #foreach 重写。
 ```
 另可参见: [Foreach](#foreach)，[Bell](#bell)，[Cr](#cr)。
 
@@ -2638,64 +2638,104 @@ ZMP 子协商上触发此事件。
 
 > 语法：#format {variable} {format} {argument1} {argument2} {etc}
 
-此命令允许您像 C 中的 sprintf 函数一样格式化文本。结果将存储在给定的变量中。格式部分可以包含文本和参数变量。在参数部分，你最多可以给出最多 20 个参数。另请参见 sprintf 上的 linux man 文件。
+`Format(格式化)` 允许您像 `C` 中的 `sprintf` 函数一样将字符串存储在给定的变量中。
 
-参数	|名字	|描述
+此命令有一些增强和限制，并且最多可以给出 30 个参数。
+
+如果在 `alias` 或 `action` 中使用 `#format`，则必须将 `%1` 转义为
+`%+1s` 或 `%%1s` 或 `%\1s`，来确保 `%1` 不会被触发替换。
+
+格式	|参数	|描述
 :- |:- |:-
-%+9s	|String	|前方插入9个空格
-%-9s	|String	|后方插入9个空格
-%.9s	|String	|最多打印9个字符
-%a	  |Number	|打印对应的 ascii 字符
-%c	  |Color	 |将参数转换为颜色代码
-%d  |	Decimal|	用整数格式打印一个数字
-%f  |	Float|	使用浮点格式打印数字
-%g  |	Number	|对数字执行千分组。
-%h	  |Header	|将参数转换为标题
-%l  |	Lowercase	|参数小写
-%m  |	Mathexp	|进行数学运算
-%n	  |Name	|第一个字母大写
-%p  |	String|剥离前导和尾随空格
-%r|	Reverse|	翻转参数(看上下文)
-%s|	String	|普通字符串参数
-%t	|Format|	在参数中使用[strftime](http://www.manpagez.com/man/3/strftime/)格式创建时间戳。
-%u	|Uppercase	|将整个参数大写
-%w	|Wordwrap	|以列表形式包装参数
-%A	|Char	|打印对应的 ascii 值
-%C	|Columns	|打印屏幕宽度 (列)
-%H	|Hash|	打印参数的 32 位散列值
-%L	|Length|	打印参数的长度
-%R|	Rows|	打印屏幕高度 (行)
-%S|	Session|打印会话名称
-%T	|Epochtime	|打印自epoch以来的秒数
-%U	|Epochtime	|打印自epoch以来的微秒数
+%+9s	|String 	|前方插入9个空格
+%-9s	|String 	|后方插入9个空格
+%.8s	|String 	|最多打印8个字符
+%a	 |Number	 |打印对应的 ascii 字符
+%c	 |String |使用高亮颜色
+%d  |Number |用整数格式打印一个数字
+%f  |String  |使用浮点格式打印数字
+%g  |Number	 |对数字执行千位分组。
+%h	 |String |将参数转换为标题
+%l  |String |将参数小写
+%m  |String |进行数学运算
+%n	 |String |第一个字母大写
+%p  |String |剥离前导和尾随空格
+%r  |Reverse |翻转参数(hiya = ayih)
+%s  |String |普通字符串参数
+%t	 |String |在参数中使用[ strftime ](http://www.manpagez.com/man/3/strftime/)格式创建时间戳
+%u	 |String |将整个参数大写
+%w	 |String |以列表形式包装参数，可选 {{string} {width}} 语法
+%x  |hex |打印相应的字符集字符
+%A	 |Char |打印对应的 ascii 值
+%D  |hex |将十六进制转换为十进制
+%H	 |String |打印参数的 64 位散列值
+%L	 |String |打印参数的长度
+%M  |Number |将数字转换为公制
+%S  |String |存储拼写错误的数量
+%T	 |Epochtime	|打印自epoch以来的秒数
+%U	 |Epochtime	|打印自epoch以来的微秒数
+%X  |dec |将十进制转换为十六进制
 
 ```
-来自dzp@pkuxkx的释义：
+来自 dzp@pkuxkx 的释义：
 epoch 就是 E 纪元，也称为 Unix 纪元。
 也就是自格林威治时间（GMT+0） 1970 年 1 月 1 日 00:00:00 以来的秒数。
 所谓的「时间戳」，就是这个东西。
 有时候也叫 timestamp。
 ```
 ```
-例如:
+示例:
 #alias {time}
 {
         #format line {%cThe time is: %t} {light green} {%Y-%m-%d %T};
         #showme {$line}
 }
+--使用高亮绿色
+
+示例：
+#format {test} {%%} 
+--一个 % 字符
 ```
-另可参见: [Function](#function), [Local](#local), [Math](#math), [Replace](#replace), [Script](#script) and [Variable](#variable).
+
+另可参见: [Cat](#cat)，[Echo](#echo)，[Function](#function)，[Local](#local)，[Math](#math)，[Replace](#replace)，[Script](#script)，[Time](#time)，[Variable](#variable)。
 
 # Function
 
-> 语法: #function {name} {commands}
+> 语法: #function {name} {operation}
 
-函数命令是别名和变量之间的交叉。除了可以传递参数之外，函数就像变量一样使用。函数类似于别名，因为您可以在函数中执行命令, 函数完成后，调用函数的行将函数调用替换为 [return](#return) 命令提供的值。
+`Function(函数)` 命令允许你在文本中执行一个脚本，然后用该函数执行完后生成的文本替换该函数调用。
+
+函数命令是别名和变量之间的交叉。
+
+除了可以传递参数之外，函数就像变量一样使用。  
+
+请注意，每个函数应使用 `#return` 结束函数，或设置 {result} 变量。
 
 函数的名称必须只存在字母、数字、下划线，函数名称的第一个字符必须始终是字母。
 
-您可以使用函数，方法是: `@<functionname> {<arguments>}`， 参数存储在 %0 到 %99 中，%0 保存所有参数，%1 第一个, %2 第二个等。参数通过用大括号或分号来分隔。
+要使用函数，请在函数名称前使用 `@` 字符。
 
+> 语法: `@<functionname> {<arguments>}` 
+
+参数存储在 %0 到 %99 中，%0 保存所有参数，%1 第一个, %2 第二个等。  
+
+参数通过大括号或分号来分隔。
+
+可以通过添加其他 `@` 符号来转义函数。
+
+```
+示例：
+#function test #return 42;#showme @@test{}
+```
+```
+示例：
+#function {rnd} {#math {result} {1 d (%2 - %1 + 1) + %1 - 1}}
+#show 100-200中的随机数字: @rnd{100;200}
+
+示例：
+#function gettime {#format result %t %H:%M}
+#show 当前时间：@gettime{}
+```
 ```
 示例:
 #function {time}
@@ -2709,37 +2749,48 @@ epoch 就是 E 纪元，也称为 Unix 纪元。
 		#var epoch %0
 	};
 	#format {time} {%t} {{%T}{$epoch}};
-
 	#return $time
 }
-
 #showme The time is @time{}
 ```
-函数的 if check in 将检查是否传递了参数，如果传递了，参数 (假设是时间戳) 存储在 $epoch 中, 如果不是，则使用 `#format {epoch} %T` 检索自 1970年以来的当前秒数。下一个 $epoch 用于将当前时间存储在 $result 中。使用: `#showme @time{}` 将显示当前时间。
 
-可以在函数中的任何地方使用 #return 命令，但是当找到 #return 命令时，命令执行就结束了。您可以在任何触发器中使用 #return 提前结束命令执行。
+上面函数的 `#if` 部分将检查是否传递了参数，  
+如果传递了，参数 (假设是时间戳) 存储在 $epoch 中,   
+如果不是，则使用 `#format {epoch} %T` 检索自 1970 年以来的当前秒数。  
+下一个 $epoch 用于将当前时间存储在 $result 中。  
+使用: `#showme @time{}` 将显示当前时间。
 
-有关其他示例，请参见脚本部分。
 
-注释: 您可以使用 #unfunction 命令删除函数。
+可以在函数中的任何地方使用 `#return` 命令。  
 
-另可参见: [Format](#format), [Local](#local), [Math](#math), [Replace](#replace), [Script](#script) and [Variable](#variable).
+但是当执行到 `#return` 命令时，函数调用就结束了。  
+
+您可以在任何触发器中使用 `#return` 提前结束命令执行。
+
+注: 您可以使用 `#unfunction` 命令删除函数。
+
+另可参见: [Format](#format)，[Local](#local)，[Math](#math)，[Replace](#replace)，[Script](#script)，[Variable](#variable)。
 
 # Gag
 
-> 语法: #gag {message}
+> 语法: #gag {string}
 
-将不再显示屏蔽的消息。
+在屏幕上消除任何包含字符串的行的显示。
 
-有关模式匹配的信息，请参见正则表达式[Regular Expressions'](#regular-expressions)一节。
+有关模式匹配的信息，请参见正则表达式[ Regular Expressions ](#regular-expressions)一节。
 
-> 示例: #gag {%iTwinkie chats}
-
-如果 Twinkie 是一个讨厌的人，这个 gag 会阻止他的聊天被显示出来。一开始的 %i 使得 gag 案变得关联性，所以如果 Twinkie 以 TWINKIE 的身份登录，gag 仍然有效。
 ```
-来自xgg@pkuxkx的注释：
+示例: 
+#gag {%iTwinkie chats}
+```
+如果 Twinkie 是一个讨厌的人，这个 gag 会阻止他的聊天被显示出来。  
 
-有时使用#gag会出现大量">"符号，
+一开始的 %i 使得 gag 具有关联性，所以如果 Twinkie 以 TWINKIE 的身份登录，gag 仍然有效。
+
+```
+来自 xgg@pkuxkx 的注释：
+
+有时使用 #gag 会出现大量">"符号，
 这时候可以使用：
 #gag {^> $}
 并且有时会出现大量空行：
@@ -2747,29 +2798,46 @@ epoch 就是 E 纪元，也称为 Unix 纪元。
 在这种情况下要显示空行：
 #line ignore #showme {}
 ```
-注释: 您可以使用 #ungag 命令删除 gag。
 
-另可参见: [Action](#action), [Highlight](#highlight), [Prompt](#prompt) and [Substitute](#substitute).
+可以使用 `gag events` 来消除一些系统消息的显示。
+
+注: 您可以使用 `#ungag` 命令删除文本消除。
+
+另可参见: [Action](#action)，[Event](#event)，[Highlight](#highlight)，[Prompt](#prompt)，[Substitute](#substitute)。
 
 # Greeting
 
 > 语法: #help greeting
 
-将简单明了地向您显示每次启动客户端时显示的问候消息 (其中包含客户端版本号)。如果您希望看到它，并且它在缓冲区中不再可用，则很有用。
+将简单明了地向您显示每次启动客户端时显示的问候消息 (其中包含客户端版本号)。
 
-这实际上不是一个命令，因为你只能通过 #help 访问它。
+如果您希望看到它，并且它在缓冲区中不再可用，则很有用。
+
+这实际上不是一个命令，因为你只能通过 `#help greeting` 访问它。
 
 # Grep
 
-> 语法:#grep {[页码]} {关键字}
+> 语法:#grep [page] {search string}
 
-此命令在回滚缓冲区中搜索给定关键字。页码是可选的。它将打印 1 页的对象。如果你想使用 pagenumber 1，然后使用 2 3 ..等，你可以使用 regexp 来获得更好的结果。记得搜索是区分大小写的。
+此命令在回滚缓冲区中搜索匹配的行。  
 
-> 示例: #grep tells you
+显示的匹配数量等于您的屏幕尺寸。
 
-这将显示包含子字符串 “tells you” 的所有接收到的MUDs输出。
+页码是可选的，你可以使用页码进一步搜索。
 
-另可参见: [Buffer](#buffer), [Echo](#echo) and [Showme](#showme).
+使用通配符以获得更好的搜索结果。
+
+注意搜索字符串区分大小写，可以使用 `%i` 禁用。
+
+默认情况下，grep 从回滚缓冲区的末尾搜索到开头，这可以通过使用负号来逆转。
+
+```
+示例: 
+#grep Bubba tells you
+--这将展示所有 Bubba 告诉你的一些事情。
+```
+
+另可参见: [Buffer](#buffer)，[Echo](#echo)，[Showme](#showme)。
 
 # Help
 
