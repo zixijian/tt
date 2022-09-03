@@ -201,11 +201,32 @@ TinTin++ 具有快速而强大的基于 JIT(即时编译) 实现的内置脚本�
 cd ~/tt && screen tt++ init.tt
 ```
 
-请记住：启动 TinTin++ 时定义的所有触发、别名、替换等都是由所有会话继承的。
+请记住：启动 TinTin++ 时定义的所有触发器、别名、替换等都是由所有会话继承的。
 
-如果要退出 TinTin++ 可以键入 `#end`，或者在空行上按组合键 ctrl-d。
+退出 TinTin++ 可以键入 `#end`，或者在空行上按组合键 ctrl-d。
 
-对于 WinTin++ 用户，会选择文本时时自动复制，使用 shift-insert 进行粘贴。
+对于 WinTin++ 用户，会在选择文本时自动复制，使用 shift-insert 进行粘贴。
+
+```
+TinTin++ 启动时可附加下列参数：
+
+用法：tt++ [option] [file]
+
+-a 设定程序开始事件的参数。  
+-e 执行给定命令。 
+-g 打开用户启动界面。  
+-G 不要显示问候信息。  
+-h 显示此帮助。  
+-H nohup 兼容模式。  
+-M 矩阵数字雨。  
+-r 读给定文件。  
+-R 重连到到后台守护进程。  
+-s 启用屏幕阅读模式。  
+-t 设置给定标题。  
+-T 不设置默认标题。  
+-v 启用详细信息模式。  
+-V 显示版本信息。
+```
 
 ## 程序的基本特性
 
@@ -2709,7 +2730,7 @@ epoch 就是 E 纪元，也称为 Unix 纪元。
 
 除了可以传递参数之外，函数就像变量一样使用。  
 
-请注意，每个函数应使用 `#return` 结束函数，或设置 {result} 变量。
+请注意，应使用 `#return` 结束函数，或设置 {result} 变量。
 
 函数的名称必须只存在字母、数字、下划线，函数名称的第一个字符必须始终是字母。
 
@@ -2843,90 +2864,171 @@ epoch 就是 E 纪元，也称为 Unix 纪元。
 
 > 语法: #help {subject}
 
-使用帮助文档中的构建，帮助命令将显示一些关于该主题的基本帮助。没有参数，它显示所有可用的帮助主题。
+没有参数 `#help` 将列出所有可用的帮助主题。
 
-**Help 命令比在线手册更最新。**
+**注：Help 命令比在线手册更新。**
 
-> 示例: #help alias
+使用 `#help %*` 将显示所有帮助条目。
 
-将显示 aliasses 的帮助文件。
+```
+示例: 
+#help alias
+--将显示 #alias 的帮助文件。
+```
 
-> 示例: #help %*
+要创建一个包含所有内部帮助主题的文件: 
 
-这将显示所有帮助文件。要创建一个包含您将使用的所有内部帮助文件的文件: 
 ```
 #buffer clear;
 #help %*;
 #buffer write help.txt
-````
+```
 
 # Highlight
 
-> 语法: #highlight {message} {color}
+> 语法: #highlight {string} {color names} {priority}
 
-Highlight 命令将向 highlight 列表中添加一条消息。如果消息匹配，它将根据给定的颜色代码进行着色。
+`#Highlight(高亮显示)` 命令用于突出显示文本字符串。
 
-有关模式匹配的信息，请参见正则表达式[Regular Expressions'](#regular-expressions)一节。突出显示消息部分不应使用 %0 变量。
+可用的颜色选项有：
 
-可用的颜色代码是:reset, light, faint, underscore, blink, reverse, dim, black, red, green, yellow, blue, magenta, cyan, white, b black, b red, b green, b yellow, b blue, b magenta, b cyan, b white。
+* reset  
+--重置颜色到默认状态
 
-如果你的终端支持 256 种颜色，额外的颜色代码是: azure, ebony, jade, lime, orange, pink, silver, tan, violet, light azure, light ebony, light jade, light lime, light orange, light pink, light silver, light tan, light violet。
+* light  
+--使用 ansi 十六色中的亮色，{light \<color>}
 
-您也可以使用颜色代码[color codes](#colors)。
+* dark  
+--使用 ansi 十六色中的暗色，{dark \<color>}
+
+* underscore  
+--添加下划线
+
+* blink  
+--文本闪烁
+
+* reverse  
+--反转前景色和背景色
+
+* b  
+--使下一种颜色成为背景色
+
+可用的颜色名称有：
+
+颜色代码 | 颜色     |颜色代码  | 颜色
+:-      |:-       |:-       |:-
+\<F06B> | azure   | \<F08F> | Azure
+\<F00B> | blue    | \<F00F> | Blue
+\<F0BB> | cyan    | \<F0FF> | Cyan
+\<F000> | ebony   | \<F666> | Ebony
+\<F0B0> | green   | \<F0F0> | Green
+\<F0B6> | jade    | \<F0F8> | Jade
+\<F6B0> | lime    | \<F8F0> | Lime
+\<FB0B> | magenta | \<FF0F> | Magenta
+\<FB60> | orange  | \<FF80> | Orange
+\<FB06> | pink    | \<FF08> | Pink
+\<FB00> | red     | \<FF00> | Red
+\<F888> | silver  | \<FDDD> | Silver
+\<F860> | tan     | \<FDB0> | Tan
+\<F60B> | violet  | \<F80F> | Violet
+\<FBBB> | white   | \<FFFF> | White
+\<FBB0> | yellow  | \<FFF0> | Yellow
+
+`%1-%99` 变量可用作与任何变量匹配的 “通配符”文本。
+
+`%0` 变量绝对不能用于 `#highlight`。
+
+如果 `<string>` 参数以 `^` 开头，那么只有该文本位于行首时才会被高亮显示。
+
+除了颜色名称，还可以使用颜色代码：[「color codes」](#colors)。
 
 ```
+示例：
+#high {Valgar} {reverse blink}
+--每次出现"Valgar"都会使用闪烁着的颜色反转来突出显示。
+
+示例：
+#high {^You %1} {bold cyan}
+--任何以"You"开头的行都用粗体青色表示。
+
+示例：
+#high {Bubba} {red underscore b green}
+--使用红色下划线文本在绿色背景上高亮显示"Bubba"。
+
 示例: 
 #high {^{你|你的}%*} {light cyan}
-```
+--这将用亮青色突出显示以 “你” 和 “你的” 开头的行。
 
-这将用浅青色突出以 “你” 和 “你的” 开头的行。在 pvp 战斗中发现失明或被诅咒很有用。
-
-```
 示例: 
 #high {%* tells you '%*'} {<ace>}
+--使用"<ace>"蓝色来为匹配的行着色。
 ```
 
-注释: 您可以使用 #unhighlight 命令删除高亮显示。
+注：有关触发器的更多信息，请参见 `#help action`。
 
-另可参见: [Action](#action), [Gag](#gag), [Prompt](#prompt) and [Substitute](#substitute).
+注：有关更高级的颜色替换，请参见 `#help substitute`。
+
+注：此命令仅适用于 `ANSI/VT100` 终端或仿真器。
+
+注: 您可以使用 `#unhighlight` 命令删除高亮显示。
+
+另可参见: [Action](#action)，[Gag](#gag)，[Prompt](#prompt)， [Substitute](#substitute)。
 
 # History
 
-> 语法:#history {command} {参数}
+> 语法：#history {delete}        
+--删除最后一个命令。
 
-默认情况下，历史命令与设置为 “!” 的重复字符一起使用。命令历史记录是手动输入命令的列表，默认情况下，每个会话都会记住最后 1000 个唯一命令，这可以用 [config](#config) 命令来更改。
+> 语法：#history {insert} {command}  
+--插入一个命令。
 
-您也可以通过按 ctrl-r 交互搜索历史列表，这与 ctrl-p (上一个) 和 ctrl-n (下一个) 一起工作。
+> 语法：#history {list}      
+-- 显示整个历史命令记录。
 
-每个会话都有自己的历史列表，从启动会话继承而来。使用`#kill or #kill histories`将清除历史列表。
+> 语法：#history {read} {filename}  
+--从文件读取历史命令。  
+--使用[ Event ](#event)可以在会话打开时执行此操作。
 
-启动/退出 tintin 时，启动会话将尝试自动加载/保存命令历史记录。存储在历史文件`.tintin/history.txt`中。
+> 语法：#history {write} {filename}  
+--将历史命令写入文件。  
+--使用[ Event ](#event)可以在会话关闭时执行此操作。
+
+没有参数，将显示所有可用选项。
+
+默认情况下，所有命令都会保存到历史命令列表。
+
+历史命令列表保存在 `~/.tintin/history.txt` 文件中。
+
+你可以使用 `#config {REPEAT CHAR} {<character>}` 设置重复历史指令字符。
+
+默认情况下，重复历史指令字符被设置为 `!`。
+
+你可以用 `!` 重复最后一个命令。
+
+或者`!<文本>` 重复以给定文本开头的最后一个命令。
+
+您可以使用 `#config {REPEAT ENTER} {ON}` 重复最后一个命令（当您在空行上按回车键时）。
+
+每个会话都会记住最后 1000 个唯一命令，这可以用 [config](#config) 命令来更改。
+
+您也可以通过按 `ctrl-r`（或者通过发出 `#cursor {history search}`）进入反向历史命令搜索模式，这与 ctrl-p (上一个) 和 ctrl-n (下一个) 一起工作。
+
+TinTin++ 默认尝试绑定上箭头和下箭头键以滚动浏览历史命令列表。
+
+您也可以自己用 `#macro` 绑定 `#cursor {history prev}` 和 `#cursor {history next}` 来滚动浏览历史命令列表。许多 `#cursor` 命令仅在与 `#macro` 绑定时才能正常工作。
+
+每个会话都有自己的历史列表，从启动会话继承而来。
+
+使用 `#kill` 或 `#kill histories` 将清除历史命令列表。
+
+启动/退出 tintin 时，启动会话将尝试自动加载/保存命令历史记录。
+
 ```
-来自xgg@pkuxkx的说明：
-这里的.tintin目录在当前登录终端的用户目录中
+来自 xgg@pkuxkx 的说明：
+这里的 ~/.tintin 目录在当前登录终端的默认用户目录中
 ```
 
-**#history {delete}**
-
-#history delete历史删除将删除命令历史记录中的最后一个命令。
-
-**#history {insert} {command}**
-
-#History insert 将在命令历史记录的末尾添加给定的命令。
-
-**#history {list}**
-
-#history list历史列表将显示命令历史记录中的所有条目。
-
-**#history {read} {filename}**
-
-#History read 允许在以前保存的命令历史列表中读取。使用事件触发器[Event](#event)可以在会话打开时执行此操作。
-
-**#history {write} {filename}**
-
-#History write 允许将命令历史列表写入文件。使用事件触发器[Event](#event)可以在会话关闭时执行此操作。
-
-另可参见: [Alias](#alias), [Cursor](#cursor), [Keypad](#keypad), [Macro](#macro), [Speedwalk](#speedwalk) and [Tab](#tab).
+另可参见: [Alias](#alias)，[Cursor](#cursor)，[Keypad](#keypad)， [Macro](#macro)，[Speedwalk](#speedwalk)，[Tab](#tab)。
 
 # If
 
