@@ -3032,59 +3032,139 @@ TinTin++ 默认尝试绑定上箭头和下箭头键以滚动浏览历史命令�
 
 # If
 
-> 语法: #if {condition} {true} {false}
+> 语法: #if {condition} {commands if true}
 
-条件是 c 风格的数学或正则表达式。字符串必须用引号 `""` 包围。在判断真假部分中，任何无零结果都将作为命令执行。如果结果等于零，它将作为可选 false 部分中的命令执行。
+`If(如果)` 命令是自 TinTin Ⅲ 版本添加以来最强大的命令之一。
 
-当使用 == 或 != 比较字符串时，左边的字符串是原始字符串，右边的字符串是正则表达式。当使用 < and > 或 <= and >= 时，会执行基本的字符串比较。
+它的工作原理类似于其他语言中的 `if` 语句，并且基于 `C` 处理其条件语句。
+
+当遇到 `#if` 命令时，如果条件语句求值结果为 `TRUE` (任何非零结果)，则执行命令。
+
+`If` 语句仅在读取时求值，所以你必须将 `if` 语句套嵌另一个语句中 (最有可能是 `#action`)。
+
+条件语句的求值方式与 `#math` 命令是一样的，并且仅使用结果来确定是否执行命令而不是存储结果。
+
+要处理 `if` 语句为 `false` 的情况，可以通过 `#else` 命令。
+
+```
+示例：
+#action {%0 gives you %1 gold coins.} {
+  #if {%1 > 5000} {
+    thank %0;
+  };
+};
+--如果有人给你 5000 个金币，感谢他们。
+
+示例：
+#alias {k} {
+  #if {"%0" == ""} {
+    kill $target;
+  };
+  #else {
+    kill %0;
+  };
+};
+```
+
+注：使用 `#else` 时，`TRUE` 部分后的分号 `;` 不能省略。
+
+条件使用 `c` 风格的数学或正则表达式。
+
+字符串必须用引号 `" "` 包围。
+
+在判断真假部分中，任何无零结果都将作为命令执行。
+
+如果结果等于零，则执行 `false` 部分中的命令。
+
+当使用 `==` 或 `!=` 比较字符串时，左边是原始字符串，右边是正则表达式。
+
+当使用 `<`  `>` 或 `<=`  `>=` 时，会执行基本的字符串比较。
 
 有关更多信息，请参见 [Mathexp](#mathematics) 和 [Regexp](#regex) 上的帮助文件。
-```
-示例:
-#action {%0 gives you %1 gold coins.}
-{
-    #if {%1 > 5000} {thank %0}
-}
-```
-如果有人给你 5000 多个金币，你会感谢他们的。
-```
-来自man@pkuxkx的疑惑：
 
-为什么 $a==好的 不行，
-因为这是一个字符串，
-必须用引号包围。
+```
+来自 man@pkuxkx 的疑惑：
+
+为什么 "#if {$a==好的}" 不行，
+因为字符串必须用引号包围。
 示例：
-"$a"=="好的"
+#if {"$a"=="好的"}
 ```
-注释: 另请参见 #else 、 #elseif 、 #switch 和 #while。
 
-另可参见: [Case](#case), [Default](#default), [Else](#else), [Elseif](#elseif), [Switch](#switch) and [Regex](#regex).
+另可参见: [Case](#case)，[Default](#default)，[Else](#else)，[Elseif](#elseif)，[Switch](#switch)，[Regex](#regex)，[While](#while)。
 
 # Ignore
 
-> 语法: #ignore {listname} {argument}
+> 语法: #ignore {listname} {on|off}
 
-如果没有参数 ignore 将显示您可以忽略的列表。如果给定一个参数，它将切换指定的列表标志。您可以使用 ON 或 OFF 作为参数更具体地更改忽略标志。
+`#Ignore(忽略)` 命令将打开或关闭列表。
 
-> 示例: #ignore actions off
+如果没有参数，将显示当前设置，以及您可以忽略的列表名称。
 
-如果要暂时禁用所有触发器，操作将不再触发，这很有用。
+```
+示例: 
+#ignore actions off
+--暂时忽略所有触发器，触发器将不再被触发。
+```
 
-忽略时，以下列表类型的行为没有变化: classes, commands, configurations, paths, and pathdirs。
+并非每个列表都可以忽略。
 
-另可参见: [Class](#class), [Debug](#debug), [Info](#info), [Kill](#kill) and [Message](#message).
+忽略时，以下列表类型的行为没有变化: `classes`，`commands`，`configurations`，`paths`，`pathdirs`。
+
+另可参见: [Class](#class)，[Debug](#debug)，[Info](#info)，[Kill](#kill)，[Message](#message)。
 
 # Info
 
-> 语法: #info
+> 语法: #info {listname} {LIST|ON|OFF|SAVE}
 
-Info 命令将显示每个列表类型的节点数量，以及每个列表的忽略、消息和调试状态。
+如果没有参数信息，则显示每个 tintin 列表的设置。
 
-> 语法: #info cpu
+可用的列表有：
 
-这将显示TinTin内部 cpu 使用情况的概述。
+* ACTIONS      
+* ALIASES      
+* BUTTONS      
+* CLASSES      
+* COMMANDS     
+* CONFIGS      
+* DELAYS       
+* EVENTS       
+* FUNCTIONS    
+* GAGS         
+* HIGHLIGHTS   
+* MACROS       
+* PATHS        
+* PATHDIRS     
+* PROMPTS      
+* SUBSTITUTES  
+* TABS         
+* TICKERS      
+* VARIABLES    
 
-另可参见: [Class](#class), [Debug](#debug), [Ignore](#ignore), [Kill](#kill) and [Message](#message).
+通过提供列表的名称和列表选项，将显示所有与该列表关联的触发器/变量。
+
+使用 `SAVE` 选项时，这些数据将写入 `$info` 变量。
+
+可用的 `#info` 参数还有：
+
+参数      | 行为
+:---     | :---
+arguments| 将显示匹配的触发参数。
+big5toutf| 将显示big5到utf8的转换表。
+cpu      | 将显示 tintin 的 cpu 使用信息。
+environ  | 将显示环境变量。
+input    | 将显示输入行信息。
+matches  | 将显示匹配的命令参数。
+mccp     | 将显示数据压缩信息
+memory   | 将显示有关内存堆栈的信息。
+stack    | 将显示低级调试堆栈。
+session  | 将显示会话的信息。
+sessions | 将显示所有会话的信息。
+system   | 将显示一些系统信息。
+tokenizer| 将显示有关脚本堆栈的信息。
+unicode  | 将显示有关所提供字符的信息。
+
+另可参见: [Class](#class)，[Debug](#debug)，[Ignore](#ignore)，[Kill](#kill)，[Message](#message)。
 
 # Keypad
 
