@@ -3042,7 +3042,7 @@ TinTin++ 默认尝试绑定上箭头和下箭头键以滚动浏览历史命令�
 
 `If` 语句仅在读取时求值，所以你必须将 `if` 语句套嵌另一个语句中 (最有可能是 `#action`)。
 
-条件语句的求值方式与 `#math` 命令是一样的，并且仅使用结果来确定是否执行命令而不是存储结果。
+条件语句的求值与 `#math` 命令一样，但仅使用结果来确定是否执行命令而不存储。
 
 要处理 `if` 语句为 `false` 的情况，可以通过 `#else` 命令。
 
@@ -3068,13 +3068,9 @@ TinTin++ 默认尝试绑定上箭头和下箭头键以滚动浏览历史命令�
 
 注：使用 `#else` 时，`TRUE` 部分后的分号 `;` 不能省略。
 
-条件使用 `c` 风格的数学或正则表达式。
+条件语句使用 `c` 风格的数学或正则表达式。
 
 字符串必须用引号 `" "` 包围。
-
-在判断真假部分中，任何无零结果都将作为命令执行。
-
-如果结果等于零，则执行 `false` 部分中的命令。
 
 当使用 `==` 或 `!=` 比较字符串时，左边是原始字符串，右边是正则表达式。
 
@@ -3150,8 +3146,8 @@ TinTin++ 默认尝试绑定上箭头和下箭头键以滚动浏览历史命令�
 参数      | 行为
 :---     | :---
 arguments| 将显示匹配的触发参数。
-big5toutf| 将显示big5到utf8的转换表。
-cpu      | 将显示 tintin 的 cpu 使用信息。
+big5toutf| 将显示 big5 到 utf8 的转换表。
+cpu      | 将显示 tt 的 cpu 使用信息。
 environ  | 将显示环境变量。
 input    | 将显示输入行信息。
 matches  | 将显示匹配的命令参数。
@@ -3162,13 +3158,15 @@ session  | 将显示会话的信息。
 sessions | 将显示所有会话的信息。
 system   | 将显示一些系统信息。
 tokenizer| 将显示有关脚本堆栈的信息。
-unicode  | 将显示有关所提供字符的信息。
+unicode  | 将显示有关给定字符的信息。
 
 另可参见: [Class](#class)，[Debug](#debug)，[Ignore](#ignore)，[Kill](#kill)，[Message](#message)。
 
 # Keypad
 
-当 Tintin++ 启动时，它会向终端发送 \e= 以启用终端的应用小键盘模式，使用 #showme {\e>} 可以禁用该模式。
+当 TinTin++ 启动时，它会向终端发送 `\e=` 以启用终端的应用小键盘模式。  
+
+使用 `#showme {\e>}` 可以禁用该模式。
 
 ```
 **Configuration A**
@@ -3211,49 +3209,62 @@ unicode  | 将显示有关所提供字符的信息。
 +-----+-----+-----+-----+
 ```
 
-禁用键盘模式后，numlock on 将为您提供配置 A，numlock off 将为您提供配置 B。启用键盘模式后，您将获得配置 C。
+禁用小键盘模式后，`numlock on` 将为您提供配置 A，`numlock off` 将为您提供配置 B。启用键盘模式后，您将获得配置 C。
 
 - **支持 keypad mode 的终端**
 
-Linux Console, PuTTY, Eterm, aterm.
+Linux Console, PuTTY, Eterm, aterm。
 
 - **不支持 keypad mode 的终端**
 
-RXVT on Cygwin, Windows Console, Gnome Terminal, Konsole
+RXVT on Cygwin, Windows Console, Gnome Terminal, Konsole。
 
 - **特殊终端**
 
 RXVT 需要关闭 numlock 才能启用配置 C。
 
-Xterm 可能需要在 `ctrl-leftclick` 菜单中禁用`Alt/NumLock`修饰符`(num-lock)`。或编辑 `~/.Xresources` 并添加 `XTerm*VT100.numLock:false`
+Xterm 可能需要在 `ctrl-leftclick` 菜单中禁用 `Alt/NumLock` 修饰符`(num-lock)`。
 
-Mac OS X 终端要求在终端-> 窗口设置-> 仿真中启用 "strict vt100 keypad behavior"。
+或编辑 `~/.Xresources` 并添加 `XTerm*VT100.numLock:false`。
 
-另可参见: [Alias](#alias), [Cursor](#cursor), [History](#history), [Macro](#macro), [Speedwalk](#speedwalk) and [Tab](#tab).
+macOS 终端要求在终端-> 窗口设置-> 仿真中启用 `strict vt100 keypad behavior`。
+
+另可参见: [Alias](#alias)，[Cursor](#cursor)，[History](#history)， [Macro](#macro)，[Speedwalk](#speedwalk)，[Tab](#tab)。
 
 # Kill
 
-> 语法: #kill {trigger type} {argument}
+> 语法: #kill {list} {pattern}
 
-没有参数的 kill 命令将删除每个列表中的每个节点。这包括标记的路径、路径和配置。如果你想在新的脚本文件中阅读并想从头开始，这很有用。
+如果没有参数，`#kill` 命令将清除所有列表。
 
-在给定列表中使用 kill 将删除指定的列表，例如: `#kill alias`。
+不退出 tintin 重新加载命令文件时很有用。
 
-此外，您可以同时给出列表和参数，在这种情况下，只会杀死列表中的匹配触发器。
+```
+示例：
+#nop 重载配置;
+#alias {reload} {
+    #kill;
+    #read main.tt;
+};
+```
 
-> 示例: #kill histories tell %*
+使用一个参数，可以清除特定列表。
 
-这将从命令历史列表中删除所有 tell 命令。
+示例: `#kill alias`
 
-另可参见: [Class](#class), [Debug](#debug), [Ignore](#ignore), [Info](#info) and [Message](#message).
+使用两个参数，所选列表中的所有匹配触发将被移除。
+
+示例: `#kill alias %*test*`
+
+另可参见: [Class](#class)，[Debug](#debug)，[Ignore](#ignore)，[Info](#info)，[Message](#message)。
 
 # Line
 
 > 语法: #line {option} {argument}
 
-Line 命令提供各种基于行的操作。  
+`#Line(行)` 命令提供各种基于行的操作。  
 
-- 更改参数的 Line 子命令（strip、sub）：
+## 更改参数的子命令
 
 **#line strip {argument}**
 
@@ -3261,16 +3272,26 @@ Line 命令提供各种基于行的操作。
 
 **#line substitute {options} {argument}**
 
-可以通过使用命令分隔符分隔多个选项。  
-有效选项有:
+使用提供的替换执行参数。
 
-Variables变量: 替换所有变量  
-Functions功能: 替换所有功能  
-Colors颜色: 替换所有TinTin颜色代码  
-Escapes转义: 替代所有转义字符  
-Secure安全: 避开所有大括号、变量、函数和命令分隔符  
+有效的选项有:
 
-- 更改行的执行方式的 Line 子命令：
+* arguments(参数)  
+--替换所有参数  
+* braces(大括号)  
+--替换所有大括号  
+* variables(变量)  
+--替换所有变量  
+* vunctions(功能)  
+--替换所有功能  
+* colors(颜色)  
+--替换所有 TinTin 颜色代码  
+* sscapes(转义)  
+--替代所有转义字符  
+* secure(安全)  
+--避开所有大括号、变量、函数和命令分隔符  
+
+## 更改行的执行方式的子命令：
 
 **#line background \<argument\>**
 
@@ -3290,7 +3311,7 @@ Secure安全: 避开所有大括号、变量、函数和命令分隔符
 
 **#line local {argument}**
 
-参数执行所有新的和间接创建的变量是局部的。
+参数执行所有新的和间接创建的是局部变量。
 
 **#line msdp \<argument\>**
 
@@ -3298,40 +3319,45 @@ Secure安全: 避开所有大括号、变量、函数和命令分隔符
 
 **#line multishot \<number\> \<argument\>**
 
-参数在 multishot 模式下执行，  
-所有创建的触发器只会触发给定的次数。
+参数在 multishot 模式下执行，所有创建的触发器只会触发给定的次数。
 
 **#line oneshot \<argument\>**
 
-参数在 oneshot 模式下执行，
-所有创建的触发器只触发一次。
-
+参数在 oneshot 模式下执行，所有创建的触发器只触发一次。
 
 **#line logmode \<option\> \<argument\>**
 
-参数使用提供的 logmode 执行，  
-可用模式有: html、纯文本和raw。
-
+参数使用提供的 logmode 执行，可用模式有: html、plain、raw。
 
 **#line {log} {\<filename>} {[text]}**
 
-#Line log 将给定的文本记录到给定的文件名中。如果没有给出文本参数，则显示的下一行将被记录到给定的文件中。如果文本参数中使用了任何TinTin++ 颜色代码，它们将被翻译为 ANSI 颜色代码。根据 #config {LOG} 设置，日志记录格式将是 HTML 、 RAW 或普通。
+`#Line log` 将给定的文本记录到给定的文件名中。  
+
+如果没有给出文本参数，则显示的下一行将被记录到给定的文件中。  
+
+如果文本参数中使用了任何 TinTin++ 颜色代码，它们将被翻译为 ANSI 颜色代码。
+
+根据 `#config {LOG MODE}` 设置，日志记录格式将是 HTML、RAW、PLAIN。
 
 **#line {logverbatim} {\<filename>} {[text]}**
 
-#Line logverbatim 的工作方式与 #line log 完全一样，只是文本参数中的颜色代码、变量和函数不会被替换。
+工作方式与 `#line log` 一样，只是文本参数中的颜色代码、变量和函数不会被替换。
 
 **#line {gag}**
 
-当被调用时，显示的下一行将被屏蔽。当操作在显示其触发的行之前触发时，在操作中使用 #line gag 将导致触发行不显示。
+当被调用时，显示的下一行将被消除。
+
+当触发器在显示其触发的行之前触发时，使用 `#line gag` 将导致触发行不显示。
 
 **#line {ignore} {argument}**
 
-参数在没有检查任何触发器的情况下执行。如果你想在不触发任何动作的情况下使用 #showme 来避免触发循环，这很有用。
+参数在没有检查任何触发器的情况下执行。
+
+如果你想在不触发任何触发器的情况下使用 `#showme` 来避免触发循环，这很有用。
 
 **#line {quiet} {argument}**
 
-参数是通过静默系统消息来执行的。
+在静默大多数系统消息的情况下执行参数。
 
 **#line verbatim \<argument\>**
 
@@ -3339,7 +3365,9 @@ Secure安全: 避开所有大括号、变量、函数和命令分隔符
 
 **#line verbose {argument}**
 
-详细执行参数。
+参数在大多数系统消息启用的情况下执行。
+
+当执行 `#line log` 并以 html 格式记录时，使用 `"\c< \c> \c& \c"` 来转义 `< > & "`。
 
 ```
 示例:
@@ -3355,8 +3383,12 @@ Secure安全: 避开所有大括号、变量、函数和命令分隔符
 		#line logverbatim tells.log
 	}
 }
+
+将所有 tells 记录到 tells.log 文件中，
+除非发件人在忽略列表中，否则 tell 内容不会显示。
 ```
-上面的示例将所有 tells 记录到 tells.log 文件中，除非发件人在忽略列表中，否则在这种情况下，tell 会被屏蔽。
+
+另可参见：[Class](#class)，[Config](#config)。
 
 # List
 
