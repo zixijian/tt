@@ -3032,8 +3032,9 @@ TinTin++ 默认尝试绑定上箭头和下箭头键以滚动浏览历史命令�
 
 # If
 
-> 语法: #if {condition} {commands if true}
-
+> 语法: #if {condition} {commands if true}  
+> 语法: #if {condition} {true} {false}
+> 
 `If(如果)` 命令是自 TinTin Ⅲ 版本添加以来最强大的命令之一。
 
 它的工作原理类似于其他语言中的 `if` 语句，并且基于 `C` 处理其条件语句。
@@ -3066,7 +3067,7 @@ TinTin++ 默认尝试绑定上箭头和下箭头键以滚动浏览历史命令�
 };
 ```
 
-注：使用 `#else` 时，`TRUE` 部分后的分号 `;` 不能省略。
+注：使用 `#else`、`#elseif` 时，前面的 `;` 不能省略。
 
 条件语句使用 `c` 风格的数学或正则表达式。
 
@@ -3169,6 +3170,8 @@ unicode  | 将显示有关给定字符的信息。
 使用 `#showme {\e>}` 可以禁用该模式。
 
 ```
+三种小键盘方案：
+
 **Configuration A**
 +-----+-----+-----+-----+
 |Num  |/    |*    |-    |
@@ -3209,17 +3212,18 @@ unicode  | 将显示有关给定字符的信息。
 +-----+-----+-----+-----+
 ```
 
-禁用小键盘模式后，`numlock on` 将为您提供配置 A，`numlock off` 将为您提供配置 B。启用键盘模式后，您将获得配置 C。
+禁用小键盘模式后：配置 A (`numlock on`)，配置 B (`numlock off`)。  
+启用小键盘模式后：配置 C。
 
-- **支持 keypad mode 的终端**
+## 支持小键盘模式的终端
 
 Linux Console, PuTTY, Eterm, aterm。
 
-- **不支持 keypad mode 的终端**
+## 不支持小键盘模式的终端
 
 RXVT on Cygwin, Windows Console, Gnome Terminal, Konsole。
 
-- **特殊终端**
+## 特殊终端
 
 RXVT 需要关闭 numlock 才能启用配置 C。
 
@@ -3250,11 +3254,15 @@ macOS 终端要求在终端-> 窗口设置-> 仿真中启用 `strict vt100 keypa
 
 使用一个参数，可以清除特定列表。
 
-示例: `#kill alias`
+```
+示例: #kill alias
+```
 
 使用两个参数，所选列表中的所有匹配触发将被移除。
 
-示例: `#kill alias %*test*`
+```
+示例: #kill alias %*test*
+```
 
 另可参见: [Class](#class)，[Debug](#debug)，[Ignore](#ignore)，[Info](#info)，[Message](#message)。
 
@@ -3291,7 +3299,7 @@ macOS 终端要求在终端-> 窗口设置-> 仿真中启用 `strict vt100 keypa
 * secure(安全)  
 --避开所有大括号、变量、函数和命令分隔符  
 
-## 更改行的执行方式的子命令：
+## 更改行的执行方式的子命令
 
 **#line background \<argument\>**
 
@@ -3315,7 +3323,7 @@ macOS 终端要求在终端-> 窗口设置-> 仿真中启用 `strict vt100 keypa
 
 **#line msdp \<argument\>**
 
-从第一个左花括号开始把 tintin 数据结构转换成 msdp 的 telnet 序列，tintin table 会翻译成 msdp table，分号分隔的值则会被翻译成 msdp 数组。
+从第一个左花括号开始把 tintin 数据结构转换成 msdp 的 telnet 序列，tintin table 会转换成 msdp table，分号分隔的值则会被转换成 msdp 数组。
 
 **#line multishot \<number\> \<argument\>**
 
@@ -3353,7 +3361,7 @@ macOS 终端要求在终端-> 窗口设置-> 仿真中启用 `strict vt100 keypa
 
 参数在没有检查任何触发器的情况下执行。
 
-如果你想在不触发任何触发器的情况下使用 `#showme` 来避免触发循环，这很有用。
+如果你想在不触发任何触发器的情况下使用 `#showme` 来避免循环触发，这很有用。
 
 **#line {quiet} {argument}**
 
@@ -3394,95 +3402,150 @@ macOS 终端要求在终端-> 窗口设置-> 仿真中启用 `strict vt100 keypa
 
 > 语法：#list {variable} {option} {argument}
 
-指令|效果
+指令|描述
 :-|:-
 #list {var} {add} {item}|将 {item} 添加到列表中
 #list {var} {clear}|清空给定列表
-#list {var} {collapse}|将列表转换为变量
-#list {var} {create} {item}|使用 {items} 创建列表
-#list {var} {delete} {index} {number}|删除位于 {index} 的项目,{number} 是可选的。
-#list {var} {explode}|将列表转换为字符列表
+#list {var} {collapse} {separator}|将列表转换为变量
+#list {var} {create} {item}|使用 {item} 创建列表
+#list {var} {delete} {index} {amount}|删除位于 {index} 的项目,{amount} 是可选的。
+#list {var} {explode}{separator}|将变量转换为列表
+#list {var} {indexate}|索引排序列表
 #list {var} {insert} {index} {string}|在给定索引处插入 {string}
-#list {var} {find} {string} {variable}|返回找到的索引
-#list {var} {get} {index} {variable}|将项目复制到 {variable}
-#list {var} {order} {string}|按数字顺序插入项目
+#list {var} {filter} {keep} {remove}|保留/删除正则表达式进行过滤
+#list {var} {find} {regex} {variable}|返回找到的索引
+#list {var} {get} {index} {variable}|将 {item} 复制到 {variable}
+#list {var} {numerate}|将表转换为列表
+#list {var} {order} {string}|按数字顺序插入 {item}
 #list {var} {shuffle}|重新排序列表
 #list {var} {set} {index} {string}|更改 {index} 处的项目
-#list {var} {simplify} {variable}|将简单列表复制到 {variable}
+#list {var} {simplify} {variable}|将列表转换为简单列表
 #list {var} {size} {variable}|将列表大小复制到 {variable}
-#list {var} {sort} {string}|按字母顺序插入项目
+#list {var} {sort} {string}|按字母顺序插入 {item}
 #list {var} {tokenize} {string}|创建字符列表
 
-索引应该在 1 和列表长度之间。你也可以给出负值，在这种情况下 -1 等于列表中的最后一项，-2 为倒数第二个，依次类推。
+关于列表的类型，请参见：[Lists](#lists)。
 
-插入项目时，正索引将在给定索引处插入，而负索引将附加到项目。
+索引应该在 `+1` 和列表大小（&list）之间。
 
-添加和创建选项也允许使用多个项目，最好是用分号分隔的项目。
+你也可以给出负值，在这种情况下 `-1` 等于列表中的最后一项，`-2` 为倒数第二个，依次类推。
 
-对于空列表或不存在列表，返回长度为 0。
+插入项目（item）时，正索引将在给定索引处插入，而负索引将附加到列表尾部。
 
-您可以使用 $var[1] 直接访问列表变量中的元素,例如：$var[2]，$var[-1] 等。
+添加和创建选项也允许使用多个项目，最好是用分号分隔。
 
-另可参见：[Break](#break), [Continue](#continue), [Foreach](#foreach), [Loop](#loop), [Parse](#parse), [Repeat](#repeat), [Return](#return) and [While](#while).
+对于空列表或不存在的列表，返回长度为 0。
+
+您可以使用 `$var[+1]` 直接访问列表变量中的元素,例如：`$var[+2]`，`$var[-1]` 等。
+
+另可参见：[Break](#break)，[Continue](#continue)，[Foreach](#foreach)，[Loop](#loop)，[Parse](#parse)，[Repeat](#repeat)，[Return](#return)，[While](#while).
 
 # Lists
 
-TinTin有几种不同类型的列表，它们的行为方式相当普遍。为了正确解释列表，在讨论更复杂的类型之前，首先解释最基本的变量类型是最容易的。
+TinTin 有几种不同类型的列表。
 
-- 基本变量: 标准 key = value 变量。
-- 简单列表: 包含分号分隔字段的字符串。 `{a;b;c}`。可以保存为变量。
-- 大括号列表: 用大括号分隔字段的字符串。 `{a}{b}{c}`。由于表也使用大括号，大括号列表不能存储为变量，因此必须将它们存储为简单列表。
-- Table: 将此视为嵌套在另一个变量中的变量。或者作为包含在另一个变量中的变量。
-- List: 使用整数作为索引的表。也称为数组。#List 命令是将表用作数组的实用程序命令。
+为了正确解释列表，在讨论更复杂的类型之前，首先解释最基本的变量类型。
 
-**Simple Variables**
+- Basic variable（基本变量）  
+--标准 key = value 变量。  
+- Simple list（简单列表）  
+--包含分号分隔字段的字符串。`{a;b;c}`。可以保存为变量。  
+- Brace list（大括号列表）  
+--用大括号分隔字段的字符串。`{a}{b}{c}`。由于表也使用大括号，大括号列表不能存储为变量，因此必须将它们存储为简单列表。  
+- Table（表）  
+--将此视为嵌套在另一个变量中的变量。或者作为包含在另一个变量中的变量。  
+- List（列表）  
+--使用整数作为索引的 `table(表)`。也称为 `数组(array)`。`#list` 是将 `table(表)` 用作数组的实用程序命令。  
 
-> 示例: <br>
-#variable {simple} {Hello World!}<br>
+## Simple Variables
+
+```
+示例:
+#variable {simple} {Hello World!}  
 #showme $simple
+```
 
-要查看 “简单” 变量是否存在，您可以使用 &simple，如果变量不存在，它将显示 0，如果变量存在，它将显示变量的索引。
+要查看 `"simple"` 变量是否存在，您可以使用 `&simple`，如果变量不存在，它将显示 0，如果变量存在，它将显示变量的索引。
 
-如果你有多个变量，它们按字母顺序和数字排序。虽然对于简单变量来说，这并不完全相关，但是第一个变量有索引 1 、第二个变量索引 2 等等。
+如果你有多个变量，它们按字母顺序和数字排序。
 
-变量名需要有字母、数字和下划线。如果您需要使用非标准变量名，可以使用大括号。
+虽然对于简单变量来说，这并不完全相关，但是第一个变量有索引 1，第二个变量索引 2，等等。
 
-> 示例:<br>
+变量名必须以字母开头，并且只存在字母、数字和下划线。
+
+如果您需要使用非标准变量名，可以使用大括号。
+
+```
+示例:
 #variable {:)} {Happy!};<br>
 #showme ${:)}
+```
 
-可以使用它们的索引访问变量。虽然对于表来说主要是有用的，但是对于简单的变量来说可以这样做。第一个变量使用 + 1，第二个变量使用 + 2，等等。最后一个变量使用-1，第二个最后一个变量使用-2，等等。
+可以使用它们的索引访问变量。
 
-> 示例: <br>
+虽然主要对于对 `table(表)` 有用，但是简单变量也可以这样做。
+
+第一个变量使用 `+1`，第二个变量使用 `+2`，等等。
+
+最后一个变量使用 `-1`，倒数第二个变量使用 `-2`，等等。
+
+```
+示例: 
 #showme 第一个变量是: ${+1}
+```
 
-**Removing Variables**
+## Removing Variables
 
-要删除变量，请使用 #unvariable 或 #unvar (每个命令都可以缩写)。可以使用 #unvar {var 1} {var 2} {etc} 同时删除多个变量。
+要删除变量，请使用 `#unvariable` 或 `#unvar` (每个命令都可以缩写)。
+
+可以使用 `#unvar {var 1} {var 2} {etc}` 同时删除多个变量。
 
 变量对于每个会话都是唯一的，因此，如果您有多个会话，从一个会话中删除变量不会将其从其他会话中删除。
 
-如果删除变量表，则该表中包含的所有变量也将被删除。
+如果删除一个 `table variable(表变量)`，则该表中包含的所有变量也将被删除。
 
-**Simple Lists**
+## Simple Lists
 
-简单列表是包含分号分隔字段的字符串。可以将命令作为简单列表输入，例如: #showme {a}; #showme {b} 将作为两个命令执行一行。
+简单列表是包含分号分隔字段的字符串。
 
-有几个命令以一个简单的列表作为输入，这些命令是:` #foreach、#line substitute、#path load、#list create 和 #highlight`。
+可以将命令作为简单列表输入，例如：`#showme {a};#showme {b}` 将作为两个命令执行。
 
-**Brace Lists**
+有几个命令以简单列表作为输入，这些命令是：
 
-大括号列表是用大括号分隔字段的字符串。大多数命令的参数都采用大括号列表，例如: #session {x} {mud.com} {1234} {mud.tin}。Session 命令接受 4 个参数，第四个参数 (命令文件) 是可选的。
+* `#foreach`
+* `#line substitute`
+* `#path load`
+* `#list create`
+* `#highlight`
 
-将简单列表作为输入的命令也将接受括号列表，请记住，您必须将括号列表嵌入额外的括号集中，例如:`#path load {{n}{s}{w}}`，与:`#path load {n;s;w}`相同。
+## Brace Lists
 
-不能将大括号列表存储为变量，因为 TinTin++ 会将它们与表混淆。您可以使用: `#list {bracelist} {create} {{a}{b}{c}}` 将大括号列表转换为表变量，这在内部看起来如下: `{{1}{a}{2}{b}{3}{c}}`。然后，您可以使用: `#list {bracelist} {simplify} {simplelist}` 将此表转换为简单列表，该列表将在 $simplelist 变量中存储。
+大括号列表是用大括号分隔字段的字符串。
 
-在TinTin++ 中，大括号很难被转义。使用 `\{` 或 `\}` 将不起作用。这是由于几个因素造成的，但主要是向后兼容性。要转义大括号，您必须使用 `\x7B` 和 `\x7D` 的十六进制符号来定义大括号。有关转义选项的列表，请参见 #help escape，帮助文件还将提醒您如何转义大括号。
+大多数命令的参数都采用大括号列表，例如: `#session {x} {mud.com} {1234} {mud.tin}`。`#session` 命令接受四个参数，第四个参数 (命令文件) 是可选的。
 
-**Tables**
+将简单列表作为输入的命令也将接受括号列表，请记住，您必须将括号列表嵌入额外的括号集中，例如：`#path load {{n}{s}{w}}` 与 `#path load {n;s;w}` 相同。
 
-表是存储在变量中的键/值对。创建和访问表有几种方法。
+不能将大括号列表存储为变量，因为 TinTin++ 会将它们与 `table(表)` 混淆。
+
+您可以使用: `#list {bracelist} {create} {{a}{b}{c}}` 将大括号列表转换为表变量，这在内部看起来如下: `{{1}{a}{2}{b}{3}{c}}`。  
+
+然后，您可以使用: `#list {bracelist} {simplify} {simplelist}` 将此表转换为简单列表，该列表将在 `$simplelist` 变量中存储。
+
+在 TinTin++ 中，大括号很难被转义。使用 `\{` 或 `\}` 将不起作用。
+
+这是由于几个因素造成的，主要是为了向后兼容性。
+
+要转义大括号，您必须使用 `\x7B` 和 `\x7D` 等十六进制符号来定义大括号。
+
+有关转义选项的列表，请参见 `#help escape`，帮助文件还将提醒您如何转义大括号。
+
+## Tables
+
+表是存储在变量中的 `key`/`value` 键值对。
+
+创建和访问表有几种方法：
+
 ```
 示例:
 #variable {friendlist}{
@@ -3490,19 +3553,39 @@ TinTin有几种不同类型的列表，它们的行为方式相当普遍。为�
    {xgg}{xgg@gmail.com}
 }
 ```
-这将创建一个包含两个条目的好友列表，键是好友的名称，值是好友的电子邮件地址。您可以使用: `#showme {$friendlist[dzp]}` 看到 dzp 的电子邮件地址。您也可以将此表定义如下:
+这将创建一个包含两个条目的好友列表，键是好友的名称，值是好友的电子邮件地址。
+
+您可以使用: `#showme {$friendlist[dzp]}` 看到 dzp 的电子邮件地址。
+
+您也可以将此表定义如下:
+
 ```
 示例:
 #variable {friendlist[dzp]} {dzp@hotmail.com}
 #variable {friendlist[xgg]} {xgg@gmail.com}
 ```
-这将创建与以前使用的单行声明完全相同的表。要查看表使用中的第一个键: `*friendlist[+1]`，请查看表使用中的第一个值: `$friendlist[+1]`。要查看表的大小，请使用 `&friendlist[]`。要打印所有朋友的括号列表，请使用 `*friendlist[%*]`，打印名称以字母 “a” 开头的所有朋友的括号列表: `*freindlist[a%*]`。类似地，看看你的朋友数量，他们的名字以你会使用的字母 “b” 结尾 `&friendlist[%*b]`。
 
-有关正则表达式选项的简要概述，请参见 #help regexp。虽然 TinTin++ 支持 PCRE (与 perl 兼容的正则表达式)，但它将它们嵌入了自己的正则表达式语法中，该语法更简单、侵入性更小, 同时仍然允许那些需要 PCRE 的人充分发挥 PCRE 的力量。
+这将创建与以前使用的单行声明完全相同的表。
 
-> 示例: #unvariable {friendlist[xgg]}
+要查看表使用中的第一个键: `*friendlist[+1]`，  
+请查看表使用中的第一个值: `$friendlist[+1]`，  
+要查看表的大小：`&friendlist[]`，  
+要打印所有朋友的括号列表： `*friendlist[%*]`，  
+打印名称以字母 “a” 开头的所有朋友: `*freindlist[a%*]`，  
+类似地，查看名称以字母 “b” 结尾的所有朋友：`&friendlist[%*b]`。
 
-这将从好友列表中删除 {xgg}。要删除您将使用的整个friendlist: `#unvariable {friendlist}`。
+有关正则表达式选项的简要概述，请参见 `#help regexp`。
+
+虽然 TinTin++ 支持 PCRE (与 perl 兼容的正则表达式)，但它将它们嵌入了自己的正则表达式语法中，该语法更简单、侵入性更小, 同时仍然允许那些需要 PCRE 的人充分发挥 PCRE 的力量。
+
+```
+示例: #unvariable {friendlist[xgg]}
+```
+
+这将从好友列表中删除 {xgg}。
+
+要删除您将使用的整个friendlist: `#unvariable {friendlist}`。
+
 ```
 示例: 
 #variable {friendlist} {
@@ -3511,11 +3594,16 @@ TinTin有几种不同类型的列表，它们的行为方式相当普遍。为�
    }
 }
 ```
-集合的数量是没有限制的，只需增加更多的大括号。要在此示例中查看 dzp 的电子邮件，您将使用: `#showme {$friendlist[dzp][email]}`。
+
+集合的数量是没有限制的，只需增加更多的大括号。
+
+要在此示例中查看 dzp 的电子邮件: `#showme {$friendlist[dzp][email]}`。
+
 ```
-注意：新版本中使用$var[]将会展开整个变量，
-这可能导致crash，
-应使用${var[]}。
+注意：
+新版本中使用 $var[] 将会展开整个变量，
+这可能导致 crash，
+应使用 ${var[]}。
 
 来自dzp@pkuxkx的高级数据结构示例:
 
@@ -3542,15 +3630,21 @@ TinTin有几种不同类型的列表，它们的行为方式相当普遍。为�
 高级数据结构可大幅度简化代码。
 ```
 
-**Lists**
+## Lists
 
-除了数字排序之外，表格按字母顺序排序。如果你想自己确定排序顺序，你可以使用 #list 命令来帮助你将表用作数组。
+表按数值排序，数值异常的按字母顺序排序。
 
-> 示例: <br>
+如果你想自己确定排序顺序，你可以使用 `#list` 命令来帮助你将表用作数组。
+
+```
+示例: 
 #action {%1 chats %2} {#list chats add {%0}}
+```
 
 每次收到聊天时，它都会被添加到 “chats” 列表变量的末尾。  
-在内部，这看起来像：  
+
+如果你输入 `#variable chats`，这看起来像：  
+
 ```
 #variable {chats}
 {
@@ -3561,135 +3655,132 @@ TinTin有几种不同类型的列表，它们的行为方式相当普遍。为�
 }
 ```
 
-#List 命令是在表实现之前编写的，因此 get 、 set 和 size 选项是多余的。
+`#List` 命令是在表实现之前编写的，因此 `get`、`set`、`size` 选项是多余的。
 
-**The list command**
+## Parsing
 
-> 语法: <br>
-#list {\<variable>} {\<option>} {\<arguments>}
+有多种方法来解析列表和表。
 
-TinTin++ 中的列表是具有数字索引的表 (又名关联数组)。List 命令通过在删除或插入项目时自动重新编号项目来更容易模拟数组行为。
+* #loop
 
-当 list 命令需要索引时，应该提供 1 到列表长度之间的值。也可以给出负值，在这种情况下，-1 等于列表中的最后一项，-2 等于倒数第二项等。
+`#loop` 采用两个数字参数，递增或递减第一个数字，直到它与第二个数字匹配。
 
-您可以使用索引直接显示列表中的项目，例如: `$var[1] 、$var[2] 、$var[-1]` 等。
+loop 计数器的值存储在提供的变量中。
 
-要使用 [foreach](#foreach) 命令循环浏览列表中的所有项目，请使用 `$<list>[%*]`。
+* #foreach
 
-**#list {\<list>} {add} {\<argument1>} {\<argument2>} {...}**
+`#foreach` 首先采用简单列表或大括号列表参数。
 
-#List add 将为提供的每个参数向给定列表添加一个项目。
+foreach 将遍历列表中的每个项目并将值存储提供的变量中。
 
-**#list {\<list>} {clear}**
+* #while
 
-#List clear 将清空给定的列表变量。该命令相当于: `#variable {<variable>} {}`
+`#while` 将对第一个参数执行 `if` 检查。
 
-**#list {\<list>} {create} {\<argument1>} {\<argument2>} {...}**
+如果结果为 true，它将执行第二个参数中的命令。
 
-#List create 将清除给定的列表，并为提供的每个参数添加一个项目。
+然后它再次对第一个参数执行 `if` 检查。
 
-**#list {\<list>} {delete} {\<index>} {[number]**
+它将继续重复，直到 if 检查返回 0 或循环被控制流命令中断。
 
-#List delete 将删除给定索引处的项目。Number 参数是要删除的项数，如果省略 1， 项将被删除。
+特别注意要避免死循环。
 
-**#list {\<list>} {find} {\<argument>} {\<variable>}**
+* #\<number> 
 
-#List find 允许搜索与提供的参数匹配的项目。如果找不到匹配项，则将目标变量设置为 0，否则将变量设置为包含匹配项的索引。
+将执行提供的参数 'number' 次。
 
-**#list {\<list>} {get} {\<indext>} {\<variable>}**
+示例：`#4 {#show beep! \a}`。
 
-#List get 将在提供的索引中检索列表的项目。如果索引不存在，则目标变量设置为 0，否则目标变量设置为包含找到的索引的值。或者，您可以使用 `$list [<index>]` 使用表的接口检索值。
+这里有一些例子：
 
-**#list {\<list>} {insert} {\<index>} {\<argument>}**
-
-#List insert 将在给定索引处插入项目。如果索引是正数，则在给定索引处创建项目。如果索引是负数，则在下一个索引处创建项目。因此，使用-1 将在列表的末尾附加一个新项，使用 1 将在列表的开头添加一个新项。
-
-**#list {\<list>} {set} {\<index>} {\<argument>}**
-
-#List set 将提供的索引的值更改为给定的参数。或者，您可以使用: `#variable {<list>[<index>]} {<argument>}`使用表的接口更改值。
-
-**#list {\<list>} {simplify} {\<variable>}**
-
-#List simplify 将表保存为简单的半冒号分隔列表。
-
-**#list {\<list>} {size} {\<variable>}**
-
-#List size 将检索列表中的项目数，并将其存储在提供的目标变量中。或者，您可以使用: `&list[]` 
-使用表的接口检索列表中的项目数。
-
-**#list {\<list>} {sort} {\<argument>}**
-
-#List sort 将按字母顺序插入提供的参数。
-
-**#list {\<list>} {tokenize} {\<argument>}**
-
-#List tokenize 使用列表标记将把给定的参数变成一个字符列表。 `{haha}` 将成为 `{{1}{h}{2}{a}{3}{h}{4}{a}}`。如果你想执行低级文本处理，这很有用。
-
-**Parsing**
-
-使用 `#loop、#foreach、#while或#<number>`有多种解析列表和表的方法。
-
-#Loop 接受两个数字参数，第一个数字递增或递减，直到它与第二个数字匹配。循环计数器的值存储在提供的变量中。
-
-#Foreach 将简单列表或大括号列表作为其第一个参数。Foreach 将遍历列表中的每个项目，并将值存储在提供的变量中。
-
-#While 将对第一个参数执行 if 检查，如果结果为 true，则执行第二个参数中的命令。然后，它再次对第一个参数执行 if 检查。它将继续重复，直到 if 检查返回 0，或者用控制流命令中断循环。
-
-#\<Number> 将执行提供的参数 “number” 次。<br>
-例如:`#4 #showme beep!\A`
-
-下面是一些例子：
 ```
-示例:
+示例：
 #list friends create {bob;bubba;zorro}
+--内部看起来像 {{1}{bob}{2}{bubba}{3}{zorro}}
 ```
-在内部，这看起来像： <br>`{{1}{bob}{2}{bubba}{3}{zorro}}`<br>可以通过各种方式解析列表。
+
+列表可以通过各种方式进行解析：
+
 ```
-示例: 
-#foreach {$friends[%*]} {name} 
-{
-    #showme $name
+示例：
+#foreach {$friends[%*]} {name} {#show $name}
+
+示例：
+#foreach {*friends[%*]} {i} {#show $friends[$i]}
+
+示例：
+#loop {1} {&friends[]} {i} {#show $friends[+$i]}
+
+示例：
+#math i 1;
+#while {&friends[+$i]} {
+  #show $friends[+$i];
+  #math i $i + 1;
 }
 
-示例: 
-#foreach {*friends[%*]} {index} 
-{
-    #showme $friends[$index]
-}
+示例：
+#math i 1;
+#&friends[] {#show $friends[+$i];#math i $i + 1}
+```
 
-示例: 
-#loop {1} {&friends[]} {index} 
-{
-    #showme $friends[+$index]
-}
+以上五个示例中的每一个都执行相同的任务：打印好友列表中的三个名字。
 
-示例: 
-#math index 1;
-#while {&friends[+$index]} 
-{
-    #showme $friends[+$index];
-    #math index $index + 1
-}
+如果你想更好地了解幕后发生的事情，  
+执行脚本时，您可以使用 `#debug all on`，  
+停止观察调试信息使用 `#debug all off`。
 
-示例: 
-#math index 1;
-#&friends[] 
-{
-    #showme $friends[+$index];
-    #math index $index + 1
+## List Tables
+
+`List tables` 数组表也称为数据库，并且 `list` 命令有多个选项操纵它们。
+
+为了使这些选项正常工作，所有表都需要具有相同的 `key`。
+
+这是一个示例数组表：
+
+```
+#var {friendlist} {
+   {1}{{name}{bob} {age}{54}}
+   {2}{{name}{bubba} {age}{21}}
+   {3}{{name}{pamela} {age}{36}}
 }
 ```
-上面的五个例子中的每一个都执行相同的任务：打印朋友列表中的三个名字。
 
-如果你想在执行脚本时更好地了解幕后发生的事情，你可以使用 “#debug all on”。要停止查看调试信息，请使用 “#debug all off”。
+要按年龄对列表表进行排序，您可以使用：
 
-**Optimization**
+`#list friendlist indexate age`  
+`#list friendlist order`  
 
-TinTin++ 表在保持在 100 个项目下时速度非常快。一旦表的长度超过 10000 个项目，在旧平台上插入和删除文件开头或中间的项目时可能会出现性能问题。
+要删除名称以 “b” 开头的所有人，您可以使用：
 
-如果从文件中加载一个大表，确保它被排序是很重要的，当使用 #write 保存一个表时，它会自动排序。
+`#list friendlist indexate name`  
+`#list friendlist filter {} {b%*}`  
 
-如果您注意到大型表的性能问题，创建哈希表相对容易。
+筛选器选项仅支持正则表达式。
+
+要为筛选器使用数学表达式，你可以向后循环遍历列表:
+
+```
+#loop &friendlist[] 1 index {
+   #if {$friendlist[+$index][age] < 30} {
+      #list friendlist delete $index
+   }
+}
+```
+
+要将项目添加到数组表中，有两个选项:
+
+`#list friendlist add {{{name}{hobo} {age}{42}}}`  
+`#list friendlist insert -1 {{name}{hobo} {age}{42}}`  
+
+## Optimization
+
+TinTin++ 表在 100 个项目下时速度非常快。
+
+一旦表的长度超过 10000 个项目，插入和删除文件开头或中间的项目时可能会出现性能问题。
+
+如果从文件中加载一个大型表，确保它被排序是很重要的，当使用 `#write` 保存一个表时，它会自动排序。
+
+如果您注意到大型表的性能问题，创建 `hash table(哈希表)` 相对容易。
 
 ```
 示例:
@@ -3717,10 +3808,11 @@ TinTin++ 表在保持在 100 个项目下时速度非常快。一旦表的长度
 	#showme The value of bla is: @gethash{bla}
 }
 ```
-以上脚本将快速存储和检索超过 100万个项目。遍历哈希表也相对容易。
+
+以上脚本将快速存储和检索超过 100 万个项目。遍历哈希表也相对容易。
+
 ```
 示例:
-
 #alias {showhash}
 {
 	#foreach {*hashtable[%*]} {hash1}
@@ -3733,17 +3825,114 @@ TinTin++ 表在保持在 100 个项目下时速度非常快。一旦表的长度
 }
 ```
 
-另可参见: [Break](#break), [Continue](#continue), [Foreach](#foreach), [Loop](#loop), [Parse](#parse), [Repeat](#repeat), [Return](#return) and [While](#while).
+## The list command
+
+> 语法: #list {\<variable>} {\<option>} {\<arguments>}
+
+TinTin++ 中的列表是具有数字索引的表 (又名关联数组)。
+
+`#List` 命令通过在删除或插入项目时自动重新编号项目来更容易模拟数组行为。
+
+当 list 命令需要索引时，应该提供 1 到列表长度之间的值。
+
+也可以给出负值，在这种情况下，-1 等于列表中的最后一项，-2 等于倒数第二项等。
+
+您可以使用索引直接显示列表中的项目，例如: `$var[+1] 、$var[+2] 、$var[-1]` 等。
+
+要使用 [foreach](#foreach) 命令循环遍历列表中的所有项目，请使用 `$<list>[%*]`。
+
+***
+
+**#list {\<list>} {add} {\<argument1>} {\<argument2>} {...}**
+
+#List add 将为提供的每个参数向给定列表添加一个项目。
+
+**#list {\<list>} {clear}**
+
+#List clear 将清空给定的列表变量。
+
+该命令相当于: `#variable {<variable>} {}`。
+
+**#list {\<list>} {create} {\<argument1>} {\<argument2>} {...}**
+
+#List create 将清除给定的列表，并为提供的每个参数添加一个项目。
+
+**#list {\<list>} {delete} {\<index>} {[number]**
+
+#List delete 将删除给定索引处的项目。  
+
+Number 参数是要删除的项数，如果省略，索引第 1 项将被删除。
+
+**#list {\<list>} {find} {\<argument>} {\<variable>}**
+
+#List find 允许搜索与提供的参数匹配的项目。  
+
+如果找不到匹配项，则将目标变量设置为 0，否则将变量设置为包含匹配项的索引。
+
+**#list {\<list>} {get} {\<indext>} {\<variable>}**
+
+#List get 将在提供的索引中检索列表的项目。  
+
+如果索引不存在，则目标变量设置为 0，否则目标变量设置为包含找到的索引的值。
+
+或者，您可以使用 `$list [<index>]` 使用表的接口检索值。
+
+**#list {\<list>} {insert} {\<index>} {\<argument>}**
+
+#List insert 将在给定索引处插入项目。
+
+如果索引是正数，则在给定索引处创建项目。
+
+如果索引是负数，则在下一个索引处创建项目。
+
+因此，使用 -1 将在列表的末尾附加一个新项，使用 +1 将在列表的开头添加一个新项。
+
+**#list {\<list>} {set} {\<index>} {\<argument>}**
+
+#List set 将提供的索引的值更改为给定的参数。  
+
+或者，您可以使用：`#variable {<list>[<index>]} {<argument>}` 使用表的接口更改值。
+
+**#list {\<list>} {simplify} {\<variable>}**
+
+#List simplify 将表保存为用分号分隔到的简单列表。
+
+**#list {\<list>} {size} {\<variable>}**
+
+#List size 将检索列表中的项目数，并将其存储在提供的目标变量中。  
+
+或者，您可以使用: `&list[]` 使用表的接口检索列表中的项目数。
+
+**#list {\<list>} {sort} {\<argument>}**
+
+#List sort 将按字母顺序插入提供的参数。
+
+**#list {\<list>} {tokenize} {\<argument>}**
+
+#List tokenize 使用列表标记将把给定的参数变成一个字符列表。 
+
+`{haha}` 将成为 `{{1}{h}{2}{a}{3}{h}{4}{a}}`。
+
+如果你想执行低级文本处理，这很有用。
+
+***
+
+另可参见: [Break](#break)，[Continue](#continue)，[Foreach](#foreach)，[Loop](#loop)，[Parse](#parse)，[Repeat](#repeat)， [Return](#return)，[While](#while)。
 
 # Local
 
-> 语法: #local {variable name} {string}
+> 语法: #local {variable name} {text to fill variable}
 
-Local 命令设置局部变量。与常规变量不同，局部变量只会在创建它的事件持续时间内留在内存中。它们的访问方式与常规变量相同。
+`#Local` 命令设置局部变量。
+
+与常规变量不同，局部变量只会在创建它的事件持续时间内留在内存中。
+
+它们的访问方式与常规变量相同。
 
 将信息存储到变量的命令将使用局部变量 (如果存在)。
 
 避免在函数中将结果变量设置为局部变量，因为这可能会导致特殊的行为。
+
 ```
 示例: 
 #alias {swap} {
@@ -3752,28 +3941,82 @@ Local 命令设置局部变量。与常规变量不同，局部变量只会在�
    #showme $x
 }
 ```
-另可参见: [Format](#format), [Function](#function), [Math](#math), [Replace](#replace), [Script](#script) and [Variable](#variable).
+
+注：您可以使用 `#unlocal` 命令删除局部变量。
+
+另可参见: [Format](#format)，[Function](#function)，[Math](#math)， [Replace](#replace)，[Script](#script)，[Variable](#variable)。
 
 # Log
 
-> 语法：#log {APPEND|OVERWRITE|OFF} {filename}
+> 语法：#log {option} {argument}
 
-Log 命令将滚动区域中接收到的所有数据记录到指定的文件名中。模式为 o (覆盖) 或 a (附加)，OFF 参数结束记录。
+`#Log` 命令将滚动区域中接收到的所有数据记录到指定的文件名中。
 
-使用 config 命令，您可以指定用于日志文件的数据类型。这些是: raw原始 (也打印转义代码) 、plain普通 (带转义代码) 、html超文本标记语言 (将转义颜色代码转换为 html 颜色代码)。
+使用 `#config` 命令，您可以指定用于日志文件的数据类型。
 
-> 示例: #log o mylog.txt
+这些类型是: 
 
-这将把所有的 mud 输出写入 mylog.txt。如果您使用 #showme 命令，它也将被记录到文件中，除非您在启用 #split 的情况下显示滚动区域之外的内容。
+* raw  
+--原始 (也打印转义代码)
 
-您可以使用 #line log 命令将单个行记录到日志文件中。
+* plain  
+--普通 (带转义代码)
+
+* html  
+--超文本标记语言 (将转义颜色代码转换为 html 颜色代码)。
+
+***
+
+可用的选项有：
+
+* #log append \<filename>
+
+开始记录到给定文件，如果该文件已经存在，它将不会被覆盖，数据将被附加到末尾。
+
+* #log move \<filename_1> \<filename_2>
+
+将 filename_1 重命名为 filename_2。这可以是任何文件，不需要是日志文件。
+
+* #log overwrite \<filename>
+
+开始记录到给定文件，如果该文件已经存在，它将被覆盖。
+
+* #log off
+
+停止记录。
+
+* #log remove \<filename>
+
+删除文件。这可以是任何文件，不需要是日志文件。
+
+* #log timestamp \<format>
+
+设置时，时间戳将被添加到记录到文件的每一行。
+
+该格式将使用 `strftime` 格式化为日期，参见 `#help time` 中所述。
+
+***
+
+```
+示例: 
+#log o mylog.txt
+```
+
+这将把所有的 mud 输出写入 mylog.txt。
+
+如果您使用 `#showme` 命令，它也将被记录到文件中，除非是您在启用 `#split` 的情况下显示滚动区域之外的内容。
+
+您可以使用 `#line log` 命令将单个行记录到日志文件中。
+
 ```
 示例: 
 #act {~%1 chats '%2'} {
    #line log comms.txt %1 chats '%2'
 }
 ```
-注释: 您可以使用 #buffer write 命令将整个 scrollback 缓冲区保存到文件中。
+
+注: 您可以使用 `#buffer write` 命令将整个回滚缓冲区保存到文件中。
+
 ```
 示例: 
 #alias savebuffer {
@@ -3781,21 +4024,36 @@ Log 命令将滚动区域中接收到的所有数据记录到指定的文件名�
     #buffer write log_$date.txt
 }
 ```
-您可以使用 #history write 命令将命令历史记录记录到文件中。
 
-另可参见: [Read](#read), [Scan](#scan), [Textin](#textin) and [Write](#write).
+注：您还可以使用 `#history write` 将命令历史记录保存到文件中。
+
+另可参见: [Read](#read)，[Scan](#scan)，[Textin](#textin)，[Time](#time)，[Write](#write)。
 
 # Loop
 
-> 语法: #loop {min} {max} {variable} {commands}
+> 语法: #loop {\<start>} {\<finish>} {\<variable>} {commands}
 
-循环命令的工作方式类似于C语言的简化for循环， min 和 max 参数应该是数字。该命令将递增或递减 (取决于数字)，直到达到第二个数字。对于每一个 `in/de-cremention`，将执行命令部分。`in/de-cremention` 计数器的值将存储在变量中，可以在命令部分使用。
+`Loop(循环)` 命令的工作方式类似于 C 语言的简化 `for` 循环， \<start> 和 \<finish> 参数应该是数字。
 
-> 示例: #loop 1 3 cnt {say $cnt}
+该命令将递增或递减 1 (取决于数字顺序)，直到达到第 2 个数字。
 
-这等于: say 1;say 2;say 3
+循环计数器的值将存储在变量中，可以在命令部分使用。
 
-另可参见: [Break](#beak), [Continue](#continue), [Foreach](#foreach), [List](#list), [Parse](#parse), [Repeat](#repeat), [Return](#return) and [While](#while).
+```
+示例：
+#loop 1 3 cnt {say $cnt}
+--这等于：say 1;say 2;say 3
+
+示例：
+#loop 1 3 loop {get all $loop.corpse}
+--这等于：get all 1.corpse;get all 2.corpse;get all 3.corpse
+
+示例：
+#loop 3 1 cnt {drop $cnt\.key}
+这等于：drop 3.key;drop 2.key;drop 1.key
+```
+
+另可参见: [Break](#beak)，[Continue](#continue)，[Foreach](#foreach)， [List](#list)，[Parse](#parse)，[Repeat](#repeat)，[Return](#return)，[While](#while)。
 
 # Macro
 
