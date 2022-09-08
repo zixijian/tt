@@ -286,7 +286,7 @@ TinTin++ 的所有命令可以缩写。
 
 > 命令: #split
 
-#Split 命令将创建一个独立的输入和输出区域。
+`#Split(分屏)` 命令将创建一个独立的输入和输出区域。
 
 使用 `#prompt` 命令，您可以捕获提示并将其放在拆分行上。  
 
@@ -297,7 +297,7 @@ TinTin++ 的所有命令可以缩写。
 > 命令: #alias  
 语法: #alias {name} {commands}
 
-`#alias` 命令的语法几乎和 `csh` 中的别名一样。  
+`#Alias(别名)` 命令的语法几乎和 `csh` 中的别名一样。  
 
 使用 `#alias` 命令定义别名。  
 变量 %0，%1..%9 包含别名命令的参数，如下所示:  
@@ -336,7 +336,7 @@ TinTin++ 不检查递归别名！您可以通过转义整行来避免递归。
 > 命令: #action  
 语法: #action {action-text} {commands}
 
-使用此命令定义当屏幕上出现特定文本时要执行的操作。  
+使用此命令定义当屏幕上出现特定文本时要执行的触发。  
 在 `action-text` 中，有 99 个变量可以用作匹配。  
 这些变量是 %1，%2...%9，%10...%99。  
 
@@ -354,12 +354,12 @@ TinTin++ 不检查递归别名！您可以通过转义整行来避免递归。
 ```
 
 如果键入 “#ignore action on”，  
-您可以让 TinTin++ 忽略触发。
+您可以让 TinTin++ 忽略触发器。
 
 通过键入 “#debug action on”，  
-您可以看到 TinTin++ 在触发时执行的命令。
+您可以看到 TinTin++ 在触发器执行时的命令。
 
-您可以使用 `#unaction` 命令删除触发器操作。
+您可以使用 `#unaction` 命令删除触发器。
 
 ## 高亮显示
 
@@ -392,6 +392,7 @@ ssw2n
 ```
 
 如果您在键入一些仅由这些字母组成的命令时遇到问题，请键入大写字母。  
+
 例如：当使用检查新闻命令 news，或输入 new 作为你的名字时。
 
 ```
@@ -555,7 +556,7 @@ TinTin++ 有一个强大的高度可配置的自动地图绘制器。
 
 > 命令: #help <指令>
 
-help 帮助命令是你的最忠实的朋友，它包含所有可用 TinTin 命令的最新信息。 
+`#Help(帮助)` 命令是你最忠实的朋友，它包含所有可用 TinTin 命令的最新信息。 
  
 如果你在没有参数的情况下键入 `#help`，你会看到所有的命令列表，其中大部分在快速上手部分没有描述，因为这里只涵盖了开始的基本知识，也可以通过下面更详细的手册部分进行学习和了解。
 
@@ -567,8 +568,10 @@ help 帮助命令是你的最忠实的朋友，它包含所有可用 TinTin 命�
 
 > 语法：#action {文本} {命令} {优先级}
 
-`#Action` 触发器命令可用于用一个或多个命令响应服务器发送的特定消息。  
+`#Action(触发器)` 命令可用于用一个或多个命令响应服务器发送的特定消息。  
+
 从文本消息中替换 %1-%99 个变量，并可以在触发器的命令部分使用。  
+
 优先级部分是可选的，用来确定操作的优先级，默认为 5。
 
 ```
@@ -589,6 +592,7 @@ help 帮助命令是你的最忠实的朋友，它包含所有可用 TinTin 命�
 __注意：%0 永远不应用于触发器（会导致所有内容被响应）。__
 
 如果消息以 `~` 开头必定匹配颜色代码。  
+
 为了触发颜色，您可以启用 `#config {convert meta} on` 来显示元字符。  
 
 ```
@@ -611,7 +615,24 @@ __注意：%0 永远不应用于触发器（会导致所有内容被响应）。
 ```
 
 触发器按字母顺序排序，一次只能触发一个。  
+
 要更改顺序，您可以为触发器分配优先级，默认为 5，数字越小，优先级越高，优先级可以是浮点数字。
+
+```
+若要使一行输出触发两次，
+可以使用 #sub 替换一个触发到 #func 中。
+
+示例：
+#action {aaa} {#showme {RECEIVED AAA}}
+#action {bbb} {#showme {RECEIVED BBB}}
+#showme {zzzzz aaa zzzzz bbb zzzz}
+RECEIVED AAA
+#function echo {#showme {%0};#return}
+#sub {aaa} {aaa@echo{RECEIVED AAA}}
+#showme {zzzzz aaa zzzzz bbb zzzz}
+RECEIVED AAA
+RECEIVED AAA
+```
 
 要删除以 `%*` 为消息的触发器，请使用：
 ```
@@ -1746,6 +1767,21 @@ FORWARD     |指定自动补全向前
 --与上面相同，只是为延迟执行命名。
 ```
 
+与 zmud 的 `#wa` 指令不同，使用多个 `#delay` 需要注意其套嵌关系。
+
+```
+示例：
+#delay {1} {
+  #show 1;
+  #delay {1} {
+    #show 2;
+    #delay {1} {
+      #show 3;
+    };
+  };
+};
+```
+
 另可参见: [Event](#event)，[Ticker](#ticker)。
 
 # Draw
@@ -1756,9 +1792,9 @@ FORWARD     |指定自动补全向前
 
 当您在没有参数的情况下键入 `#draw` 时提供常见的选项和类型和简要说明。
 
-`<square>` 空间参数应该存在两个坐标定义左上角和右下角，使用 `row, col, row, col` 语法。
+空间参数 `<square>` 应该存在两个坐标定义左上角和右下角，使用 `row, col, row, col` 语法。
 
-`<square>` 空间参数可以是负数，在这种情况下坐标从屏幕的另一侧计算。
+空间参数 `<square>` 可以是负数，在这种情况下坐标从屏幕的另一侧计算。
 
 在这种情况下，在一个 80 列宽度的屏幕上绘制 `#draw box 1 60 10 70` 等效于 `#draw box 1 -21 10 -11`。
 
@@ -1887,7 +1923,7 @@ VERTICAL|如果可能的话，将垂直绘制。
 * #edit save \<variable>  
 将编辑器保存到指定的变量。
 * #edit suspend  
-挂起编辑，类似于按回车键，除了没有触发事件。
+挂起编辑，类似于按回车键，但不触发事件。
 * #edit write \<filename>  
 将编辑器内容写入文件。
 
@@ -3477,7 +3513,7 @@ TinTin 有几种不同类型的列表。
 
 ```
 示例:
-#variable {:)} {Happy!};<br>
+#variable {:)} {Happy!};
 #showme ${:)}
 ```
 
@@ -3833,7 +3869,7 @@ TinTin++ 中的列表是具有数字索引的表 (又名关联数组)。
 
 `#List` 命令通过在删除或插入项目时自动重新编号项目来更容易模拟数组行为。
 
-当 list 命令需要索引时，应该提供 1 到列表长度之间的值。
+当 list 命令需要索引时，应该提供 1 到列表大小之间的值。
 
 也可以给出负值，在这种情况下，-1 等于列表中的最后一项，-2 等于倒数第二项等。
 
@@ -3950,7 +3986,7 @@ Number 参数是要删除的项数，如果省略，索引第 1 项将被删除�
 
 > 语法：#log {option} {argument}
 
-`#Log` 命令将滚动区域中接收到的所有数据记录到指定的文件名中。
+`#Log` 命令将回滚缓冲区中接收到的所有数据记录到指定的文件中。
 
 使用 `#config` 命令，您可以指定用于日志文件的数据类型。
 
@@ -4004,7 +4040,7 @@ Number 参数是要删除的项数，如果省略，索引第 1 项将被删除�
 
 这将把所有的 mud 输出写入 mylog.txt。
 
-如果您使用 `#showme` 命令，它也将被记录到文件中，除非是您在启用 `#split` 的情况下显示滚动区域之外的内容。
+如果您使用 `#showme` 命令，它也将被记录到文件中，除非是您在启用 `#split` 的情况下显示在滚动区域之外的内容。
 
 您可以使用 `#line log` 命令将单个行记录到日志文件中。
 
@@ -4050,7 +4086,7 @@ Number 参数是要删除的项数，如果省略，索引第 1 项将被删除�
 
 示例：
 #loop 3 1 cnt {drop $cnt\.key}
-这等于：drop 3.key;drop 2.key;drop 1.key
+--这等于：drop 3.key;drop 2.key;drop 1.key
 ```
 
 另可参见: [Break](#beak)，[Continue](#continue)，[Foreach](#foreach)， [List](#list)，[Parse](#parse)，[Repeat](#repeat)，[Return](#return)，[While](#while)。
@@ -4059,249 +4095,346 @@ Number 参数是要删除的项数，如果省略，索引第 1 项将被删除�
 
 > 语法: #macro {key sequence} {commands}
 
-Macro 宏命令使 tintin 可以响应按键。
+`#Macro(宏)` 命令使 tintin 可以响应按键。
 
-按下按键时发送给终端的按键码可能会因操作系统和终端而异，要了解发送详情，  
-您可以启用 `CONVERT META` 配置选项。  
+按下按键时发送给终端的按键码可能会因操作系统和终端而异。
+
+要了解发送详情，您可以启用 `CONVERT META` 配置选项。  
+
 您也可以通过组合键 `ctrl-v` 为下一次按键动作启用 `CONVERT META`。
 
-如果您只希望一个按键码被触发，在输入行开头为按键码添加前缀 ^。
+如果您只希望一个按键码被触发，在输入行开头为按键码添加前缀 `^`。
 
 ```
 示例: 
 #macro {(press ctrl-v)(press F1)} {#show \e[2J;#buffer lock}
-当您按下 F1 时，清除屏幕并锁定窗口，可以用作老板键。
+--当您按下 F1 时，清除屏幕并锁定窗口，可以用作老板键。
 
 示例：
 #macro {\eOM} {#cursor enter}
-使小键盘的回车键在键盘模式下作为回车键工作。
+--使小键盘的回车键在键盘模式下作为回车键工作。
 
 示例：
 #macro {^nn} {north}
-在空行上按两次 n 执行 north。
+--在空行上按两次 n 执行 north。
 ```
 
 默认情况下，tintin 模拟 bash 输入编辑。  
-可以使用与 #cursor 命令相结合的宏来改变 TinTin 的输入编辑行为。
 
-注意：并非所有终端都能正确初始化小键盘按键码，如果是这种情况，您仍然可以使用小键盘，但是需要替换方向键为 ctrl-b、f、p、n。
+可以使用与 `#cursor` 命令相结合的宏来改变 TinTin 的输入编辑行为。
 
-注意: 您可以使用 #unmacro 命令删除宏。
+注：并非所有终端都能正确初始化小键盘按键码，如果是这种情况，您仍然可以使用小键盘，但是需要替换方向键为 ctrl-b、f、p、n。
 
-另可参见: [Alias](#alias), [Cursor](#cursor), [History](#history), [Keypad](#keypad), [Speedwalk](#speedwalk) and [Tab](#tab).
+注: 您可以使用 `#unmacro` 命令删除宏。
+
+另可参见: [Alias](#alias)，[Cursor](#cursor)，[History](#history)， [Keypad](#keypad)，[Speedwalk](#speedwalk)，[Tab](#tab)。
 
 # Map
 
 > 语法: #map {option} {argument}
 
-TinTin++ 有一个功能强大的自动化程序，它使用类似于 Diku MUDs 的房间系统，这意味着奇怪的地图布局和奇怪的出口配置不是一个重大问题。Mapper 提供了改进可视化地图显示的工具。有关基本路径跟踪，请参见路[Path](#path)。
+`#Map(地图)` 是自动绘图特性的主要命令。
+
+TinTin++ 有一个功能强大的自动地图绘制器，它使用类似于 Diku MUDs 的房间系统，这意味着奇怪的地图布局和奇怪的出口配置不是一个重大问题。
+
+mapper 提供了改进的可视化地图工具。
+
+有关基本路径跟踪，请参见路径命令：[Path](#path)。
+
+使用不带参数的 `#map`，查看可用选项及其简单介绍。
+
+选项      | 介绍
+:---      | :---
+AT        | 在给定区域执行命令
+CENTER    | 设置地图显示中心
+COLOR     | 设置给定区域颜色
+CREATE    | 创建初始化的地图
+DEBUG     | 调试信息
+DELETE    | 删除给定方向的房间
+DESTROY   | 摧毁区域或地图
+DIG       | 在给定方向创建新房间
+ENTRANCE  | 改变给定出口的入口
+EXIT      | 改变给定出口
+EXITFLAG  | 改变给定出的的标签
+EXPLORE   | 保存探测到的路径到 #path
+FIND      | 保存寻找到到位路径到 #path
+FLAG      | 改变地图标志
+GET       | 获取各种房间相关值
+GLOBAL    | 设置全局出口
+GOTO      | 移动到给定房间
+INFO      | 显示地图和房间信息
+INSERT    | 在给定方向插入一个房间
+JUMP      | 移动到给定坐标
+LANDMARK  | 设置全局房间地标
+LEAVE     | 离开地图
+LEGEND    | 操纵地图图例
+LINK      | 在给定方向连接房间
+LIST      | 列出匹配房间
+MAP       | 显示地图
+MOVE      | 移动到给定方向
+NAME      |（过时）改为使用 SET ROOMNAME
+OFFSET    | 设置 vt 地图的偏移量
+READ      | 读取地图文件
+RESIZE    | 调整地图房间号范围的大小
+RETURN    | 返回最后一个已知房间
+ROOMFLAG  | 改变房间标志
+RUN       | 保存找到的路径到 #path 并执行
+SET       | 设置多种房间相关的值
+SYNC      | 读取地图文件且不覆写
+TERRAIN   | 创建地形类型
+TRAVEL    | 保存探寻到的路径到 #path 并执行
+UNDO      | 取消最后一个地图指令
+UNINSERT  | 在给定方向取消插入房间
+UNLANDMARK| 移除地标
+UNLINK    | 移除给定出口
+UNTERRAIN | 移除地形类型
+UPDATE    | 标记 vt map 为自动更新
+VNUM      | 改变房间号为给定数字
+WRITE     | 保存地图到给定文件
+
+***
+
+以下是关于 `#map` 选项的相关介绍：
+
+**#map at \<exit|vnum> \<command>**
+
+在给定出口或房间号执行命令。
+
+如果位置不存在，则不执行命令。
+
+如果你想遍历所有房间号并访问所有房间来执行某种操作，这将非常有用。
+
+**#map center \<x> \<y> \<z>**
+
+设置地图查看器的显示中心，默认值为0。
+
+**#map color \<field> [value]**
+
+> 语法: #MAP COLOR {AVOID|BACKGROUND|EXIT|FOG|HIDE|INVIS|PATH|ROOM|USER} {COLOR CODE}
+
+为给定地图区块设置颜色。
+
+使用 `#map color reset` 将颜色恢复为默认值。
+
+要将背景设置为蓝色，您可以使用 `#map color background <884>`。  
+
+要将房间颜色设置为暗红色，您可以使用 `#map color room <218>`。
 
 **#map create {size}**
 
-此命令创建初始地图。默认情况下，大小为 50,000，可以使用 #map resize 命令随时更改。如果你玩的是使用 MSDP 或 GMCP 提供房间号码的MUDs，你必须将它增加到报告的最高房间号码。增加地图的大小不会降低性能。
+此命令创建初始地图和第一个房间。
 
-**#map goto {location}**
+默认情况下，地图大小为 50000。
 
-创建地图时，您不会自动进入地图。默认情况下，创建了房间号 (vnum) 1，因此您可以使用 `#map goto 1` 转到它。一旦您进入地图，当您四处走动时，新房间会使用 pathdir 命令定义移动命令。默认情况下，n, ne, e, se, s, sw, w, nw, u, d被定义。
+可以使用 `#map resize` 命令随时更改地图大小。  
 
-**#map map {radius} {filename} {a|v}**
+如果你玩的是使用 MSDP 或 GMCP 提供房间号码的 MUDs，你必须将它增加到报告的最高房间号码。
 
-要查看地图，您可以使用 #map。然而，必须不断键入 #map 是令人讨厌的。可以使用 #split 显示 vt100 地图。  
-要执行:   
+增加地图的大小不会降低性能。
 
-> #split 16 1   
-#map flag vtmap 
+**#map destroy {area|world} \<name>**
 
-第一个命令将顶部分割线设置为 16，底部分割线设置为 1。如果您想要更小或更大的地图显示，可以使用 10 、 13 、 19 、 22 等, 尽管对于默认显示设置，更改需要是 3 的倍数。
-
-如果你不需要显示对角线出口，更喜欢更紧凑的外观，你可以使用 `#map flag AsciiGraphics off`。这将启用使用 UTF-8 框绘图字符的标准显示，结果可能会因使用的字体而异。
-
-如果你想在不同的终端中显示地图，打开一个新的终端，启动 tt++，然后输入: 
-> #port init mapper 4051 
-
-在你的MUDs终端中，输入: 
-> #ses mapper localhost 4051 
-
-这将映射程序会话连接到您在另一个终端窗口中初始化的端口。  
-接下来，在 MUD 会话中定义以下事件: 
-
-```
-#EVENT {MAP ENTER ROOM} {
-  #map map 80x24 mapvar v;
-  #mapper #line sub {secure;var} #send {$mapvar}
-}
-```
-
-**#map undo**
-
-如果你不小心走进墙上，mapper会创建一个新的房间。您可以使用 `#map undo` 轻松修复此错误。如果你想在地图上四处移动而不在MUDs上四处移动，你可以使用: #map move {direction}。要手动删除房间，您可以使用: #map delete {direction}。
-
-**#map write {filename}**
-
-您可以使用 #map write 保存地图，加载地图可以使用 #map read。
-
-**#map leave**
-
-您可以使用 #map leave 离开地图，地图仍然存在，但是您的移动命令将不再被跟踪。你可以使用 #map return 返回你离开地图时所在的房间。如果使用 #map read，返回点将设置为保存地图时所在的房间。
-
-**#map set {option} {value}**
-
-可以使用 #map set roomname {name} 设置房间名称。您必须手动执行此操作，或者创建触发器手动设置房间名称。设置房间名称后，您可以使用 #map goto 作为访问房间名称的参数。如果有两个同名的房间，#map goto 会去附近的房间。如果你总是想去同一个房间，你应该记住房间号码。您可以通过提供额外的参数来进一步缩小匹配范围。
-```
-例如: 
-#map goto {武庙} {n;w} {roomarea} {扬州}
-```
-您可以使用 #map set roomweight {value} 设置房间权重。默认情况下，权重设置为 1.0，表示穿过房间的难度。如果你有一个湖泊作为替代路线，并且穿越水房比普通房间慢 4 倍，那么你可以将湖房的权重设置为 4.0 。如果湖宽 3 个房间，总权重是 12。如果绕着湖泊散步的权重小于 12 ，穿越湖泊权重大于 12 ，mapper将沿着湖走一条路线。
-```
-来自一位不愿扬名大佬的注释:
-
-tt的map信息本身就记录了周边房间号，
-还能设置权重，
-通过权重很容易就能实现河两边分两次遍历，
-不需要额外的代码。
-
-一个NPC只给一个大概范围，
-可能在河这边也可能在对岸，
-没有权重控制，简单广度优先的话，
-会来来回回的坐船。
-渡口到对岸权重999即可。
-
-权重用来计算GPS路径也很有用，
-能做马车不坐船，能穿洞不坐车，
-不同门派不同需求，
-score捕获了信息，自动修改权重即可。
-```
-可以使用 #map set roomsymbol {value} 设置房间符号。符号应该是可以上色的一、二、三个字符。例如，你可以用 “S” 标记商店，并根据商店的类型对 “S” 进行着色。
-
-**#map run {location} {delay}**
-
-Run 命令将让TinTin找到到给定位置的最短路径，并执行到达那里的移动命令。您可以以浮点精度提供秒为单位的延迟，例如: #map run {dark alley} {0.5}
-
-**#map insert {direction} {flag}**
-
-Insert 命令对于添加名为 void room 的间隔房间很有用。房间经常重叠，通过增加房间空间，你可以延伸出出口。例如: #map insert north void。一旦创建了空房间，你就不能进入空房间，所以你必须在相邻的房间中使用 #map info 来找到房间 vnum, 然后使用 #map goto {vnum} 访问。
-
-也可以隐藏整个区域，直到你输入它，为了做到这一点，你也想设置隐藏标志。例如:#map insert north {void;hide}。
-
-**#map exit {exit}<br>
-{COMMAND|DIRECTION|FLAG|GET|NAME|SAVE|SET|VNUM}<br>
-{argument}**
-
-默认情况下，退出命令设置为退出名称。如果你想自动打开门，你可以使用以下方式: #map exit {e} {command} {open door;e}。当使用 #map run 时，它将执行 {open door;e} 而不是 {e}。
-
-如果你有一个不寻常的出口，你可以给它一个方向。例如:`#map exit {enter portal} direction {s}`。也接受类似于 #pathdir 提供的数字方向。这允许mapper显示位于门户之外的房间，尽管你必须注意没有通往南方的实际出口。
-
-**#map at {location} {command}**
-
-在给定位置执行命令。如果位置不存在，则不执行命令。如果你想遍历所有 vnums 并访问所有房间来执行某种操作，这将非常有用。
-
-**#map color<br>
-{BACKGROUND|EXIT|HERE|PATH|ROOM}<br>
-{COLOR CODE}**
-
-设置颜色。要将背景设置为蓝色，您可以使用 #map color background <884>。要将房间颜色设置为暗红色，您可以使用 #map color room <218>。
+删除地图或给定区域。
 
 **#map delete {exit|vnum}**
 
-删除给定出口或房间 vnum 的房间。
+删除给定出口或房间号的房间。
 
 **#map dig {exit|vnum} {new|vnum}**
 
-#Map dig {vnum} 将使用给定的 vnum 创建一个新房间，除非已经存在具有该 vnum 的房间。
+为给定出口名称创建出口。
 
-#Map dig {exit} 将在给定方向创建一个新的出口。如果一个房间占据了这个空间，出口将与那个房间相连，否则将创建一个新的房间。
+如果没有给出有效的出口名称或未找到现有房间则创建新房间。
 
-#Map dig {exit} {new} 将在给定方向创建一个新的出口，将始终创建一个新的房间。
+对于传送点（驿站）的连接以及其他可替代的两点间移动方式很有用。
 
-#Map dig {exit} {vnum} 将在给定方向创建一个新的出口，该出口指向具有给定 vnum 的房间。如果这个房间不存在，将创建一个带有这个 vnum 的新房间。
+如果提供了 “new” 参数，则忽略所有出口房间并创建新房间。
 
-**#map exit {exit}<br>
-{COMMAND|DIRECTION|FLAG|GET|NAME|SAVE|SET|VNUM}<br>
-{argument}**
+如果房间号是第二个参数，将创建一个出口，引导到给定的房间号。如果房间号不存在，则创建新房间。
 
-#Map exit {exit} {NAME} {argument} 将设置移动命令。如果名称设置为 “and”，并且键入 “and”，这将使您跟随退出。实际执行的移动命令可以用 #map exit {exit} {command} 设置。名称和命令通常是相同的。
+* `#map dig {vnum}`   
+--将使用给定的房间号创建一个新房间，除非已经存在具有该房间号的房间。
 
-#Map exit {exit} {COMMAND} {argument} 将设置发送到服务器的移动命令。例如 {open door;n}
+* `#map dig {exit}`   
+--将在给定方向创建一个新的出口。如果一个房间占据了这个空间，出口将与那个房间相连，否则将创建一个新的房间。
 
-#Map exit {exit} {DIRECTION} {argument} 将设置退出的方向。这可以是与 PATHDIR 命令使用的数字参数相同的数字参数。
+* `#map dig {exit} {new}`   
+--将在给定方向创建一个新的出口，将始终创建一个新的房间。
 
-#Map exit {exit} {FLAG} {argument}将设置退出标志。这一定是个数字，使用 #map exitflag 设置退出标志更容易。
+* `#map dig {exit} {vnum}`   
+--将在给定方向创建一个新的出口，该出口指向具有给定房间号的房间。如果这个房间不存在，将创建一个带有这个房间号的新房间。
 
-#Map exit {exit} {GET} {variable} 将退出数据保存到给定变量中。
+**#map entrance \<exit> [option] [arg]**
 
-#Map exit {exit} {SET} {argument} 将退出数据设置为给定的参数。参数可以是表。
+设置给定出口的入口数据。您必须指定一个有效的双向出口。
 
-#Map exit {exit} {SAVE} {variable} 将退出信息 (commands/direction/flags/name/vnum) 保存到给定变量中。
+**#map exit \<exit> \<option> <arg>**
 
-#Map exit {exit} {VNUM} {argument} 将 exit vnum 设置为给定的参数。这是出口通向的房间的索引号。
+设置出口数据。
 
-**#map exitflag {exit} {HIDE|AVOID} {ON|OFF}**
+如果你想自动打开关闭的门，使用: `#map exit {e} {command} {open door;e}`。  
 
-#Map exitflag {exit} 将显示退出标志的状态。
+当使用 `#map run` 时，它将执行 {open door;e} 而不是 {e}。
 
-#Map exitflag {exit} {HIDE} 启用后，此出口之外的房间将不会显示在地图上。用于隐藏重叠区域。
+如果你有一个不寻常的出口，你可以给它一个方向。
 
-#Map exitflag {exit} {AVOID} 启用时，在搜索到给定描述的路径时，mapper不会使用 exit。
+例如：`#map exit {enter portal} direction {s}`。
+
+也接受类似于 `#pathdir` 提供的数字方向。
+
+这允许 mapper 显示位于门户之外的房间，尽管你必须注意没有通往南方的实际出口。
+
+查看可用选项列表使用：`#map exit <exit>`。
+
+保存出口数据使用：`#map exit <eixt> save`。
+
+* `#map exit {exit} {NAME} {argument}`  
+--将设置移动命令。如果名称设置为 “and”，并且键入 “and”，这将使您跟随出口。实际执行的移动命令可以用 `#map exit {exit} {command}` 设置。名称和命令通常是相同的。
+
+* `#map exit {exit} {COMMAND} {argument}`  
+--将设置发送到服务器的移动命令。例如 {open door;n}
+
+* `#map exit {exit} {DIRECTION} {argument}`  
+--将设置出口的方向。这可以是与 `#PATHDIR` 命令使用的数字参数相同的数字参数。
+
+* `#map exit {exit} {FLAG} {argument}`  
+--将设置标志。这一定是个数字，使用 `#map exitflag` 设置出口标志更容易。
+
+* `#map exit {exit} {GET} {variable}`  
+--将出口数据保存到给定变量中。
+
+* `#map exit {exit} {SET} {argument}`  
+--将出口数据设置为给定的参数。参数可以是表。
+
+* `#map exit {exit} {SAVE} {variable}`  
+--将出口相关信息 (commands/direction/flags/name/vnum) 等保存到给定变量中。
+
+* `#map exit {exit} {VNUM} {argument}`  
+--将出口房间号设置为给定的参数。这是出口通向的房间的索引号。
+
+**#map exitflag {exit} {AVOID|BLOCK|HIDE|INVIS} {ON|OFF}**
+
+设置出口标志。
+
+有关更多信息，请参阅 `#map roomflag`。
+
+* `#map exitflag {exit}`  
+--将显示出口标志的状态。
+
+* `#map exitflag {exit} {HIDE}`  
+--启用后，此出口之外的房间将不会显示在地图上。用于隐藏重叠区域。
+
+* `#map exitflag {exit} {AVOID}` 
+--启用时，在搜索到给定描述的路径时，mapper 不会使用出口。
 
 **#map explore {exit}**
 
-mapper将探索给定的出口，直到到达十字路口或死胡同。路径存储在 #path 中，随后可以与 #walk 一起使用。对于走过漫长的道路而不必记住任何目的地特别有用。
+mapper 将探索给定的出口，直到到达交叉路口或死胡同。
 
-**#map find {location} {...}**
+路径存储在 `#path` 中，随后可以与 `#walk` 一起使用。
 
-mapper会找到位置。路径存储在 #path 中。该位置可以存在多个参数，其中第一个参数应该是房间名称或房间 vnum。
+对于走过漫长的路径特别有用。
+
+**#map find \<name> \<exits> \<desc> \<area> \<note> \<terrain> \<flag>**
+
+搜索给定的房间名称。
+
+如果找到，将计算从当前位置到目的地的最短路径。
+
+路径存储在 `#path` 中，并可以与各种 `#path` 命令一起使用。
+
+如果 `#map flag nofollow` 被设置，将存储出口命令而不是出口名称。
+
+如果提供了 \<exit>，则必须匹配所有出口。
+
+如果提供了 \<roomdesc>，\<roomarea>，\<roomnote>，\<roomterrain>，\<roomflag> ，将找到与这些参数更加匹配的房间。
+
+这些搜索选项也可用于： `at`，`delete`，`goto`，`link`，`list`，`run`。
+
+`delete` 和 `dig` 命令只接受房间号。
+
+该位置可以存在多个参数，其中第一个参数应该是房间名称或房间号。
 
 如果你想进一步缩小范围，你可以使用以下键/值对:
 ```
 第二、三个大括号必须匹配
-#map find {location} {roomname} {argument} the room's name must match argument.
+#map find {location} {roomname} {argument}
+--房间名必须匹配参数
 
-#map find {location} {roomexits} {argument} the room's exit must match argument, for example {n;e;u}.
+#map find {location} {roomexits} {argument} 
+--房间出口必须匹配参数，例如：{n;e;u}.
 
-#map find {location} {roomdesc} {argument} the room's description must match argument.
+#map find {location} {roomdesc} {argument}
+--房间描述必须匹配参数
 
-#map find {location} {roomarea} {argument} the room's area must match argument.
+#map find {location} {roomarea} {argument}
+--房间区域必须匹配参数
 
-#map find {location} {roomnote} {argument} the room's note must match argument.
+#map find {location} {roomnote} {argument}
+--房间注释必须匹配参数
 
-#map find {location} {roomterrain} {argument} the room's terrain must match argument.
+#map find {location} {roomterrain} {argument}
+--房间地形必须匹配参数
 
-#map find {location} {roomflag} {number} the room's flag must match number.
+#map find {location} {roomflag} {number}
+--房间标志必须匹配参数
 ```
-例如，可以使用几个键/值对来找到房间:
+
+例如，可以使用几个键/值对来找到房间：
+
 ```
 示例: 
 #map find {A small clearing} {roomexits} {n;e;s;w} {roomarea} {The holy grove} {roomterrain} {Forest}
 ```
-Goto、link、list、run、delete、at 和 link 命令也可以使用这些搜索选项。delete和dig命令只接受 vnum 。
 
-**#map flag <br>
-{ASCIIGRAPHICS|ASCIIVNUMS|NOFOLLOW|STATIC|VTMAP}<br> 
-{ON|OFF}**
+**#map flag asciigraphics**
 
-ASCIIGRAPHICS: 默认情况下启用此标志，并绘制一张有点宽敞的地图，显示 NE SE SW NW 出口、单向出口、上下出口和房间符号。禁用时，它将默认为地图图例，该图例使用紧凑的 UTF-8 框绘图字符来显示和退出。
+默认情况下启用此标志，并绘制一张宽敞的地图，显示 NE SE SW NW 出口、单向出口、上下出口和房间符号。
 
-ASCIIVNUMS: 启用时，ASCIIGRAPHICS 模式将更改为不再显示单向出口和房间符号，而是替换房间 vnum。用于编辑或调试地图。
+禁用时，它将默认为地图图例，该图例使用紧凑的 UTF-8 框绘图字符。
 
-MUDFONT：这是一种不太受支持的实验显示模式。它需要特殊的字体和 #map legend 的正确配置。
+**#map flag asciivnums**
 
-NOFOLLOW: 启用时，当您输入移动命令时，地图不会尝试跟随。使用 #PATHDIR 定义移动命令。对于 MSDP 和 GMCP 自动映射脚本很有用。
+显示房间号。用于编辑或调试地图。
 
-STATIC静态: 启用时，当进入未映射方向时，不再自动创建新房间。当你完成地图绘制并经常意外撞到墙壁时，这很有用。
+**#map flag mudfont**
 
-SYMBOLGRAPHICS符号图形: 启用时，ASCIIGRAPHICS 模式被禁用，紧凑地图模式被启用，通过设置房间符号，可以覆盖 UTF-8 的退出图形。显示荒野地图很有用。
+这是一种不太受支持的实验显示模式。它需要特殊的字体和 `#map legend` 的正确配置。
 
-VTMAP: 启用时，地图会显示在顶部提示栏中。这需要一个支持 VT100 的终端，并使用 #split。例如: #split 16 1。
+**#map flag nofollow**
 
-**#map goto {location}**
+启用时，当您输入移动命令时，地图不会尝试跟随。
 
-此命令将将您在地图中的位置移动到给定的目标房间。
+使用 `#PATHDIR` 定义移动命令。对于 MSDP 和 GMCP 地图自动绘制脚本很有用。
 
-**#map get {option} {variable}**
+当您使用 `#map find` 时，nofollow 模式将存储出口命令而不是出口名称到路径。
 
-此命令允许您将世界和房间信息存储到变量中。
+**#map flag static**
+
+启用时，当进入未绘制的方向时，不再自动创建新房间。
+
+当你完成地图绘制并经常意外撞到墙壁时，这很有用。
+
+**#map flag vtgraphics**
+
+启用某些终端上的 vt line 绘制。
+
+**#map flag vtmap**
+
+启用时，地图会显示在顶部分割区中。
+
+这需要一个支持 VT100 的终端，并使用 `#split` 分割屏幕。
+
+创建一个 16 行高的屏幕顶部分割区域: `#split 16 1`。
+
+**#map get {option} {variable} [vnum]**
+
+此命令允许您将地图信息存储到变量中。
+
+如果没有提供房间号使用当前房间。使用 “all” 选项会将所有值存储到表变量。
+
 ```
-选项有: 
+可用选项有: 
 WORLDFLAGS,
 WORLDSIZE, 
 ROOMVNUM, 
@@ -4317,69 +4450,230 @@ ROOMSYMBOL,
 ROOMTERRAIN, 
 ROOMWEIGHT.
 ```
-**#map info**
 
-这将向您展示您当前所在房间的一些世界数据和房间数据。
+**#map get roomexits \<variable>**
 
-**#map insert {exit} {roomflags}**
+将所有房间出口存储为变量。
 
-这将在提供的出口插入一个新房间。如果你想同时设置多个房间标志，你必须用半冒号将它们分开。
+**#map global \<room vnum>**
 
-> 示例: #map insert {e} {void;hide}
+为包含全局出口房间的设置房间号，例如名为 “recall” 的出口。
+
+一些 mud 中输入 "recall" 会返回初始地点/复活点/传送点。
+
+```
+示例:
+#map goto {984} dig
+#map global 984
+#map link recall 26
+#map link gohome 116
+```
+这将创建 984 号房间，然后将 984 号房间设置为全局房间，然后将出口链接到 26 号房间。
+
+每当您输入 “recall”，您的地图位置将更改为 26 号房间。
+
+如果您输入 "gohome" 则更改到 116 号房间。
+
+因此，基本上 984 号房间将成为一个特别的房间。它不应该是 mud 的实际房间。
+
+房间可以包含多个出口，以防万一可以设置多个类似 recall 的命令。
+
+**#map goto \<room vnum> [dig]**
+
+转到给定的房间号，dig 参数如果不存在，将创建一个新房间。
+
+创建地图时，您不会自动进入地图。
+
+默认情况下，创建了房间号 (vnum) 1，因此您可以使用 `#map goto 1` 转到它。
+
+一旦您进入地图，当您四处走动时，新房间会使用 `#pathdir` 命令定义移动命令。
+
+默认情况下，n, ne, e, se, s, sw, w, nw, u, d 被定义。
+
+**#map goto \<name> \<exits> \<desc> \<area> \<note> \<terrain>**
+
+转到给定的房间名称，如果你提供出口则这些必须匹配。
+
+**#map info [save]**
+
+提供有关您所在的地图和房间的信息。
+
+如果给定 `save` 参数，地图数据被保存到 `info[map]` 变量中。
+
+**#map insert \<direction> [roomflag]**
+
+这将在提供的方向插入一个新房间。最有用的是插入空房间。
+
+如果你想同时设置多个房间标志，你必须用半冒号将它们分开。
+
+```
+示例: 
+#map insert {e} {void;hide}
+```
+
+Insert 命令对于添加名为 void room 的间隔房间很有用。
+
+房间经常重叠，通过增加房间空间，你可以延伸出出口。
+
+例如: `#map insert north void`。
+
+一旦创建了空房间，你就不能进入空房间，所以你必须在相邻的房间中使用 `#map info` 来找到房间号, 然后使用 `#map goto {vnum}` 访问。
+
+也可以隐藏整个区域，直到你输入它，为了做到这一点，你可以设置隐藏标志。
+
+例如：`#map insert north {void;hide}`。
 
 **#map jump {x} {y} {z}**
 
-此命令类似于 #map goto，只是您提供了相对于当前所在房间的坐标。
+跳转到给定坐标。
+
+此命令类似于 `#map goto`，只是您提供了相对于当前所在房间的坐标。
+
+**#map landmark \<name> \<vnum> [description] [size]**
+
+创建别名以定位所提供的房间号。描述是可选的，应该简短。
+
+大小决定从多少个房间的距离到地标可见。
 
 **#map leave**
 
-让你离开地图。当进入一个不可切换的迷宫时很有用。你可以使用 #map return 返回你最后一个已知的房间。
+让你离开地图。地图仍然存在，但是您的移动命令将不再被跟踪。
+
+当进入迷宫时很有用。
+
+你可以使用 `#map return` 返回最后的已知房间。
+
+如果使用 `#map read`，返回点将设置为保存地图时所在的房间。
+
 
 **#map legend**
 
+> #map legend \<legend> [symbols|reset]  
+> #map legend \<legend> \<index> [symbol]
+
+有几个图例和子图例可用于绘制适合个人喜好和字符集的地图。
+
+使用 `#map legend all` 查看当前定义的图例。
+
+使用 `#map legend <legend> <reset>` 重置默认图例。
+
+使用 `#map legend <legend> <character list>` 创建自定义图例。
+
+自定义图例会自动保存，使用 `#map read` 和 `#map write` 加载。
+
 图例包含对用于显示地图的绘图字符的引用。
 
-紧凑显示模式使用前 16 个字符。它只显示值N E S W exits为n=1 e=2 s=4 w=8。0指数是指没有出口的房间。第一个指数是指有一个出口通向北方的房间。第二个指标是一个房间，有一个出口通向东方。第三个指数是一个出口朝北向东的房间，等等。位于索引 1+4+8=13 的房间，出口通向北、南、西。索引应该是 ASCII 字符的 32 到 254 之间的数字，或者 UTF-8 字符的hex序列。如果 #config 字符集设置为 UTF-8，TinTin++ 将自动用 UTF-8 框绘图字符初始化新创建的地图。
+紧凑显示模式使用前 16 个字符。
 
-仅部分使用了指数 16 至 31。在紧凑模式下，索引 16 用于当前位置。在 MUDFONT 模式下，当前位置使用索引 17 和 18。
+它只显示值 N E S W 出口值为 n=1 e=2 s=4 w=8。
 
-指数 32 95 用于 MUDFONT 显示模式。指数 32 到 63 显示 NW W SW S exits 值为n=1 nw=2 w=4 sw=8 s=16。指数 64 到 95 显示 NE E SE S exits 值为 n=1 ne=2 e=4 se=8 s=16。
+0 指数是指没有出口的房间。
 
-默认情况下，MUDFONT 字符映射到从 U+E000 开始的第一个 Unicode 专用区域。在 Windows 上，这将与您可以在下面下载的两个 EUDC (最终用户定义字符) 文件一起使用。
+第一个指数是指有一个出口通向北方的房间。
 
-[EUDC.EUF](https://tintin.sourceforge.io/download/EUDC.EUF) and [EUDC.TTE](https://tintin.sourceforge.io/download/EUDC.TTE)
+第二个指数是一个房间，有一个出口通向东方。
 
-必须使用 7zip 或类似的实用程序将这些文件复制到 C:/Windows/Fonts 目录中。您不能使用 Windows 自带的复制例程复制文件，因为它会尝试安装字体，这不是您想要的。
+第三个指数是一个出口朝北向东的房间，等等。
 
-要修改 EUDC 文件，必须启动私有字符编辑器程序。默认情况下应该安装它。进行更改后，您已经使用文件-> 字体链接-> 所有字体的链接来完成更改。EUDC 文件是a proof of concept。
+位于索引 1+4+8=13 的房间，出口通向北、南、西。
 
-**#map link {direction} {location} {both}**
+索引应该是 ASCII 字符的 32 到 254 之间的数字，或者 UTF-8 字符的 hex 序列。
 
-此命令将在指向给定位置的给定方向创建单向出口。如果方向是有效的路径目录，您可以提供 {both} 作为第三个参数来创建双向退出。
+如果 `#config` 字符集设置为 UTF-8，TinTin++ 将自动用 UTF-8 框绘图字符初始化新创建的地图。
 
-**#map list {location}**
+仅部分使用了指数 16 至 31。
 
-这个命令列出了所有匹配的房间和它们的距离。您可以使用`#map list {<location>} {variable} {<variablename>}`将列表存储在变量中。
+在紧凑模式下，索引 16 用于当前位置。
 
-**#map map {<x>x<y>} {filename} {a|v}**
+在 `MUDFONT` 模式下，当前位置使用索引 17 和 18。
 
-`#Map map {<x>x<y>}` 向屏幕显示具有给定尺寸的地图。
+指数 32 95 用于 `MUDFONT` 显示模式。
 
-`#Map map {<x>x<y>} {filename}` 将 map 显示写入给定的文件名。
+指数 32 到 63 显示 NW W SW S 出口值为 n=1 nw=2 w=4 sw=8 s=16。
 
-`#Map map {<x>x<y>} {filename} {a}` 将 map 显示写入文件，附加到现有文件中。
+指数 64 到 95 显示 NE E SE S 出口值为 n=1 ne=2 e=4 se=8 s=16。
 
-`#Map map {<x>x<y>} {variable} {v}` 将地图显示保存到给定变量。
+默认情况下，MUDFONT 字符映射到从 U+E000 开始的第一个 Unicode 专用区域。
 
-**#map move {exit}**
+在 Windows 上，这将在下面下载的两个 EUDC (最终用户定义字符) 文件一起使用。
+
+[EUDC.EUF](https://tintin.sourceforge.io/download/EUDC.EUF) 和 [EUDC.TTE](https://tintin.sourceforge.io/download/EUDC.TTE)
+
+必须使用 7zip 或类似的实用程序将这些文件复制到 `C:/Windows/Fonts` 目录中。  
+
+您不能使用 Windows 自带的复制例程复制文件，因为它会尝试安装字体，这不是您想要的。
+
+要修改 EUDC 文件，必须启动私有字符编辑器程序。默认情况下应该安装它。
+
+进行更改后，您已经使用文件-> 字体链接-> 所有字体的链接来完成更改。
+
+EUDC 文件是 a proof of concept。
+
+**#map link {direction} \<room name> {both}**
+
+此命令将在指向给定位置的给定方向创建单向出口。
+
+如果方向是有效的路径目录，您可以提供 {both} 作为第三个参数来创建双向出口。
+
+**#map list \<name> \<exits> \<desc> \<area> \<note> \<terrain>**
+
+这个命令列出了所有匹配的房间和它们的距离。
+
+您可以使用`#map list {<location>} {variable} {<variablename>}` 将列表存储在变量中。
+
+支持以下搜索关键词：
+
+关键词 | 行为
+:---   | :---
+{distance}   \<arg>| 将列出给定距离内的房间。
+{roomarea}   \<arg>| 将列出匹配区域名称的房间。
+{roomdesc}   \<arg>| 将列出与描述匹配的房间。
+{roomexits}  \<arg>| 将列出具有相同房间出口的房间。使用 * 作为出口以忽略没有路径值的出口。
+{roomflag}   \<arg>| 将列出带有匹配房间标志的房间。
+{roomid}     \<arg>| 将列出具有相同id名的房间。
+{roomname}   \<arg>| 将列出与房间名称匹配的房间。
+{roomnote}   \<arg>| 将列出房间与匹配的房间说明。
+{roomterrain}\<arg>| 将列出与房间地形相匹配的房间。
+{variable}   \<arg>| 将输出保存到给定的变量。
+
+**#map map \<rows> \<cols> \<append|overwrite|list|variable> \<name>**
+
+显示给定高度和宽度的地图图形。
+
+所有参数都是可选的。
+
+如果 {rows} 或 {cols} 设置为 {} 或 {0}，它们将使用滚动窗口大小作为默认值。
+
+如果 {rows} 或 {cols} 为负数，则该数字为从滚动窗口大小中减去。
+
+**#map map \<rows> \<cols> draw \<square>**
+
+显示给定高度和宽度的地图图形。
+
+空间参数由 4 个数字组成，构成空间的左上角和右下角。
+
+如果使用 {append|overwrite}，地图将写入指定的文件名必须作为第四个参数给出。
+
+如果使用 {list|variable}，则地图将保存到指定的变量名称。
+
+
+**#map move \<direction>**
 
 这与实际移动命令相同，更新地图上的位置并创建新房间。
 
-当你跟踪某人并希望地图跟随时，这很有用。当然，您必须使用 #map move 创建操作才能正常工作。
+当你跟踪某人并希望地图跟随时，这很有用。
+
+当然，您必须使用 `#map move` 创建触发器才能正常工作。
+
+**#map offset \<row> \<col> \<row> \<col>**
+
+将 vtmap 的偏移量定义为空间。没有参数它默认为整个顶部分割区域。
 
 **#map read {filename}**
 
-将加载给定的文件名。您可以使用 #map goto 进入地图，也可以使用 #map return，它会将您带回保存地图的房间。
+将加载给定的文件名。
+
+您可以使用 `#map goto` 进入地图，也可以使用 `#map return`，它会将您带回保存地图的房间。
 
 **#map resize {size}**
 
@@ -4387,32 +4681,256 @@ ROOMWEIGHT.
 
 **#map return**
 
-离开地图或加载地图后，将您返回到最后一个已知的房间。
+离开地图或加载地图后，返回到最后一个已知的房间。
 
-**#map roomflag {AVOID|HIDE|LEAVE|VOID|STATIC}**
+**#map roomflag \<flags> \<get|on|off>**
 
-#map roomflag avoid: 设置时，“地图查找” 将避免穿过该房间的路线。避免陷阱和攻击性暴徒很有用。
+* #map roomflag avoid  
+设置后，`#map find` 将避免穿过该房间的路线。避免关闭的门、陷阱和攻击性怪物很有用。
 
-#map roomflag hide: 设置时，“#map” 将不会在这个房间之外显示地图。当映射重叠的区域或不一致构建的区域时，除非使用空房间，否则您也需要此标志来防止自动链接。
+* #map roomflag block  
+设置后，自动地图将阻止移动进入或通过房间。对死亡陷阱有用。
+ 
+* #map roomflag hide  
+设置后，`#map` 将不会在这个房间之外显示地图。当地图绘制重叠的区域或不一致构建的区域时，除非使用空房间，否则您也需要此标志来防止自动链接。
 
-#map roomflag leave: 当你带着这个标志进入房间时，你会自动离开地图。当设置在带有随机出口的迷宫入口处时很有用。
+* #map roomflag invis  
+设置后，房间将使用 INVIS 颜色着色。
 
-#map roomflag void: 当设置房间时，房间变成了一个间距房间，可以用来连接重叠的区域。一个空房间应该只有两个出口。当你进入一个空房间时，你会被移动到连接房间，直到你进入一个非空房间。要访问空房间，必须使用 #map goto 或 #map jump。
+* #map roomflag leave  
+当你带着这个标志进入房间时，你会自动离开地图。当设置在带有随机出口的迷宫入口处时很有用。
 
-#map roomflag static: 设置时，当四处走动时，房间将不再自动链接。用于绘制迷宫。
+* #map roomflag noglobal  
+这标志着一个房间不允许全局返回，就像阻碍返回的 norecall 房间。
 
-**#map run {destination} {delay}**
+* #map roomflag void  
+当设置房间时，房间变成了一个间隔房间，可以用来连接重叠的区域。一个空房间应该只有两个出口。当你进入一个空房间时，你会被移动到间隔房间，直到你进入一个非空房间。要访问空房间，必须使用 `#map goto` 或 `#map jump`。
 
-#Map run {location} 将找到通向给定位置的路径，并执行移动命令来到达那里。延迟是可选的浮点数字，在每个移动命令之间添加延迟。
+* #map roomflag static  
+设置时，当四处走动时，房间将不再自动链接。用于绘制迷宫。
 
-> 示例: #map run {The dump} {0.25}
+**#map run \<room name> {delay}**
+
+找到到给定位置的最短路径，并执行到达那里的移动命令。
+
+{delay} 是可选的，且必须使用大括号。
+
+您可以以浮点精度提供秒为单位的延迟，例如: `#map run {dark alley} {0.5}`
+
+除了房间名称还可以提供出口列表，以便更精确匹配。
+
+**#map set {option} {value}**
+
+为您当前的房间设置一个地图值，如果房间提供房间号。
+
+可以使用 `#map set roomname {name}` 设置房间名称。
+
+您必须手动执行此操作，或者创建触发器手动设置房间名称。
+
+设置房间名称后，您可以使用 `#map goto` 作为访问房间名称的命令。
+
+如果有两个同名的房间，`#map goto` 会去附近的房间。
+
+如果你总是想去同一个房间，你应该记住房间号码。
+
+您可以通过提供额外的参数来进一步缩小匹配范围。
+```
+例如: 
+#map goto {武庙} {n;w} {roomarea} {扬州}
+```
+您可以使用 `#map set roomweight {value}` 设置房间权重。
+
+默认情况下，权重设置为 1.0，表示穿过房间的难度。
+
+如果你有一个湖泊作为替代路线，并且穿越水房比普通房间慢 4 倍，那么你可以将湖房的权重设置为 4.0 。
+
+如果湖宽 3 个房间，总权重是 12。如果绕着湖泊散步的权重小于 12 ，穿越湖泊权重大于 12 ，mapper 将沿着湖走一条路线。
+```
+来自一位不愿扬名大佬的注释:
+
+tt 的 map 信息本身就记录了周边房间号，
+还能设置权重，
+通过权重很容易就能实现河两边分两次遍历，
+不需要额外的代码。
+
+一个 NPC 只给一个大概范围，
+可能在河这边也可能在对岸，
+没有权重控制，简单广度优先的话，
+会来来回回的坐船。
+渡口到对岸权重 999 即可。
+
+权重用来计算 GPS 路径也很有用，
+能做马车不坐船，能穿洞不坐车，
+不同门派不同需求，
+score捕获了信息，自动修改权重即可。
+```
+可以使用 `#map set roomsymbol {value}` 设置房间符号。
+
+符号应该是可以上色的一、二、三个字符。
+
+例如，你可以用 “S” 标记商店，并根据商店的类型对 “S” 进行着色。
+
+**#map sync \<filename>**
+
+类似于 `#map read`，只是不会卸载当前地图或者覆盖。
+
+**#map terrain \<name> \<symbol> [flag]**
+
+设置地形符号和标志。
+
+**#map terrain \<name> \<symbol> [DENSE|SPARSE|SCANT]**
+
+确定符号密度，省略默认值。
+
+**#map terrain \<name> \<symbol> [NARROW|WIDE|VAST]**
+
+确定符号扩展范围，省略默认值。
+
+**#map terrain \<name> \<symbol> [FADEIN|FADEOUT]**
+
+确定符号扩散密度，省略默认值。
+
+**#map terrain \<name> \<symbol> [DOUBLE]**
+
+您使用两个字符作为符号。
+
+**#map travel {exit} {delay}**
+
+对于穿越长道路很有用。
+
+该命令将沿着给定的出口移动，并将继续移动，直到到达死胡同或交叉路口。
+
+延迟是可选的浮点数字，在每个移动命令之间添加延迟。
+
+使用 `#path stop` 停止延迟移动。
+
+**#map undo**
+
+将撤消您最后一个移动行为。
+
+如果这个命令创建了一个房间或链接，它将被删除。
+
+如果这个命令涉及移动，它会将你移回上一个房间。
+
+如果你走进一个不存在的方向，那就很有用了。
+
+如果你想在地图上而不是在 MUDs 上四处移动，使用: `#map move {direction}`。
+
+要手动删除房间，使用: `#map delete {direction}`。
+
+**#map uninsert {exit}**
+
+这个命令与 `#map insert` 完全相反。
+
+它将删除出口通向的房间，并将出口连接到被删除房间之外的房间。
+
+**#map unlandmark \<name>**
+
+移除地标。
+
+**#map unlink \<direction> [both]**
+
+将移除出口，这不是双向的，所以你可以适当地显示无出口房间和迷宫。
+
+如果您同时使用这两个参数，则将删除双向出口。
+
+**#map unterrain \<name>**
+
+移除地形。
+
+**#map update [now]**
+
+将 vtmap 设置为在接下来的 0.1 秒内更新，或者使用 `now` 立即更新。
+
+**#map {vnum} {number}**
+
+将房间号更改为给定的数字。
+
+**#map {vnum} {low} {high}**
+
+改变房间号。
+
+如果提供了一个范围，则选择该范围内的第一个可用房间。
+
+低和高是一个数字范围。
+
+如果最低数量不可用，则在找到可用的房间号之前，房间号会递增。
+
+如果最高号码不可用，命令将失败。
+
+**#map {write} {filename} [force]**
+
+将地图保存到给定的文件名。
+
+建议偶尔创建备份，因为很容易混淆 `#map write` 和 `#write`。
+
+如果要将地图保存到 .tin 为后缀的文件，您必须提供 {force} 参数。
+
+**#map map {\<x>x\<y>} {filename} {a|v}**
+
+`#map map {<x>x<y>}` 向屏幕显示具有给定尺寸的地图。
+
+`#map map {<x>x<y>} {filename}` 将 map 显示写入给定的文件名。
+
+`#map map {<x>x<y>} {filename} {a}` 将 map 显示写入文件，附加到现有文件中。
+
+`#map map {<x>x<y>} {variable} {v}` 将地图显示保存到给定变量。
+
+**#map map {radius} {filename} {a|v}**
+
+要查看地图，您可以使用 `#map`。
+
+然而，必须不断键入 `#map` 是令人讨厌的。
+
+可以使用 `#split` 显示 vt100 地图。  
+
+执行:   
+
+```
+#split 16 1   
+#map flag vtmap 
+```
+第一个命令将顶部分割线设置为 16，底部分割线设置为 1。
+
+如果您想要更小或更大的地图显示，可以使用 10 、 13 、 19 、 22 等, 尽管对于默认显示设置，更改需要是 3 的倍数。
+
+如果要在屏幕的其他位置显示地图，使用如下内容：
+
+```
+#split 0 1 0 -80
+#map offset 1 81 -4 -1
+```
+这将在屏幕右侧显示地图，如果屏幕足够宽。
+
+如果你不需要显示对角线出口，更喜欢更紧凑的外观，你可以使用 `#map flag AsciiGraphics off`。
+
+这将启用使用 UTF-8 框绘图字符的标准显示，结果可能会因使用的字体而异。
+
+如果您的终端支持UTF-8，您还可以使用 `#Map flag unicode` 试一试。
+
+如果你想在不同的终端中显示地图，打开一个新的终端，启动 tt++，然后输入:   
+`#port init mapper 4051 `
+
+在你的 MUDs 终端中，输入:   
+`#ses mapper localhost 4051`
+
+这将地图程序会话连接到您在另一个终端窗口中初始化的端口。  
+
+接下来，在 MUD 会话中定义以下事件:   
+
+```
+#EVENT {MAP ENTER ROOM} {
+  #map map 80x24 mapvar v;
+  #mapper #line sub {secure;var} #send {$mapvar}
+}
+```
 
 **#map set {option} {variable}**
 
 此命令允许您设置房间信息。
 
 ```
-选项有: 
+可用选项有: 
 ROOMVNUM, 
 ROOMAREA, 
 ROOMCOLOR, 
@@ -4426,37 +4944,16 @@ ROOMSYMBOL,
 ROOMTERRAIN, 
 ROOMWEIGHT.
 ```
-**#map travel {exit} {delay}**
-
-#map travel {exit} {delay}对于穿越长道路很有用。该命令将沿着给定的出口移动，并将继续移动，直到到达死胡同或十字路口。延迟是可选的浮点数字，在每个移动命令之间添加延迟。
-
-> 示例: #map travel e
-
-**#map undo**
-
-将撤消您最后一个重要的地图命令。如果这个命令创建了一个房间或链接，它将被删除。如果这个命令涉及移动，它会将你移回上一个房间。如果你走进一个不存在的方向，那就很有用了。
-
-**#map uninsert {exit}**
-
-这个命令与 #map insert 完全相反。它将删除出口通向的房间，并将出口连接到被删除房间之外的房间。
-
-**#map {vnum} {number}**
-
-将 roomvnum 更改为给定的 vnum。
-
-**#map {vnum} {low} {high}**
-
-将设置roomvnum。低和高是一个数字范围。如果最低数量不可用，则在找到可用的 vnum 之前，vnum 会递增。如果最高号码不可用，命令将失败。
-
-**#map {write} {filename}**
-
-将地图保存到给定的文件名。建议偶尔创建备份，因为很容易混淆 #map write 和 #write。
 
 **#help map**
 
-#Help map 应该为您提供关于可用地图选项的其他信息。输入部分命令可能会为您提供有用的语法建议或概述，请记住这一点。
+`#help map` 为您提供关于可用地图选项的其他信息。
 
-另可参见: [Path](#path) and [Pathdir](#pathdir).
+输入部分命令可能会为您提供有用的语法建议或概述，请记住这一点。
+
+***
+
+另可参见: [Path](#path)，[Pathdir](#pathdir)，[Speedwalk](#speedwalk)。
 
 # Math
 
