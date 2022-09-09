@@ -2,7 +2,7 @@
 #class colorpad open;
 
 #alias {colorpad} {
-  #echo @color_radom{====调色板====};
+  #echo @color_radom{==============调色板==============};
   #echo @color_radom{『大慈大悲入凡尘，普度苍生怜世人』};
   #var color_dic {A;B;C;D;E;F};
   #var color_bg {};
@@ -35,5 +35,17 @@
    };
   #return $color_radom;
 };
+
+#function color_r2 {
+   #local color_r2 {};
+   #parse %1 char {
+     #math a {1d9-1};
+     #math b {1d9};
+     #math c {1d9};
+     #local ccolor {<$a$b$c>};
+     #local color_r2 {$color_r2$ccolor$char};
+   };
+   #return $color_r2;
+}
 
 #class colorpad close;
