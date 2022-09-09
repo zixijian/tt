@@ -4324,7 +4324,7 @@ WRITE     | 保存地图到给定文件
 * `#map exitflag {exit} {HIDE}`  
 --启用后，此出口之外的房间将不会显示在地图上。用于隐藏重叠区域。
 
-* `#map exitflag {exit} {AVOID}` 
+* `#map exitflag {exit} {AVOID}`  
 --启用时，在搜索到给定描述的路径时，mapper 不会使用出口。
 
 **#map explore {exit}**
@@ -4607,7 +4607,7 @@ Insert 命令对于添加名为 void room 的间隔房间很有用。
 
 进行更改后，您已经使用文件-> 字体链接-> 所有字体的链接来完成更改。
 
-EUDC 文件是 a proof of concept。
+EUDC 文件是概念功能。
 
 **#map link {direction} \<room name> {both}**
 
@@ -4645,6 +4645,61 @@ EUDC 文件是 a proof of concept。
 如果 {rows} 或 {cols} 设置为 {} 或 {0}，它们将使用滚动窗口大小作为默认值。
 
 如果 {rows} 或 {cols} 为负数，则该数字为从滚动窗口大小中减去。
+
+`#map map {<x>x<y>}` 向屏幕显示具有给定空间大小的地图。
+
+`#map map {<x>x<y>} {filename}` 将 map 显示写入给定的文件名。
+
+`#map map {<x>x<y>} {filename} {a}` 将 map 显示写入文件，附加到现有文件中。
+
+`#map map {<x>x<y>} {variable} {v}` 将地图显示保存到给定变量。
+
+要查看地图，您可以使用 `#map`。
+
+然而，必须不断键入 `#map` 是令人讨厌的。
+
+可以使用 `#split` 显示 vt100 地图。  
+
+执行:   
+
+```
+#split 16 1   
+#map flag vtmap 
+```
+第一个命令将顶部分割线设置为 16，底部分割线设置为 1。
+
+如果您想要更小或更大的地图显示，可以使用 10 、 13 、 19 、 22 等, 尽管对于默认显示设置，更改需要是 3 的倍数。
+
+如果要在屏幕的其他位置显示地图，使用如下内容：
+
+```
+#split 0 1 0 -80
+#map offset 1 81 -4 -1
+```
+这将在屏幕右侧显示地图，如果屏幕足够宽。
+
+如果你不需要显示对角线出口，更喜欢更紧凑的外观，你可以使用 `#map flag AsciiGraphics off`。
+
+这将启用使用 UTF-8 框绘图字符的标准显示，结果可能会因使用的字体而异。
+
+如果您的终端支持UTF-8，您还可以使用 `#Map flag unicode` 试一试。
+
+如果你想在不同的终端中显示地图，打开一个新的终端，启动 tt++，然后输入:   
+`#port init mapper 4051 `
+
+在你的 MUDs 终端中，输入:   
+`#ses mapper localhost 4051`
+
+这将地图程序会话连接到您在另一个终端窗口中初始化的端口。  
+
+接下来，在 MUD 会话中定义以下事件:   
+
+```
+#EVENT {MAP ENTER ROOM} {
+  #map map 80x24 mapvar v;
+  #mapper #line sub {secure;var} #send {$mapvar}
+}
+```
 
 **#map map \<rows> \<cols> draw \<square>**
 
@@ -4721,7 +4776,23 @@ EUDC 文件是 a proof of concept。
 
 **#map set {option} {value}**
 
-为您当前的房间设置一个地图值，如果房间提供房间号。
+为您当前的房间设置一个地图信息值。
+
+```
+可用选项有: 
+ROOMVNUM, 
+ROOMAREA, 
+ROOMCOLOR, 
+ROOMDATA, 
+ROOMDESC, 
+ROOMEXITS, 
+ROOMFLAGS, 
+ROOMNAME, 
+ROOMNOTE, 
+ROOMSYMBOL, 
+ROOMTERRAIN, 
+ROOMWEIGHT.
+```
 
 可以使用 `#map set roomname {name}` 设置房间名称。
 
@@ -4734,6 +4805,7 @@ EUDC 文件是 a proof of concept。
 如果你总是想去同一个房间，你应该记住房间号码。
 
 您可以通过提供额外的参数来进一步缩小匹配范围。
+
 ```
 例如: 
 #map goto {武庙} {n;w} {roomarea} {扬州}
@@ -4764,6 +4836,7 @@ tt 的 map 信息本身就记录了周边房间号，
 不同门派不同需求，
 score捕获了信息，自动修改权重即可。
 ```
+
 可以使用 `#map set roomsymbol {value}` 设置房间符号。
 
 符号应该是可以上色的一、二、三个字符。
@@ -4866,90 +4939,11 @@ score捕获了信息，自动修改权重即可。
 
 如果要将地图保存到 .tin 为后缀的文件，您必须提供 {force} 参数。
 
-**#map map {\<x>x\<y>} {filename} {a|v}**
-
-`#map map {<x>x<y>}` 向屏幕显示具有给定尺寸的地图。
-
-`#map map {<x>x<y>} {filename}` 将 map 显示写入给定的文件名。
-
-`#map map {<x>x<y>} {filename} {a}` 将 map 显示写入文件，附加到现有文件中。
-
-`#map map {<x>x<y>} {variable} {v}` 将地图显示保存到给定变量。
-
-**#map map {radius} {filename} {a|v}**
-
-要查看地图，您可以使用 `#map`。
-
-然而，必须不断键入 `#map` 是令人讨厌的。
-
-可以使用 `#split` 显示 vt100 地图。  
-
-执行:   
-
-```
-#split 16 1   
-#map flag vtmap 
-```
-第一个命令将顶部分割线设置为 16，底部分割线设置为 1。
-
-如果您想要更小或更大的地图显示，可以使用 10 、 13 、 19 、 22 等, 尽管对于默认显示设置，更改需要是 3 的倍数。
-
-如果要在屏幕的其他位置显示地图，使用如下内容：
-
-```
-#split 0 1 0 -80
-#map offset 1 81 -4 -1
-```
-这将在屏幕右侧显示地图，如果屏幕足够宽。
-
-如果你不需要显示对角线出口，更喜欢更紧凑的外观，你可以使用 `#map flag AsciiGraphics off`。
-
-这将启用使用 UTF-8 框绘图字符的标准显示，结果可能会因使用的字体而异。
-
-如果您的终端支持UTF-8，您还可以使用 `#Map flag unicode` 试一试。
-
-如果你想在不同的终端中显示地图，打开一个新的终端，启动 tt++，然后输入:   
-`#port init mapper 4051 `
-
-在你的 MUDs 终端中，输入:   
-`#ses mapper localhost 4051`
-
-这将地图程序会话连接到您在另一个终端窗口中初始化的端口。  
-
-接下来，在 MUD 会话中定义以下事件:   
-
-```
-#EVENT {MAP ENTER ROOM} {
-  #map map 80x24 mapvar v;
-  #mapper #line sub {secure;var} #send {$mapvar}
-}
-```
-
-**#map set {option} {variable}**
-
-此命令允许您设置房间信息。
-
-```
-可用选项有: 
-ROOMVNUM, 
-ROOMAREA, 
-ROOMCOLOR, 
-ROOMDATA, 
-ROOMDESC, 
-ROOMEXITS, 
-ROOMFLAGS, 
-ROOMNAME, 
-ROOMNOTE, 
-ROOMSYMBOL, 
-ROOMTERRAIN, 
-ROOMWEIGHT.
-```
-
 **#help map**
 
 `#help map` 为您提供关于可用地图选项的其他信息。
 
-输入部分命令可能会为您提供有用的语法建议或概述，请记住这一点。
+请记住输入部分命令可能会为您提供有用的语法建议或概述。
 
 ***
 
