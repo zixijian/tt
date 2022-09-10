@@ -2,7 +2,6 @@
 
 #nop #act {1分钟内回答以下问题} {answer 1};
 
-set wimpy 30;
 #act {你动作似乎开始有点不太灵光，但是仍然有条不紊} {yun recover};
 #act {你看起来可能有些累了} {yun recover};
 #act {你似乎十分疲惫，看来需要好好休息了} {yun recover};
@@ -42,7 +41,7 @@ set wimpy 30;
 
 #act {^目前权限} {#delay 1 {hpbrief;sc}};
 
-#act {^重新连线完毕} {#delay 1 {hp;sc}};
+#act {^重新连线完毕} {set wimpy 30;#delay 1 {hp;sc}};
 
 
 #nop slink查看mxp链接，termux调用浏览器mxp;

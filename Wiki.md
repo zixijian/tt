@@ -69,6 +69,7 @@
 |[ Mathematics ](#mathematics) 
 |[ Message ](#message)|  
 |[ Metric System ](#metric-system)
+|[ Mouse ](#mouse)
 |[ MSDP ](#msdp)
 |[ MSLP ](#mslp)|  
 |[ Nop ](#nop)|   
@@ -4212,7 +4213,7 @@ WRITE     | 保存地图到给定文件
 
 > 语法: #MAP COLOR {AVOID|BACKGROUND|EXIT|FOG|HIDE|INVIS|PATH|ROOM|USER} {COLOR CODE}
 
-为给定地图区块设置颜色。
+为给定地图字段设置颜色。
 
 使用 `#map color reset` 将颜色恢复为默认值。
 
@@ -4511,9 +4512,9 @@ ROOMWEIGHT.
 #map insert {e} {void;hide}
 ```
 
-Insert 命令对于添加名为 void room 的间隔房间很有用。
+`insert` 命令对于添加名为 void 的间隔房间很有用。
 
-房间经常重叠，通过增加房间空间，你可以延伸出出口。
+房间经常重叠，通过增加房间空间，你可以延伸出出口，也可以使用空房间来对齐房间。
 
 例如: `#map insert north void`。
 
@@ -4676,6 +4677,7 @@ EUDC 文件是概念功能。
 #split 0 1 0 -80
 #map offset 1 81 -4 -1
 ```
+
 这将在屏幕右侧显示地图，如果屏幕足够宽。
 
 如果你不需要显示对角线出口，更喜欢更紧凑的外观，你可以使用 `#map flag AsciiGraphics off`。
@@ -4817,6 +4819,7 @@ ROOMWEIGHT.
 如果你有一个湖泊作为替代路线，并且穿越水房比普通房间慢 4 倍，那么你可以将湖房的权重设置为 4.0 。
 
 如果湖宽 3 个房间，总权重是 12。如果绕着湖泊散步的权重小于 12 ，穿越湖泊权重大于 12 ，mapper 将沿着湖走一条路线。
+
 ```
 来自一位不愿扬名大佬的注释:
 
@@ -4834,7 +4837,7 @@ tt 的 map 信息本身就记录了周边房间号，
 权重用来计算 GPS 路径也很有用，
 能做马车不坐船，能穿洞不坐车，
 不同门派不同需求，
-score捕获了信息，自动修改权重即可。
+score 捕获了信息，自动修改权重即可。
 ```
 
 可以使用 `#map set roomsymbol {value}` 设置房间符号。
@@ -4890,6 +4893,8 @@ score捕获了信息，自动修改权重即可。
 如果你想在地图上而不是在 MUDs 上四处移动，使用: `#map move {direction}`。
 
 要手动删除房间，使用: `#map delete {direction}`。
+
+您可以手动创建房间：`#map dig {direction}`。
 
 **#map uninsert {exit}**
 
@@ -4998,6 +5003,8 @@ True 是任何非零数字，False 是零。
 `#if` 和 `#switch` 命令使用 `#math`。
 
 有多个命令接受整数输入也允许数学运算。
+
+浮点精度支持使用小数点 `.` 。
 
 ```
 示例：
@@ -5120,7 +5127,7 @@ d    |  1 | 整数随机骰子
 
 `==` `!=` 运算符执行正则表达式，左边的参数是字符串，右边的参数是正则表达式。
 
-例如：`"bla”==“%*a”` 将评估为 1 (true)。
+例如：`"bla"=="%*a"` 将评估为 1 (true)。
 
 另可参见: [Math](#math)，[Regexp](#regular-expressions)。
 
@@ -5128,7 +5135,7 @@ d    |  1 | 整数随机骰子
 
 > 语法: #message {listname} {on|off}
 
-没有参数将显示所有您可以切换信息状态的列表。
+没有参数将显示所有您可以切换消息状态的列表。
 
 您可以使用 `ON` 或 `OFF` 作为参数更改消息状态。
 
@@ -5157,22 +5164,147 @@ d    |  1 | 整数随机骰子
 
 另可参见：[Echo](#echo)，[Format](#format)，[Math](#math)。
 
+# Mouse
+
+要启用 xterm 鼠标跟踪，请使用 `#CONFIG MOUSE ON`。
+
+要在鼠标事件发生时查看它们，请使用 `#CONFIG MOUSE INFO`。
+
+这些信息可用于 `#event` 创建鼠标事件和 `#button` 创建带有按钮命令的按钮。
+
+可以使用 `#draw` 在屏幕上绘制可视按钮和弹出窗口。
+
+输入框允许创建用于输入处理的命名事件，可以使用 `#screen inputregion` 更改和重命名。
+
+可以使用 MSLP 协议创建链接，该协议将生成链接单击时的特定事件。
+
+另可参见：[Button](#button)，[Draw](#draw)，[Event](#event)，[MSLP](#mslp)。
+
 # MSDP
 
-MSDP 是 #port 功能的一部分。请参阅 `#help event` 附加文档，因为所有 MSDP 事件都可以作为常规事件。
+MSDP（Mud 服务器数据协议） 是 `#port` 功能的一部分。
 
-可以使用[ MSDP 协议 ](https://tintin.sourceforge.io/protocols/msdp) 查询可用的 MSDP 事件，如文档中所述。
+请参阅 `#help event` 附加文档，所有 MSDP 事件都可以作为常规事件。
 
-另可参见：[Event](#event),[Port](#port).
+可以访问[「MSDP 协议」](https://tintin.sourceforge.io/protocols/msdp) 查询可用的 MSDP 事件。
+
+MUD 服务器通常希望向 MUD 客户端发送不一定需要显示的附加数据，以及需要一种方法来识别支持带外数据的客户端。
+
+MSDP 协议旨在通过为 MUD 服务器提供透明且直接的带外协议来解决这些问题，以将变量及其值发送给 MUD 客户端（针对有问题的 MUD 可以是通用的和特定的）。使用通用变量将允许通用客户端接口脚本适用于所有 MSDP MUDs。
+
+MSDP 实现为 Telnet 选项：[RFC854](https://tintin.mudhalla.net/rfc/rfc854)、[RFC855](https://tintin.mudhalla.net/rfc/rfc855)。
+
+服务器和客户端像协商任何其他 telnet 选项一样协商 MSDP 的使用。
+
+一旦就选项的使用达成一致，就使用选项子协商在服务器和客户端之间交换信息。
+
+**服务端命令**
+
+* IAC WILL MSDP  
+--表明服务器想开启 MSDP。
+
+* IAC WONT MSDP  
+--表明服务器想关闭 MSDP。
+
+**客户端命令**
+
+* IAC DO MSDP  
+--表明客户端接受 MSDP 子协商。
+
+* IAC DONT MSDP  
+--表明客户端拒绝 MSDP 子协商。
+
+**握手协议**
+
+当客户端连接到启用 MSDP 的服务器时，服务器应发送 `IAC WILL MSDP`。
+
+客户端应该用 `IAC DO MSDP` 或 `IAC DONT MSDP` 来回应。
+
+一旦服务器收到 `IAC DO MSDP`，客户端和服务器都可以发送 MSDP 子协商。
+
+客户端不应发起协商，如果发生这种情况，服务器应遵守状态更改。
+
+为了避免触发循环，服务器不应响应来自客户端的协商，除非它正确实现了 [RFC1143](https://tintin.mudhalla.net/rfc/rfc1143.html) 中的 Q 方法。
+
+更多信息请查看 [「MSDP 协议」](https://tintin.sourceforge.io/protocols/msdp)。
+
+另可参见：[Event](#event)，[Port](#port)。
 
 # MSLP
 
-TinTin++ 支持MSLP（Mud服务器链接协议)。请参阅 `#help event` 附加文档，因为所有 MSLP 事件都可以作为常规事件使用。
+MSLP（Mud 服务器链接协议）需要启用 `#config mouse on`，并创建适当的链接事件。
 
-可以使用[ MSLP 协议 ](https://tintin.mudhalla.net/protocols/mslp) 查询可用的 MSLP 事件，如文档中所述。
+最简单的链接可以通过使用 `\e[4m` 和 `\e[24m` 标签。
 
+```
+示例：
+#substitute {\b{n|e|s|w|u|d}\b} {\e[4m%1\e[24m}
+```
 
-另可参见：[Event](#event),[Port](#port).
+这将显示 “n，e，w” 为带有下划线的 “<u>n</u>，<u>e</u>，<u>w</u>”。
+
+当点击时，将触发 `PRESSED LINK MOUSE BUTTON ONE` 事件，其中 %4 将保存链接命令，%6 将保链接名称，在简单链接的情况下将为空。
+
+```
+示例：
+#event {PRESSED LINK MOUSE BUTTON ONE} {#send {%4}}
+```
+
+请记住，如果你改变 `PRESS` 为 `DOUBLE-CLICKED` ，仅当在点击时文本没有滚动才有效。
+
+如果要创建复杂链接，请使用 OSC 代码。
+
+```
+示例：
+#sub {\bsmurf\b} {\e]68;1;;say I hate smurfs!\a\e[4m%0\e[24m}
+```
+
+如果您具有以上示例的链接事件，%4 参数将包含 'say I hate smurfs!'。
+
+```
+示例：
+#sub {\bgoblin\b} {\e]68;1;SEND;kill goblin\a\e[4m%0\e[24m}
+```
+
+注意以上示例 `;;` 已被替换为 `;SEND;`，这将命名链接。这还将生成命名事件。
+
+```
+示例：
+#event {PRESSED LINK SEND MOUSE BUTTON ONE} {#send {%4}}
+```
+
+通过命名链接，你可以更好地组织事务来替代通过同一事件干所有事。
+
+请记住，服务器同样允许使用 `\e]68;1;\a`，这使各种安全措施到位。
+
+要创建安全链接，这些链接在服务器发送时会被过滤掉，您需要使用 `#\e]68;2;\a`，然后它们会触发安全链接事件。
+
+```
+示例：
+#sub {%* tells %*} {\e]68;2;EXEC;#cursor set tell %1 \a\e[4m%0\e[24m}
+#event {PRESSED SECURE LINK EXEC MOUSE BUTTON ONE} {%4}
+```
+这将使您在单击 tells 时开始回复。
+
+```
+来自 xgg@pkuxkx 的示例：
+鼠标事件点击带有下划线的方向自动发送移动指令
+
+#nop 开启鼠标模式;
+#config mouse on;
+
+#nop 开启鼠标点击事件，点击即发送带有下划线标签的内容;
+#event {PRESSED LINK MOUSE BUTTON ONE} {#send {%4}};
+
+#nop 匹配方向替换为带有下划线标签的可点击链接;
+#sub {\b{south|north|west|east|up|down|enter|out|southeast|southwest|northeast|northwest|southup|southdown|northup|northdown|westup|westdown|eastup|eastdown}\b} {<139>\e[4m%1\e[24m<099>};
+```
+
+请参阅 `#help event` 附加文档，所有 MSLP 事件都可以作为常规事件使用。
+
+可以访问[「MSLP 协议」](https://tintin.mudhalla.net/protocols/mslp) 查询可用的 MSLP 事件。
+
+另可参见：[Event](#event)，[Port](#port)。
 
 # Nop
 

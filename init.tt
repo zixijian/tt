@@ -5,6 +5,9 @@
 #re goto.tt;
 #re colorpad.tt;
 
+#nop 加载鼠标点击下划线标签链接事件;
+#re mouse.tt;
+
 #nop 断线事件;
 #event {SESSION ACTIVATED} {
 	#if {"%0" == "gts"} {#read init.tt}
