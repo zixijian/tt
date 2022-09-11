@@ -8,6 +8,27 @@
 #event {PRESSED LINK MOUSE BUTTON ONE} {#send {%4}};
 
 #nop 匹配方向替换为带有下划线标签的可点击链接;
-#sub {\b{south|north|west|east|up|down|enter|out|southeast|southwest|northeast|northwest|southup|southdown|northup|northdown|westup|westdown|eastup|eastdown}\b} {<139>\e[4m%1\e[24m<099>};
+
+#nop 此方案会替换所有匹配的方向，容易错误替换;
+#nop #sub {\b{south|north|west|east|up|down|enter|out|southeast|southwest|northeast|northwest|southup|southdown|northup|northdown|westup|westdown|eastup|eastdown}\b} {<139>\e[4m%1\e[24m<099>};
+
+#nop 此方案速度慢，导致输出延迟 1 秒;
+#nop #action {^    这里{唯一|明显}的{出口|方向}有%*。$} {
+  #local {dir_all} {%3};
+  #list dir_list create {southeast;southwest;northeast;northwest;southup;southdown;northup;northdown;westup;westdown;eastup;eastdown;north;south;west;east;enter;out;up;down;};
+  #foreach {$dir_list[]} {dir} {
+    #replace {dir_all} {\b$dir\b} {<139>\e[4m$dir\e[24m<099>};
+  };
+  #show {    这里%1的%2有$dir_all。};
+  #line gag;
+};
+
+#nop 最优方案;
+#action  {^    这里{唯一|明显}的{出口|方向}{有|是}%*。$} {
+  #local {dir_all} {%4};
+  #replace {dir_all} {{\w+}} {<139>\e[4m&1\e[24m<099>};
+  #line ignore #show {    这里%1的%2有$dir_all。};
+  #line gag;
+}
 
 #class mouse close;

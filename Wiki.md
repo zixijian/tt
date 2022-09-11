@@ -3331,7 +3331,7 @@ macOS 终端要求在终端-> 窗口设置-> 仿真中启用 `strict vt100 keypa
 --替换所有功能  
 * colors(颜色)  
 --替换所有 TinTin 颜色代码  
-* sscapes(转义)  
+* escapes(转义)  
 --替代所有转义字符  
 * secure(安全)  
 --避开所有大括号、变量、函数和命令分隔符  
@@ -5241,7 +5241,7 @@ MSLP（Mud 服务器链接协议）需要启用 `#config mouse on`，并创建�
 #substitute {\b{n|e|s|w|u|d}\b} {\e[4m%1\e[24m}
 ```
 
-这将显示 “n，e，w” 为带有下划线的 “<u>n</u>，<u>e</u>，<u>w</u>”。
+这将显示 “n，e，w” 为带有下划线的 “<ins>n</ins>，<ins>e</ins>，<ins>w</ins>”。
 
 当点击时，将触发 `PRESSED LINK MOUSE BUTTON ONE` 事件，其中 %4 将保存链接命令，%6 将保链接名称，在简单链接的情况下将为空。
 
@@ -5297,7 +5297,12 @@ MSLP（Mud 服务器链接协议）需要启用 `#config mouse on`，并创建�
 #event {PRESSED LINK MOUSE BUTTON ONE} {#send {%4}};
 
 #nop 匹配方向替换为带有下划线标签的可点击链接;
-#sub {\b{south|north|west|east|up|down|enter|out|southeast|southwest|northeast|northwest|southup|southdown|northup|northdown|westup|westdown|eastup|eastdown}\b} {<139>\e[4m%1\e[24m<099>};
+#action  {^    这里{唯一|明显}的{出口|方向}{有|是}%*。$} {
+  #local {dir_all} {%3};
+  #replace {dir_all} {{\w+}} {<139>\e[4m&1\e[24m<099>};
+  #line ignore #show {    这里%1的%2有$dir_all。};
+  #line gag;
+}
 ```
 
 请参阅 `#help event` 附加文档，所有 MSLP 事件都可以作为常规事件使用。
@@ -5308,30 +5313,70 @@ MSLP（Mud 服务器链接协议）需要启用 `#config mouse on`，并创建�
 
 # Nop
 
-> 语法: #nop
+> 语法: #nop {whatever}
 
-这个命令 “nop” 意味着 “no operation”，如果你不想做一件事，它会很有用。
+`#Nop` 是 “no operation” 的简称，有助于在脚本中留下注释。
 
-> 示例: #act {&} {#nop} {0}
+任何 `#nop` 后面到分号 `;` 之前的文本都会被忽略。
 
-一些 MUDs 允许你使用 “&” 来分离命令，同时仍然允许玩家在 “say” 或 “tll” 中使用它。这将允许一些狡猾的玩家在没有这种保护的情况下滥用你的触发器。因此，如果消息包含 “&” 字符，则不会触发易受攻击的操作，因为一次只允许触发 1 个操作。
+不应将 `{}` 符号放到注释内容里面，除非是一对闭合的大括号。
 
-在脚本中留下注释也可以使用 #nop。
+注：通过使用大括号，您可以在脚本文件中注释掉多行代码。每一行仍需 `;` 结尾。
 
-> 示例: #nop {这是一条注释。}
+```
+示例: 
+#act {&} {#nop}
+```
+
+一些 MUDs 允许你使用 “&” 来分离命令，同时仍然允许玩家在 “say” 或 “tell” 中使用它。
+
+这将允许一些狡猾的玩家在没有保护的情况下滥用你的触发器。
+
+因此，如果消息包含 “&” 字符，则不会触发易受攻击的操作，因为一次只允许触发 1 个操作。
+
+用于注释掉整个触发，尤其是包含大量内容的可以使用 `/* 文本 */`。
+
+```
+示例：
+
+#nop 这是我的脚本文件开头;
+
+#nop {
+  bli;
+  bla;
+  blo;
+};
+
+/*
+脚本文件 written by xgg
+2022.9.11 
+*/
+```
+
+如果想忽略事件触发消息，你可以在命令部分使用 `#nop` 或 `#0`。
+
+```
+示例：
+#event {GAG SESSION ACTIVATED} {#0};
+```
+
+另可参见：[Read](#read)。
 
 # Parse
 
 > 语法: #parse {string} {variable} {commands}
 
-Parse 命令就像一个简化的循环。TinTin将遍历访问每个字符的给定字符串，该字符串将存储在给定变量中，可以在命令部分使用。
+`#Parse` 命令就像一个简化的循环。
+
+Parse 将遍历访问给定字符串的每个字符，该字符存储在给定变量中，并可以在命令部分使用。
+
 ```
 示例: 
 #parse {hello} {character} {say $character!}
-这等于：
-say h!;say e!;say l!;say l!;say o!
+--这等于：say h!;say e!;say l!;say l!;say o!
 ```
-虽然通常使用有限，但是parse可以用于一些实用的东西，比如使用 . 作为快速行走捷径。
+
+虽然很少使用，但是 parse 仍然相当实用，比如使用 `.` 快速行走。
 
 ```
 示例:
@@ -5360,72 +5405,152 @@ say h!;say e!;say l!;say l!;say o!
         }
 }
 ```
-另可参见: [Break](#break), [Continue](#continue), [Foreach](#foreach), [List](#list), [Loop](#loop), [Repeat](#repeat), [Return](#return) and [While](#while).
+
+还可以作出一些有趣的功能，比如给每个字符随机上色。
+
+```
+来自 xgg@pkuxkx 的示例：
+
+#function bc0 {
+   #local color_r {};
+   #parse %1 char {
+     #math a {1d9-1};
+     #math b {1d9};
+     #math c {1d9};
+     #local ccolor {<$a$b$c>};
+     #local color_r {$color_r$ccolor$char};
+   };
+   #return $color_r;
+};
+#echo {@bc0{「大慈大悲入凡尘，普度苍生怜世人」}};
+
+--上述示例还用到了循环变量拼接，这也是相当实用的技巧。
+```
+
+另可参见: [Break](#break)，[Continue](#continue)，[Foreach](#foreach)，[List](#list)，[Loop](#loop)，[Repeat](#repeat)，[Return](#return)，[While](#while)。
 
 # Path
 
-> 语法:   
-#path {del|end|ins|load|map|new|save|run|walk} {argument}
+> 语法: #path {option} {argument}
 
+`#Path` 命令是一种快速简单的方法，可以记录您的移动，并创建一个命令列表，以便从一个位置移动到另一个位置并返回。
 
-Path 命令是一种快速简单的方法，可以记录您的移动，并创建一个命令列表，以便从一个位置移动到另一个位置并返回。要获得更高级的映射程序，请查看 [#map](#map) 命令。
+要使用更高级的地图程序，请查看 [「Map」](#map) 命令。
 
-**#path {new}**
+使用没有参数的 `#path` ，将列出可用选项及其介绍：
 
-此命令启动路径跟踪模式。如果输入移动命令 (用 #pathdir 列出)，它将被添加到路径中。
+选项    | 说明
+:---    | :---
+create  | 将会清除路径并开始记录新路径。
+delete  | 移除最后的移动。
+describe| 描述路径信息和当前位置。
+destroy | 将会清除路径并开停止记录路径。
+get     | 将得到长度或位置。
+goto    | 转到开始、结束或给定位置索引。
+insert  | 添加给定参数到路径。
+load    | 加载指定变量作为新路径。
+map     | 显示地图和当前位置。
+move    | 向前或向后移动位置。如果给出了一个数字,通过给定的步数改变位置。
+run     | 执行或延迟执行当前路径 (以秒为单位) 。
+save    | 保存路径到变量，必须指定方向 'forward' 或 'backward'。
+start   | 开始路径记录。
+stop    | 停止/暂停路径行走。
+undo    | 撤销上一步。
+swap    | 切换向前和向后路径。
+unzip   | 加载给定的快速行走作为新路径。
+walk    | 向前或向后走一步。
+zip     | 把路径变成快速行走。
+
+***
+
+以下是部分选项的详细说明：
+
+**#path {new|create}**
+
+此命令启动路径跟踪模式。
+
+如果输入移动命令 (用 `#pathdir` 列出)，它将被添加到路径中。
 
 **#path {end}**
 
-使用 #path new 启动路径跟踪后，您可以使用 #path end 停止。这不会删除创建的路径，尽管再次键入 #path new 会。
+使用 `#path new` 启动路径跟踪后，您可以使用 `#path end` 停止。
+
+这不会删除创建的路径，尽管再次键入 `#path new` 会。
 
 **#path {map}**
 
-此命令显示到目前为止创建的路径，它显示命令列表，而不是图形地图。
+此命令用列表显示到目前为止创建的路径和当前位置。
 
 **#path {ins} {forward command} {backward command}**
 
-有时当你从这里走到那里时，你需要打开门，使用这个选项，你可以将命令插入你正在创建的路径中。当创建从 A 到 B 的路径时，也会自动创建从 B 到 A 的向后路径。因此，第二个参数是为向后路径插入的命令。
+有时当你移动时需要打开门，使用这个选项可以将命令插入你正在创建的路径中。
+
+当创建从 A 到 B 的路径时，也会自动创建从 B 到 A 的向后路径。
+
+因此，第二个参数是为向后路径插入的命令。
+
 ```
 示例: 
-#path ins {open north} {};n;
-#path ins {} {open south}
+#path ins {unlock n;open n} {unlock s;open s}
 ```
+
 **#path {del}**
 
-移除路径中的最后一个移动。<br>
-这在撞墙时十分有用。
+移除路径中的最后一个移动，这在撞墙时十分有用。
+
 ```
 示例: 
 #act {这个方向没有出路} {#path del}
 ```
+
 **#path {save} {forward|backward} {variable}**
 
-此命令将创建的路径保存到提供的变量中，您必须指定是向前还是向后保存路径。你可以用 f 和 b。如果使用: #path save f AtoB，您可以使用: $AtoB 执行保存的路径。
+此命令将创建的路径保存到提供的变量中，您必须指定是向前还是向后保存路径。
+
+你可以用 f 和 b。
+
+如果使用: `#path save f A2B`，您可以使用: `$A2B` 执行保存的路径。
+
 ```
 示例: 
 #path new;n;n;n;e;e;e;
-#path save backward return;
-$return
+#path save f A2B;
+$A2B
 ```
+
 **#path {load} {variable}**
 
 此命令将加载任何给定的变量作为路径，并且不需要与移动相关。
 
 **#path {run} {delay}**
 
-要使此命令工作，您必须创建或加载了路径。执行时，路径中的所有命令都会被删除并立即执行，除非您提供可选的延迟参数，以延迟给定浮点秒数的每个命令之间的执行。
+要使此命令工作，您必须创建或加载了路径。
 
-> 示例: #path run 0.5
+执行时，路径中的所有命令都会被删除并立即执行，延迟参数是可选的，每个命令执行将延迟给定的时间。
+
+例如: `#path run 0.5`。
+
+**#path {stop}**
+
+停止路径行走，路径没有被删除，可以继续行走。
 
 **#path {walk} {forward|backward}**
 
-要使此命令工作，您必须创建或加载了路径。执行时，路径队列中的下一个命令将被删除并执行。如果到达路径的末尾，这将触发路径事件的末尾。
+要使此命令工作，您必须创建或加载了路径。
+
+执行时，路径队列中的下一个命令将被删除并执行。
+
+如果到达路径的末尾，将触发到达路径末尾的事件。
+
 ```
 示例: 
 #tick {slowwalk} {#walk f} {0.5};
 #event {END OF PATH} {#untick slowwalk}
 ```
-另可参见: [Map](#map) and [Pathdir](#pathdir).
+
+***
+
+另可参见: [Map](#map)，[Pathdir](#pathdir)。
 
 # Pathdir
 

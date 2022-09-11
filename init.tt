@@ -6,7 +6,13 @@
 #re colorpad.tt;
 
 #nop 加载鼠标点击下划线标签链接事件;
-#re mouse.tt;
+#alias mlo {
+  #read mouse.tt;
+}:
+#alias mld {
+  #class mouse kill;
+};
+mlo;
 
 #nop 断线事件;
 #event {SESSION ACTIVATED} {
