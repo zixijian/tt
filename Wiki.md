@@ -76,12 +76,11 @@
 |[ Parse ](#parse)
 |[ Path ](#path)
 |[ Pathdir ](#pathdir)|  
-|[ PCRE ](##regular-expressions)
+|[ PCRE ](#pcre)
 |[ Port ](#port)
 |[ Prompt ](#prompt)|  
 |[ Read ](#read)
-|[ Regex ](#regex)
-|[ Regular Expressions ](#regular-expressions)|  
+|[ Regexp ](#regexp)
 |[ Repeat ](#repeat)
 |[ Replace ](#replace)
 |[ Return ](#return)
@@ -118,9 +117,11 @@
 
 ## 关于 TinTin++ Mud 客户端
 
-TinTin++ (或称 tt++) 是适用于 Android,iOS,Linux,macOS,Windows 的 `free(自由)` Mud 客户端。  
+TinTin++ (或称 tt++) 是 `Free(自由)` Mud 客户端。
 
-TinTin ++ 具有高级自动程序、脚本语言和 VT100 接口。  
+适用于 Android,iOS,Linux,macOS,Windows 等平台。  
+
+具有高级自动程序、脚本语言和 VT100 接口。  
 
 WinTin++ Windows 桌面程序适用于不使用 Cygwin 的用户。
 
@@ -138,7 +139,7 @@ TinTin++ 还提供内部帮助文件，可通过 `#help` 命令访问。
 
 有多个 Mud 客户端使用 tt++ 脚本语言，因此您可能已经熟悉使用另一个 Mud 客户端的一些命令。  
 
-对于错误报告、问题、请求和建议，您可以访问 [「Github论坛」](https://github.com/scandum/tintin/discussions)或[「Discord」](https://discord.gg/gv7a37n)频道。
+对于错误报告、问题、请求和建议，您可以访问 [「Github 论坛」](https://github.com/scandum/tintin/discussions)或[「Discord 频道」](https://discord.gg/gv7a37n)。
 
 ## 安装 TinTin++ Mud 客户端
 
@@ -236,27 +237,31 @@ TinTin++ 启动时可附加下列参数：
 所有 TinTin++ 命令都以 `#` 开头(可以用 `#config` 来改变)。  
 
 ```
-示例: #help   
-    -- #help是客户端命令，不会发送到服务端。
+示例：
+#help   
+--#help 是客户端命令，不会发送到服务端。
 ```
 
 TinTin++ 的所有命令可以缩写。  
 
 ```
-示例: #he   
-    -- #he 等效于 #help。
+示例：
+#he   
+--#he 等效于 #help。
 ```
 
 所有命令都可以用 `;` 分隔。
+
 ```
-示例: w;u;look;say dzp我要买药！   
-    -- 递归执行这四条命令。
+示例：
+w;u;look;say dzp我要买药！   
+--递归执行这四条命令。
 ```
 
 有三种方法可以转义符号 `;` 。
 ```
 示例: \say Hello ;) 
-用符号'\'开头的行不会被TinTin++解析。
+用符号'\'开头的行不会被 TinTin++ 解析。
 
 示例: say Hello \;)
 不解析'\'后面的字符。
@@ -277,10 +282,11 @@ TinTin++ 的所有命令可以缩写。
 默认会话是 `#gts`，可以向其他会话发送指令：`#gts #echo hi`。
 
 您可以通过键入: `#session` 来获得所有会话列表。  
+
 ```
--- 当前活动会话标记为 (active)。    
--- Snooped 会话标记为 (snooped)。  
--- MCCP 会话 (MUDs 客户端压缩协议) 标记为 (mccp)。
+--当前活动会话标记为 (active)。    
+--Snooped 会话标记为 (snooped)。  
+--MCCP 会话 (MUDs 客户端压缩协议) 标记为 (mccp)。
 ```
 
 ## 分屏
@@ -301,7 +307,9 @@ TinTin++ 的所有命令可以缩写。
 `#Alias(别名)` 命令的语法几乎和 `csh` 中的别名一样。  
 
 使用 `#alias` 命令定义别名。  
+
 变量 %0，%1..%9 包含别名命令的参数，如下所示:  
+
 %0 变量包含所有参数。  
 %1 变量包含第 1 个参数。  
 ....  
@@ -309,26 +317,25 @@ TinTin++ 的所有命令可以缩写。
 
 ```
 示例: #alias nice helo Mr %1
-如果别右侧没有定义的变量，那么别名指令后面的所有参数都将附加到命令字符串中。
+--如果别右侧没有定义的变量，那么别名指令后面的所有参数都将附加到命令字符串中。
 ```
 
 ```
 示例:  #alias ff cast 'fireball'
-'ff dzp' 等效于: cast 'fireball' dzp
+--'ff dzp' 等效于: cast 'fireball' dzp
 ```
 
-```
 如果希望别名执行更多命令，则必须使用大括号。
-示例: #alias ws {wake;stand}
-```
+
+例如: `#alias ws {wake;stand}`。
 
 要删除别名，请使用 `#unalias` 命令。
 
+TinTin++ 不检查递归别名！您可以通过转义整行或者使用 `#send` 命令来避免递归。
+
 ```
-TinTin++ 不检查递归别名！您可以通过转义整行来避免递归。
 示例: #alias put \put %1 in %2
 
-或者使用 send 命令。
 示例: #send put %1 in %2
 ```
 
@@ -338,7 +345,9 @@ TinTin++ 不检查递归别名！您可以通过转义整行来避免递归。
 语法: #action {action-text} {commands}
 
 使用此命令定义当屏幕上出现特定文本时要执行的触发。  
+
 在 `action-text` 中，有 99 个变量可以用作匹配。  
+
 这些变量是 %1，%2...%9，%10...%99。  
 
 ```
@@ -348,10 +357,10 @@ TinTin++ 不检查递归别名！您可以通过转义整行来避免递归。
 #action {%1想要杀了你。} {kill %1}
 
 #action {%1告诉你'%2'} {tell dzp %1告诉我'%2'}
--- 转发消息给 dzp。
+--转发消息给 dzp。
 
-#action {告诉你} #bell 
--- 当你得到一个通知时终端发出嘟嘟声和振动提醒。
+#action {%1告诉你%2} {#bell }
+--当你得到一个通知时终端发出嘟嘟声和振动提醒。
 ```
 
 如果键入 “#ignore action on”，  
@@ -374,10 +383,10 @@ TinTin++ 不检查递归别名！您可以通过转义整行来避免递归。
 ```
 示例:
 #high {通脉药} {light yellow}
--- 为词语"脉药标"记亮黄色。
+--为词语"脉药标"记亮黄色。
 
 #high {%1通脉药%2} {light yellow} 
--- 给包含词语"通脉药"的整行标记亮黄色。
+--给包含词语"通脉药"的整行标记亮黄色。
 ```
 
 可以使用 `#unhigh` 删除高亮显示。
@@ -389,17 +398,16 @@ TinTin++ 不检查递归别名！您可以通过转义整行来避免递归。
 ```
 示例: 
 ssw2n 
--- 相当于南、南、西、北、北
+--相当于南、南、西、北、北
 ```
 
 如果您在键入一些仅由这些字母组成的命令时遇到问题，请键入大写字母。  
 
 例如：当使用检查新闻命令 news，或输入 new 作为你的名字时。
 
-```
 您必须在设置中启用快速行走才能使用本功能。
-指令：#config speedwalk on/off
-```
+
+指令：`#config speedwalk on/off`。
 
 ## 定时器
 
@@ -433,10 +441,10 @@ ssw2n
 
 ```
 #read <文件名>
--- 读取并执行文件。
+--读取并执行文件。
 
 #write <文件名>
--- 将当前会话已知的所有触发/别名/替换等写入文件。
+--将当前会话已知的所有触发/别名/替换等写入文件。
 ```
 
 ## 重复命令
@@ -447,10 +455,10 @@ ssw2n
 ```
 例子:
 #5 eat yao
--- 如果你受伤了，多吃药可以快速恢复伤势。
+--如果你受伤了，多吃药可以快速恢复伤势。
 
 #10 {buy yao;eat yao}
--- 重复这两个命令 10 次。
+--重复这两个命令 10 次。
 ```
 
 ## 历史回溯
@@ -471,25 +479,29 @@ Ctrl-r -- 组合键进入反向历史搜索模式。
 
 ```
 Path 的子命令:
+
 #path new 
--- 启动路径模式，重置队列。
+--启动路径记录，重置队列。
 #path end 
--- 停止路径模式。
+--停止路径记录。
 #path map 
--- 显示路径。
+--显示路径。
 #path ins {forward} {backward} 
--- 将命令插入队列。
+--将命令插入队列。
 #path del 
--- 删除路径中的最后一步。
+--删除路径中的最后一步。
 #path save {f|b} {变量} 
--- 将路径保存到给定的变量。
+--将路径保存到给定的变量。
 #path load {alias} 
--- 将路径别名加载到映射队列中。
+--将路径别名加载到路径队列中。
 #path walk {forward|backward} 
--- 按照队列路径向前或向后走 1 步。
+--按照队列路径向前或向后走 1 步。
 #path run <n>
--- 在已加载路径的情况下，每 n 秒执行一个路径指令。
+--在已加载路径的情况下，每 n 秒执行一个路径指令。
+#path stop
+--停止记录路径，行走时则停止行走。
 ```
+
 ```
 示例：
 #act {这个方向没有出路} {#path del}  
@@ -515,22 +527,22 @@ TinTin++ 有一个强大的高度可配置的自动地图绘制器。
 地图命令：
 
 > #map create  
--- 创建地图。
+--创建地图。
 
 > #map goto 1  
 --转到地图中默认创建的第一个房间。
 
 > #map map  
--- 显示地图。
+--显示地图。
 
 > #map undo  
 --撤消上次对地图的更改。
 
 > #map write <filename>  
--- 将地图保存到文件中。
+--将地图保存到文件中。
 
 > #map read <filename>  
--- 从文件加载地图。
+--从文件加载地图。
 
 还有许多其他的地图命令选项。`#help map` 将介绍所有关于 `#map` 命令的信息。  
 
@@ -573,7 +585,7 @@ TinTin++ 有一个强大的高度可配置的自动地图绘制器。
 
 从文本消息中替换 %1-%99 个变量，并可以在触发器的命令部分使用。  
 
-优先级部分是可选的，用来确定操作的优先级，默认为 5。
+优先级部分是可选的，用来确定触发的优先级，默认为 5。
 
 ```
 %1-%99 个变量针对当前设置触发器有效，
@@ -602,22 +614,22 @@ __注意：%0 永远不应用于触发器（会导致所有内容被响应）。
 {#showme {--用粗体白色显示: %1}}
 ```
 
-有关模式匹配的信息，请参见正则表达式 [Regular Expressions](#regular-expressions) 一节。
+有关模式匹配的信息，请参见正则表达式 [「PCRE」](#pcre) 一节。
 
 ```
 示例: 
 #action {%1告诉你'%2'} {tell %1 我暂时不在.}
 ```
 
-`#Showme` 命令可以被触发器响应。  
-如果你不想让 `#showme` 被触发器响应：  
-```
-#line ignore #showme {text}
-```
+`#showme` 命令可以被触发器响应，如果你不想被触发器响应：  
+
+使用：`#line ignore #showme {text}`。
 
 触发器按字母顺序排序，一次只能触发一个。  
 
-要更改顺序，您可以为触发器分配优先级，默认为 5，数字越小，优先级越高，优先级可以是浮点数字。
+要更改触发顺序，您可以为触发器分配优先级。
+
+优先级默认为 5，数字越小，优先级越高，可以是浮点数字。
 
 ```
 若要使一行输出触发两次，
@@ -636,13 +648,14 @@ RECEIVED AAA
 ```
 
 要删除以 `%*` 为消息的触发器，请使用：
+
 ```
 #unaction {%%*}
 或
 #unaction {\%*}
 ```
 
-或者，您可以将动作封装在分类 `#class` 中，然后在不再需要触发器动作时清除该分类。
+或者，您可以将触发封装在分类 `#class` 中，然后在不再需要触发器时清除该分类。
 
 注: 您可以使用 `#unaction` 命令删除触发器。  
 
@@ -653,7 +666,9 @@ RECEIVED AAA
 > 语法：#alias {名称} {命令} {优先级}
 
 `#Alias` 别名命令可用于缩短长时间或经常使用的命令。  
+
 当使用别名时，%1-%99 变量从参数中被替换，表示第 1 到 99 个单词，这些单词可以在别名的命令部分使用。  
+
 优先级部分是可选的，并用来确定别名的优先级，默认为 5。
 
 如果使用 %0，它将包含所有参数，如果命令部分只存在一个单词，则变量会自动附加到末尾。
@@ -665,6 +680,7 @@ RECEIVED AAA
 ```
 
 您可以使用别名的“名称”部分中的变量创建更复杂的别名，该部分将覆盖默认变量处理。
+
 ```
 示例: 
 #alias {k %1 with %2} {
@@ -679,23 +695,28 @@ k blue smurf with battle axe
 ```
 
 若要定义与所有用户输入内容相匹配的别名，请使用 `%*` 作为名称。
+
 ```
 示例: 
 #alias {%*} {#showme You Wrote:%0}
 ```
 
 别名按字母顺序排序，一次只能触发一个别名。  
-要更改顺序，您可以为别名分配优先级，默认为 5，数字越小，优先级越高，优先级可以是浮点数字。
+
+要更改顺序，您可以为别名分配优先级。
+
+优先级默认为 5，数字越小，优先级越高，可以是浮点数字。
 
 注: 您可以使用 `#unalias` 命令删除别名。
 
 要删除以 %* 为名称的别名，请使用：  
+
 ```
 #unalias {%%*} 
 或 
 #unalias {\%*}。
 ```
-或者，您可以将别名包装在分类 `#class` 中，然后在不再需要别名时清除该类。
+或者，您可以将别名封装在分类 `#class` 中，然后在不再需要别名时清除该类。
 
 另可参见: [Cursor](#cursor)， [History](#history)，[Keypad](#keypad)， [Macro](#macro)， [Speedwalk](#speedwalk)，[Tab](#tab)。
 
@@ -1258,7 +1279,7 @@ DND 代表 “不打扰”，此命令切换 DND 状态。启用后，所有新�
 
 如果颜色代码超出您配置的颜色模式，它将会降级到最接近的匹配项。
 
-另可参见: [Escape Codes](#escape-codes)， [Mathematics](#mathematics)，[Regular Expressions](#regular-expressions)。
+另可参见: [Escape Codes](#escape-codes)， [Mathematics](#mathematics)，[PCRE](#pcre)。
 
 # Commands
 
@@ -1904,6 +1925,11 @@ VERTICAL|如果可能的话，将垂直绘制。
 #echo {The current date is %t.} {%Y-%m-%d %H:%M:%S}
 #echo {[%38s][%-38s]} {Hello World} {Hello World}
 #echo {{this is %s on the top row} {1}} {printed}
+
+示例：
+#echo {%c%h} {light green} {【逍遥行】}
+--这将用亮绿色显示被 # 填充满的标题。
+##############【逍遥行】##############
 ```
 另可参见: [Buffer](#buffer)，[Grep](#grep)，[Showme](#showme)。
 
@@ -2107,7 +2133,7 @@ hello xgg
 你说道：「dzp: hello xgg」
 ```
 
-另可参见: [Characters](#characters)，[Colors](#colors)，[Coordinates](#coordinates)，[Mathematics](#mathematics)，[Regular Expressions](#regular-expressions)。
+另可参见: [Characters](#characters)，[Colors](#colors)，[Coordinates](#coordinates)，[Mathematics](#mathematics)，[PCRE](#pcre)。
 
 # Event
 
@@ -2753,6 +2779,11 @@ epoch 就是 E 纪元，也称为 Unix 纪元。
 示例：
 #format {test} {%%} 
 --一个 % 字符
+
+示例：
+#echo {%c%h} {light green} {【逍遥行】};
+--这将用亮绿色显示被 # 填充满的标题。
+##############【逍遥行】##############
 ```
 
 另可参见: [Cat](#cat)，[Echo](#echo)，[Function](#function)，[Local](#local)，[Math](#math)，[Replace](#replace)，[Script](#script)，[Time](#time)，[Variable](#variable)。
@@ -2835,7 +2866,7 @@ epoch 就是 E 纪元，也称为 Unix 纪元。
 
 在屏幕上消除任何包含字符串的行的显示。
 
-有关模式匹配的信息，请参见正则表达式[ Regular Expressions ](#regular-expressions)一节。
+有关模式匹配的信息，请参见正则表达式 [「PCRE」](#pcre) 一节。
 
 ```
 示例: 
@@ -5129,7 +5160,7 @@ d    |  1 | 整数随机骰子
 
 例如：`"bla"=="%*a"` 将评估为 1 (true)。
 
-另可参见: [Math](#math)，[Regexp](#regular-expressions)。
+另可参见: [Math](#math)，[PCRE](#pcre)，[Regexp](#regexp)。
 
 # Message
 
@@ -5300,7 +5331,7 @@ MSLP（Mud 服务器链接协议）需要启用 `#config mouse on`，并创建�
 #action  {^    这里{唯一|明显}的{出口|方向}{有|是}%*。$} {
   #local {dir_all} {%3};
   #replace {dir_all} {{\w+}} {<139>\e[4m&1\e[24m<099>};
-  #line ignore #show {    这里%1的%2有$dir_all。};
+  #line ignore #show {    这里%1的%2%3$dir_all。};
   #line gag;
 }
 ```
@@ -5433,7 +5464,7 @@ Parse 将遍历访问给定字符串的每个字符，该字符存储在给定�
 
 > 语法: #path {option} {argument}
 
-`#Path` 命令是一种快速简单的方法，可以记录您的移动，并创建一个命令列表，以便从一个位置移动到另一个位置并返回。
+`#Path` 命令是一种可以快速简单地记录您的移动的方法，并创建一个命令列表，以便从一个位置移动到另一个位置并返回。
 
 要使用更高级的地图程序，请查看 [「Map」](#map) 命令。
 
@@ -5453,8 +5484,8 @@ map     | 显示地图和当前位置。
 move    | 向前或向后移动位置。如果给出了一个数字,通过给定的步数改变位置。
 run     | 执行或延迟执行当前路径 (以秒为单位) 。
 save    | 保存路径到变量，必须指定方向 'forward' 或 'backward'。
-start   | 开始路径记录。
-stop    | 停止/暂停路径行走。
+start   | 开始记录路径。
+stop    | 停止记录路径，行走时则停止行走。
 undo    | 撤销上一步。
 swap    | 切换向前和向后路径。
 unzip   | 加载给定的快速行走作为新路径。
@@ -5494,6 +5525,12 @@ zip     | 把路径变成快速行走。
 #path ins {unlock n;open n} {unlock s;open s}
 ```
 
+没有简单的方法在路径的开头插入。
+
+您可以使用 `#path save`，更新变量，然后使用 `#path load`。
+
+或者使用 `#path swap`，`#path insert`，然后再次使用 `#path swap`。
+
 **#path {del}**
 
 移除路径中的最后一个移动，这在撞墙时十分有用。
@@ -5530,9 +5567,13 @@ $A2B
 
 例如: `#path run 0.5`。
 
+**#path {start}**
+
+开始记录路径。
+
 **#path {stop}**
 
-停止路径行走，路径没有被删除，可以继续行走。
+停止记录路径，行走时则停止行走，路径没有被删除，可以继续行走。
 
 **#path {walk} {forward|backward}**
 
@@ -5540,7 +5581,7 @@ $A2B
 
 执行时，路径队列中的下一个命令将被删除并执行。
 
-如果到达路径的末尾，将触发到达路径末尾的事件。
+如果到达路径的末尾，将触发到达路径末尾的特定事件。
 
 ```
 示例: 
@@ -5554,36 +5595,344 @@ $A2B
 
 # Pathdir
 
-> 语法: #pathdir {forward direction} {backward direction} {coord}
+> 语法: #pathdir {dir} {reversed dir} {coord}
 
-默认情况下，TinTin设置了最常用的移动命令，这意味着你通常不必费心处理路径。#Path 和 #map 命令使用路径。
+默认情况下，TinTin 设置了最常用的移动命令，这意味着你通常不必费心路径方向。
 
-第一个参数是方向，第二个参数是相反的方向。north的反方向是south等。
+`#path` 和 `#map` 命令使用路径方向。
 
-第三个参数是空间坐标。一般来说，每个基数方向都应该有一个唯一的值，该值是 (例如 1 、 2 、 4 、 8 、 16 、 32 、 64 等) 2的幂。复合方向除外，复合方向的值应为每个组件方向的值之和。例如，如果 “n”值是 1，而 “e” 是 2，那么你 “ne” 的值是 3 (1+2)。#Map 功能工作需要此值。
+第一个参数是方向，第二个参数是相反的方向。
+
+north 的反方向是 south 等。
+
+第三个参数是空间坐标。
+
+一般来说，每个基数方向都应该有一个唯一的值，该值是 2 的幂。
+
+例如：'n' 1，'e' 2，'s' 4，'w' '8'，'u' 16，'d' 32。
+
+复合方向除外，复合方向的值应为每个组件方向的值之和。
+
+例如，如果 “n” 值是 1，“w” 是 8，那么你 “nw” 的值是 9 (1+8)。
+
+`#map` 功能工作需要此值。
+
+示例: `#pathdir {ue} {dw} {18}`。
+
+在上面的例子中，18 是 16(u) 和 2(e) 的总和。
+
+当你键入 `ue` 时，一旦设置，地图程序就知道你在向上和向东移动。
+
+请记住，您还必须设置映射程序的反向 {dw} {ue} {40} 路径才能正常工作。
+
+注意: 您可以使用 `#unpathdir` 命令删除路径方向。
+
+如果你的 MUDs 没有使用 ne se sw nw (默认设置)，你可以使用 `#unpath ne se sw nw` 来移除它们。
+
 
 ```
-来自xgg@pkuxk的说明：
-自定义命令只能是1-63之间的值。
-比如enter，out。
+来自 xgg@pkuxkx 的说明：
+自定义命令只能是 1-63 之间的值。
+比如：enter，out。
+
+#PATHDIR         {n}  {s}  {1}
+#PATHDIR         {e}  {w}  {2}
+#PATHDIR         {s}  {n}  {4}
+#PATHDIR         {w}  {e}  {8}
+#PATHDIR         {u}  {d}  {16}
+#PATHDIR         {d}  {u}  {32}
+#PATHDIR         {ne} {sw} {3}
+#PATHDIR         {se} {nw} {6}
+#PATHDIR         {nw} {se} {9}
+#PATHDIR         {sw} {ne} {12}
+#PATHDIR         {nu} {sd} {17}
+#PATHDIR         {eu} {wd} {18}
+#PATHDIR         {su} {nd} {20}
+#PATHDIR         {wu} {ed} {24}
+#PATHDIR         {nd} {su} {33}
+#PATHDIR         {ed} {wu} {34}
+#PATHDIR         {sd} {nu} {36}
+#PATHDIR         {wd} {eu} {40}
+#nop 自定义命令范围 1-63;
+#PATHDIR         {out} {enter} {61}
+#PATHDIR         {enter} {out} {62}
 ```
-> 示例: #pathdir {ue} {dw} {18}
 
-在上面的例子中，18 是 16(u) 和 2(e) 的总和。当你键入 ue 时，一旦设置，映射程序就知道你在向上和向东移动。请记住，您还必须设置映射程序的反向 {dw} {ue} {40} 路径才能正常工作。
+另可参见: [Map](#map)，[Path](#path)。
 
-注意: 您可以使用 #unpathdir 命令删除路径。如果你的MUDs没有使用 ne se sw nw存在 (默认设置)，你可以使用 #unpath ne se sw nw 来移除它们。
+# PCRE
 
-另可参见: [Map](#map) and [Path](#path).
+Regular Expressions、Regex 或 Regexp 是定义搜索模式的字符序列。
+
+自从 1980 年以后，就有了编写正则表达式的不同语法，其中使用最广泛的是 POSIX 语法和类似但更高级的 Perl 标准。
+
+TinTin++ 支持被称为 PCRE (Perl 兼容正则表达式) 的 Perl 标准。
+
+正则表达式是 TinTin++ 的一个组成部分，但是请记住，TinTin 不允许直接使用正则表达式, 相反，它使用更简单的中间语法，当需要时，它仍然允许更复杂的表达式。
+
+以下命令利用正则表达式: action, alias, elseif, gag, grep, highlight, if, kill, local, math, prompt, regexp, replace, substitute, switch, variable, while。
+
+其他几个命令以次要的方式使用正则表达式。
+
+幸运的是，基础知识非常容易学习。
+
+**TinTin++ Regular Expression**
+
+正则表达式有以下支持。
+
+```
+^ 匹配行首。
+$ 匹配行尾。
+\ 转义字符。
+
+%1-%99 匹配任意文本并保存在相应索引中。
+%0 匹配所有文本。
+{ } 嵌入与 perl 兼容的正则表达式，存储匹配项。
+%!{ } 嵌入与 perl 兼容的正则表达式，不存储匹配项。
+[ ] . + | ( ) ? * 等符号除非在大括号内使用，否则被视为普通文本。
+请记住，除非使用 %!{}，否则 {} 会自动替换为 ()。
+```
+
+正则  | 描述                       | POSIX
+:---  |:---                     |:---
+\%d	  | 匹配零到任意量的数字       | ([0-9]*?)
+\%D	 | 匹配零到任意数量的非数字    | ([^0-9]*?)
+\%i	 | 匹配不区分大小写           | (?i)
+\%I  	| 匹配区分大小写(默认)       | (?-i)
+\%s   | 匹配零到任意数量的空格     |	 ([\r\n\t ]*?)
+\%S  	| 匹配零到任意数量的非空格    |	 ([^\r\n\t ]*?)
+\%w   | 	匹配零到任意数量的单词字符  | ([A-Za-z0-9_]*?)
+\%W   |	 匹配零到任意数量的非单词字符 | ([^A-Za-z0-9_]*?)
+\%?	 | 匹配 0 个或 1 个字符       | (.??)
+\%. 	 | 匹配一个字符               |	(.)
+\%+	 | 匹配一个到与任意数量的字符   | (.+?)
+\%\*	 | 匹配零到任意数量的字符      | (.*?)
+
+要匹配四个空格：`%+4s`。
+
+**Variables**
+
+如果在触发器中使用 %1 执行匹配，则匹配到的字符串存储在 %1 变量中，该变量可用于触发器主体部分。
+
+```
+示例：
+#act {%1 says 'Tickle me'} {tickle %1}
+```
+
+如果使用 %2，则匹配存储在 %2 中，以此类推。
+
+如果使用未编号的匹配，如 %* 或  %S，则在最后使用的索引处递增 1。
+
+```
+示例：
+#act {%3 says '%*'} {
+  #if {"%4" == "Tickle me"} {
+     tickle %3
+  }
+}
+```
+
+最大变量索引为 99。
+
+如果以 %* 在开头触发，匹配项将存储在 %1 中。
+
+当在触发器主体内永远不应使用 %0，%0 包含匹配的字符串的所有部分。
+
+要防止存储匹配项，请使用 %!* 、 %!w 等。
+
+**Perl Compatible Regular Expressions**
+
+您可以使用大括号 `{}` 嵌入 PCRE (Perl 兼容正则表达式)，除非使用 `%!{}`，否则这些大括号将被 `()` 替换。
+
+或者，您可以使用 `|` 字符在 PCRE 中分离替代方案。
+
+```
+示例: 
+#act {%* scratches {his|her|its} butt.} {
+  mutter Someone should wash %2 hands..
+}
+
+示例：
+#action  {^    这里{唯一|明显}的{出口|方向}{有|是}%*。$} {
+  #local {dir_all} {%4};
+  #replace {dir_all} {{\w+}} {<139>\e[4m&1\e[24m<099>};
+  #line ignore #show {    这里%1的%2%3$dir_all。};
+  #line gag;
+}
+--上述示例可以为方向加上可点击的下划线标签和颜色，详情查看 #help mslp。
+```
+
+**Brackets**
+
+您可以使用方括号 `[]` 对 PCRE 中的替代方案和范围进行分组。
+
+```
+示例: 
+#act {%* says 'Who is number {[1-9]}} {
+   say $number[%2] is number %2
+}
+```
+
+只有当有人提供 1 到 9 之间的数字时，该示例才会触发。
+
+任何其他字符都不会导致触发器触发。
+
+```
+示例: 
+#act {%* says 'Set password to {[^0-9]*}$} {
+ say The password must contain at least one number, not for security reasons, but just to annoy you.
+} {4}
+```
+
+当 `^` 字符在方括号内使用时，它会创建反向搜索，除了 0 到 9 之间的数字之外，[^0-9] 会匹配每个字符。
+
+**Quantification**
+
+匹配后放置的量化限定词指定允许匹配发生的频率。
+
+```
+? 重复零次或一次。
+* 重复零次或多次。
++ 重复一次或多次。
+
+{n} 准确的重复次数，并且必须是一个数字。
+{n,} 至少重复 n 次，并且必须是一个数字。
+{n,o} 重复 n 到 o 次，n 和 o 必须是一个数字。
+```
+```
+示例: 
+#act {%* says 'Who is number {[1-9][0-9]{0,2}} {
+   Say $number[%2] is number %2
+}
+```
+
+仅当有人提供 1 到 999 之间的数字时，示例才会触发。
+
+**Paranthesis**
+
+TinTin 正则表达式自动添加圆括号 `()`，例如 `%*` 在 PCRE 中转换为 `(.*？)`，除非在行首或行尾找到 `%*`，这种情况下会转换为 `(.*)`。
+
+PCRE 中的圆括号导致执行优先级发生类似于数学表达式的变化，但圆括号也会存储匹配项到变量中。
+
+当嵌套多组圆括号时，每个嵌套都按照外观顺序分配自己的数值变量。
+
+```
+示例：
+#act {%* chats '{Mu(ha)+}'} {chat %2ha!}
+--如果有人说 Muha，你会说 Muhaha，如果有人说 Muhaha，你会说 Muhahaha。
+```
+
+**Lazy vs Greedy**
+
+默认的正则表达式匹配是贪婪的，这意味着 `{.*}` 将捕获尽可能多的文本。
+
+通过附加 `?` 在正则表达式后面，它变得懒惰，意味着 `{.*？}` 将尽可能少地捕捉文本。
+
+```
+示例: 
+#regex {bli bla blo} {^{.*} {.*}$} {#showme Arg1=(&1) Arg2=(&2)}
+--这将显示：Arg1=(bli bla) Arg2=(blo)。
+
+示例: 
+#regex {bli bla blo} {^{.*?} {.*?}$} {#showme Arg1=(&1) Arg2=(&2)}
+--这将显示：Arg1=(bli) Arg2=(bla blo)。
+```
+
+**Escape Codes**
+
+PCRE 支持以下转义代码。
+
+PCRE	|描述	                |POSIX
+:-  |:-                   |:-
+\\A	| 匹配行首              | ^	
+\\b	| 匹配单词边界           | (^|\r|\n|\t| |$)	
+\\B |	匹配非单词边界         | [^\r\n\t ]	
+\\c | 插入控制字符           |	\c	
+\\d	| 匹配数字              |	[0-9]	
+\\D |	匹配非数字            |	[^0-9]	
+\\e	| 插入转义字符           | \e	
+\\f	| 插入表单输入字符        | \f	
+\\n	| 插入表单换行字符        |	\n	
+\\r | 插入回车字符	           |	\r	
+\\s | 匹配空格	              |	[\r\n\t ]	
+\\S	| 匹配非空格	             | [^\r\n\t ]	
+\\t	| 插入 tab 字符          | \t	
+\\w |	匹配字母、数字和下划线   |	[A-Za-z0-9_]	
+\\W	| 匹配非字母、数字和下划线  | [^A-Za-z0-9_]	
+\\x	| 插入十六进制字符         | \x	
+\\Z |	匹配字符串结束          | $
+\\Q | 开始引用               | /
+\\E | 结束引用               | /
+
+`\s` 匹配一个空格，`\s+` 匹配一个或多个空格，`\s+{4}` 匹配四个空格。
+
+```
+示例：
+#sub {\b{north|east|west|south|enter|out}\b} {\e[4m%1\e[24m}
+--替换方向为带有下划线标签的链接，使用 \b 避免 out 和 south 重复替换。
+
+示例：
+#var {str1} {>    ))))))))))))))))=\\\x7B}
+#var {str2} {))))))))=\\\x7B}
+#regex {$str1} {{\Q$str2\E}} {#sh OK} {#sh NO}
+--使用 \Q..\E 表示原样匹配，不转义。
+
+示例：
+#nop 北侠房间匹配;
+#var s_nation {?:[ ]+\[大(宋|元|理|夏)国\]|};
+#var s_terrain {?:[ ]+\[(城市|城内|门派|野外|阴间|(\S+)势力范围)\]|};
+#var s_save {?:[ ]+\[(存盘点)\]|};
+#var s_store {?:[ ]+\[(玩家储物柜)\]|};
+#var s_group {?:[ ]+\[(\S+)\]|};
+#var s_node {?:[ ]+★|};
+#var s_path {?:[ ]+((/\w).+)|};
+#var SUF {%s-%s{$s_nation}{$s_terrain}{$s_save}{$s_store}{$s_group}{$s_node}{$s_path}%s};
+--使用分离组合方案将更好的控制匹配结果。
+```
+
+**Color triggers**
+
+为了使文本触发器更容易匹配，(Actions, Gags, Highlights, Prompts, and Substitutes）的颜色代码会被删除。
+
+如果要创建颜色触发器，必须在触发的开头使用 `~`。
+
+使用 `#config {convert meta} on` 使转义代码可见。
+
+```
+示例: 
+#action {~\e[1;37m%1} {#var roomname %1}
+--如果房间名称是 MUDs 上唯一一行亮白色的，将 %1 保存为房间名称。
+```
+
+***
+
+这里涵盖了正则表达式的基础知识。
+
+阅读 [「PCRE 手册」](https://www.pcre.org/original/doc/html/pcre.html) 获得更多关于 PCRE 的信息。
+
+在 Linux 和 macOS 下，使用 `man pcresyntax` 查看更多 PCRE 语法。
+
+另可参见: [Colors](#colors)，[Escape Codes](#escape-codes)，[Mathematics](#mathematics)。
 
 # Port
 
 > 语法: #port {command} {argument}
 
-#Port 命令用于创建与其他 mud 客户端 (包括您自己的客户端) 的对等连接，通常用于更新状态窗口。如果你想让别人从另一台机器上连接，你必须交换 ip地址和端口号。您可以使用 #session 命令连接到端口。
+`#Port(端口)` 命令用于创建与其他 mud 客户端 (包括您自己的客户端) 的对等连接，通常用于更新状态窗口。
+
+如果你想让别人从另一台机器上连接，你必须交换 ip 地址和端口号。
+
+您可以使用 `#session` 命令连接到端口。
+
+***
+
+以下是 `#port` 命令的详细说明：
 
 **#port {init} {name} {port} {file}**
 
-#port init 启动您的端口。文件参数是可选的。该命令创建具有给定名称的新会话，该会话接受给定端口的传入套接字连接。
+`#port init` 启动您的端口。文件参数是可选的。
+
+该命令创建具有给定名称的新会话，该会话接受给定端口的传入套接字连接。
 
 **#port {call} {address} {port}**
 
@@ -5595,7 +5944,7 @@ $A2B
 
 **#port {dnd}**
 
-切换请勿打扰模式，拒绝新的socket连接。
+切换请勿打扰模式，拒绝新的 socket 连接。
 
 **#port {group} {name} {group}**
 
@@ -5633,6 +5982,13 @@ $A2B
 
 关闭socket连接。
 
+***
+
+`#port` 命令与 `#chat` 非常相似，只是它创建了一个专用于在给定端口接收套接字连接的新会话，并没有内置通信协议支持。
+
+您还可以使用 0 作为端口号初始化以创建虚拟会话。
+
+例如：`#port init test 0`。
 
 ```
 示例:
@@ -5644,46 +6000,52 @@ $A2B
         #port zap {%0}
     }
 }
+--此示例将事件设置为仅允许从本地主机连接的 IP。
 ```
-此示例将事件设置为仅允许从本地主机连接的 IPs。
 
 ```
 示例:
-#nop Launch tt++ in a new terminal and execute:
-
+#nop 在新终端里启动 tt++ 并执行：
 #port init commwindow 4052
 #port prefix {}
 
-#nop In your mud session running in a different terminal execute:
-
+#nop 在你的终端开启另一个 tt++ 会话并执行：
 #gts #ses comms localhost 4052
 #act {~%* chats '%*'} {#comms #send {%0}}
 #showme <128>Bubba chats 'Testing if this works'
+--此示例设置显示聊天的通信窗口。
 ```
-此示例设置显示聊天的通信窗口。创建新会话时，它将成为活动会话，通过使用 #gts (启动会话)，活动会话在执行命令后返回到原始会话。
 
-如果上述解释没有生效，以下可能是: 您有一个名为 “mud” 的会话，该会话执行 #gts {argument}。因为 #gts 是一个未知的命令 ，TinTin检查 “gts” 是否是会话名称，因为这是它暂时启动 gts 并执行参数的情况, 执行参数后，TinTin重新启动调用会话，在这种情况下，会话名为 “mud”。
+创建新会话时，它将成为活动会话，通过使用 #gts (启动会话)，活动会话在执行命令后返回到原始会话。
 
-另可参见: [All](#all), [Run](#run), [Session](#session), [Session Name](#session-name), [Snoop](#snoop), [SSL](#ssl) and [Zap](#zap).
+如果没有生效可能是您有一个名为 “mud” 的会话，该会话执行 `#gts {argument}`。
+
+因为 `#gts` 是一个未知的命令 ，TinTin 检查 “gts” 是否是会话名称，因为这是它暂时启动 gts 并执行参数的情况, 执行参数后，TinTin 重新启动调用会话，在这种情况下，会话名为 “mud”。
+
+另可参见: [All](#all)，[Chat](#chat)，[Run](#run)，[Session](#session)，[Session Name](#session-name)，[Snoop](#snoop)，[SSL](#ssl)，[Zap](#zap)。
 
 # Prompt
 
 > 语法: #prompt {text} {new text} {row #} {col #}
 
-prompt 是 [#split](#split) 分割窗口模式的一项特性功能，  
-它将从服务器按行接收并显示在分割后的终端屏幕上。  
+`#Prompt(提示)` 是 [split](#split) 分割窗口模式的一项特性功能。
 
-你可以使用和 [#substitute](#substitute) 命令相同的方式来定义 {text}  和 {new text}。
+它将从服务器捕捉行并显示在分割屏幕后的状态条上。  
+
+你可以使用和 [substitute](#substitute) 命令相同的方式来定义 {text}  和 {new text}。
 
 行号 raw 是可选且实用的参数，有助于非标准屏幕拆分模式的显示。  
-正行数从顶部绘制 #raw 行；  
-而负行数从底部绘制 #raw 行；    
+
+正行号从顶部绘制 #raw 行，而负行号从底部绘制 #raw 行。
+
 没有参数时 `#prompt` 将写入默认的分割行，即输入行上面的一行，通常位于 `raw -2`。
 
 列号 col 是可选的参数，可用于设置列索引。  
-正列数从左部绘制 #col 列；  
-而负行列数从右部绘制 #col 列；  
+
+正列号从左部绘制 #col 列，而负列号从右部绘制 #col 列。
+
 如果列参数为空，tintin 将在打印行的开头前先把行的内容清空。
+
 ```
 打印前清空行：
 #prompt {bla} {bli} {-1}
@@ -5691,48 +6053,64 @@ prompt 是 [#split](#split) 分割窗口模式的一项特性功能，
 #prompt {bla} {bli} {-1} {1}
 ```
 
-[#showme](#showme) 命令也可以使用 raw、col 参数，因此使用 `#show` 命令在也可以在分割窗口上显示文本。
+[showme](#showme) 命令也可以使用 raw、col 参数，因此使用 `#show` 命令在也可以在分割窗口上显示文本。
 
 注: 有关拆分窗口模式的更多信息，请参阅 `#help split`。
 
 注: 有关替换文本的更多信息，请参见 `#help substitute`。
 
-有关模式匹配的信息，  
-请参见正则表达式 [Regular Expressions'](#regular-expressions) 一节。
+有关模式匹配的信息，请参见正则表达式 [「PCRE」](#pcre) 一节。
 
-> 示例: #prompt {[%1/%2hp]} {[<078>%1/%2hp]}
+```
+示例: 
+#prompt {[%1/%2hp]} {[<078>%1/%2hp]}
+--这将在状态条中打印匹配的行，将颜色设置为暗淡的白色。
+```
 
-这将在状态行中打印匹配的行，将颜色设置为暗淡的白色。脚本部分提供了一个更高级的示例。
+注：`#prompt` 有一定的局限性，比如一行只能显示一个字段，不能自主更新等，可以通过使用 `#list`、`#echo` 等写插件来解决这些问题，请参见技术交流群内示例文件。
 
-注意: 您可以使用 #unprompt 命令删除提示。
+注: 您可以使用 `#unprompt` 命令删除提示。
 
-另可参见: [Action](#action), [Gag](#gag), [Highlight](#highlight) and [Substitute](#substitute).
+另可参见: [Action](#action)，[Gag](#gag)，[Highlight](#highlight)，[Substitute](#substitute)。
 
 # Read
 
 > 语法: #read {filename}
 
-此命令将在命令文件中读取。
+将命令文件读取到内存中。
 
-> 示例: #read autolevel.tin
+命令文件将与当前加载的命令合并，重复的命令将被覆盖。
 
-这将在你制作的文件中读取，其中包含 aliasses 、 action 、 tickers 等，以参与一些淘气的自动升级。
+如果使用大括号 `{` 和 `}`，则可以对一个命令使用多行。
 
-TinTin++ 将命令字符设置为命令文件中找到的第一个字符，默认情况下命令字符设置为 “#”。
+但是，这意味着您必须始终将每个 `{` 与 `}` 匹配，否则 `#read` 会失败。
 
-如果您想在读取文件时看到更多信息，请使用: #config {verbose} {on}。
+您可以使用 `/* text */` 注释掉多行内容。
 
-请记住，文件中使用的每个开口大括号 {必须与闭合大括号} 相匹配。如果不这样做，您将收到错误消息，并且文件不会加载。
+```
+示例：
+#read autolevel.tin
+```
 
-另可参见: [Log](#log), [Scan](#scan), [Textin](#textin) and [Write](#write).
+这将在你制作的命令文件中读取包含 aliasses 、action 、tickers 等，以参与一些淘气的全自动升级。
 
-# Regex
+TinTin++ 将命令字符设置为命令文件中找到的第一个字符，默认情况下命令字符设置为 `#`。
+
+如果您想在读取文件时看到更多信息，请使用: `#config {verbose} {on}`。
+
+请记住，文件中使用的每个开口大括号 `{` 必须与闭合大括号 `}` 相匹配。
+
+如果不这样做，您将收到错误消息，并且文件不会加载。
+
+另可参见: [Log](#log)，[Scan](#scan)，[Textin](#textin)，[Write](#write)。
+
+# Regexp
 
 > 语法: #regex {string} {expression} {true} {false}
 
 #Regex 命令 (正则表达式的缩写) 用于将给定字符串与给定正则表达式进行比较。变量存储在 &1 到 &99 中，&0 保存整个匹配的子字符串。
 
-有关模式匹配的信息，请参见正则表达式[Regular Expressions'](#regular-expressions)一节。
+有关模式匹配的信息，请参见正则表达式 [「PCRE」](#pcre) 一节。
 
 以下(懒惰)匹配项在 %1-%99 + 1 处可用：
 
@@ -5794,172 +6172,6 @@ $lastid = {@_@)。(xgg}
 
 另可参见: [Case](#case), [Default](#default), [Else](#else), [Elseif](#elseif), [If](#if) and [Switch](#switch).
 
-# Regular Expressions
-
-Regular Expressions、Regex或Regexp是定义搜索模式的字符序列。自从 1980 以后，就有了编写正则表达式的不同语法，其中使用最广泛的是 POSIX 语法和类似但更高级的 Perl 标准。TinTin++ 支持被称为 PCRE (Perl 兼容正则表达式) 的 Perl 标准。
-
-正则表达式是TinTin++ 的一个组成部分，但是请记住，TinTin不允许直接使用正则表达式, 相反，它使用更简单的中间语法，当需要时，它仍然允许更复杂的表达式。
-
-以下命令利用正则表达式: action, alias, elseif, gag, grep, highlight, if, kill, local, math, prompt, regexp, replace, substitute, switch, variable, and while。其他几个命令以次要的方式使用正则表达式。幸运的是，基础知识非常容易学习。
-
-**TinTin++ Regular Expression**
-
-正则表达式有以下支持。
-```
-^ 匹配行首。
-$ 匹配行尾。
-\ 转义字符。
-
-%1-%99 匹配任意文本并保存在相应索引中。
-%0 匹配所有文本。
-{ } 嵌入与 perl 兼容的正则表达式，存储匹配项。
-%!{ } 嵌入 perc 兼容的正则表达式，不存储匹配项。
-[ ] . + | ( ) ? *等符号除非在大括号内使用，否则被视为普通文本。请记住，除非使用 %!{}，否则 {} 会自动替换为 ()。
-```
-
-tt++|	描述 |POSIX
-:- |:- |:-
-\%d	|将匹配零到任意量的数字|([0-9]*?)
-\%D	|将匹配零到任意数量的非数字|([^0-9]*?)
-\%i	|匹配不区分大小写|	(?i)
-\%I	|匹配区分大小写(默认)|(?-i)
-\%s |将匹配零到任意数量的空格|	([\r\n\t ]*?)
-\%S	 |将匹配零到任意数量的非空格|	([^\r\n\t ]*?)
-\%w |	将匹配零到任意数量的单词字符|([A-Za-z0-9_]*?)
-\%W |	将匹配零到任意数量的非单词字符|([^A-Za-z0-9_]*?)
-\%?	|匹配 0 个或 1 个字符|(.??)
-\%.	|匹配一个字符|	(.)
-\%+	|将匹配一个到与任意数量的字符|(.+?)
-\%*	|将匹配零到任意数量的字符|(.*?)
-
-**Variables**
-
-如果在操作中使用 %1 执行匹配，则匹配的字符串存储在 %1 变量中，该变量可用于操作正文。
-
-> 示例: %1 says 'Tickle me'} {tickle %1}
-
-如果使用 %2，则匹配存储在 %2 中，以此类推。如果使用未编号的匹配，如 %* 或  %S，该索引则匹配存储在最后使用的索引处。
-
-> 示例: %3 says '%*'} {#if {"%4" == "Tickle me"} {tickle %3}}
-
-最大变量索引为 99。如果以 %* 开始操作，匹配将存储在 %1 中。当在操作正文中使用时，永远不应该在操作的触发部分使用 %0，%0 包含匹配的字符串的所有部分。
-
-要防止存储匹配项，请使用 %!* 、 %!w 等。
-
-**Perl Compatible Regular Expressions**
-
-您可以使用大括号 {} 嵌入 PCRE (Perl 兼容正则表达式)，除非使用 %!{}，否则这些大括号将被() 替换。
-
-**Or**
-
-您可以使用 | 字符在 PCRE 中分离替代方案。
-```
-示例: 
-#act {%* scratches {his|her|its} butt.} {
-  mutter Someone should wash %2 hands..
-}
-```
-**Brackets**
-
-您可以使用括号对 PCRE 中的替代方案和范围进行分组。
-```
-示例: 
-#act {%* says 'Who is number {[1-9]}} {
-   say $number[%2] is number %2
-}
-```
-只有当有人提供 1 到 9 之间的数字时，该示例才会触发。任何其他字符都会导致操作不触发。
-```
-示例: 
-#act {%* says 'Set password to {[^0-9]*}$} {
- say The password must contain at least one number, not for security reasons, but just to annoy you.
-} {4}
-```
-当 ^ 字符在括号内使用时，它会创建反向搜索，除了 0 到 9 之间的数字之外，[^0-9] 匹配每个字符。
-
-**Quantification**
-
-匹配后放置的限定符指定允许匹配发生的频率。
-
-```
-? 重复零次或一次。
-* 重复零次或多次。
-+ 重复一次或多次。
-
-{n} 准确的重复次数，并且必须是一个数字。
-{n,} 至少重复 n 次，并且必须是一个数字。
-{n,o} 重复 n 到 o 次，n 和 o 必须是一个数字。
-```
-```
-示例: 
-#act {%* says 'Who is number {[1-9][0-9]{0,2}} {
-   Say $number[%2] is number %2
-}
-```
-仅当有人提供 1 到 999 之间的数字时，示例才会触发。
-
-**Paranthesis**
-
-TinTin 正则表达式在 PCRE 中自动添加括号，例如 %* 翻译为 (.*？)。PCRE 中的副命题导致执行优先级发生类似于数学表达式的变化，但副命题也导致匹配存储到变量中。
-
-当嵌套多个副命题集时，每个嵌套都按照外观顺序分配自己的数值变量。
-
-> 示例: #act {%* chats '{Mu(ha)+}'} {chat %2ha!}
-
-如果有人说Muha，你会说Muhaha，如果有人说Muhaha，你会说Muhahaha。
-
-**Lazy vs Greedy**
-
-默认的正则表达式匹配是贪婪的，这意味着 {.*} 将捕获尽可能多的文本。
-```
-示例: 
-#regex {bli bla blo} {^{.*} {.*}$} {#showme Arg1=(&1) Arg2=(&2)}
-这将显示:Arg1=(bli bla) Arg2=(blo)。
-
-示例: 
-#regex {bli bla blo} {^{.*?} {.*?}$} {#showme Arg1=(&1) Arg2=(&2)}
-这将显示:Arg1=(bli) Arg2=(bla blo)。
-```
-**Escape Codes**
-
-PCRE 支持以下转义代码。
-
-PCRE	|描述	|POSIX
-:-|:-|:-
-\\A	|匹配行首|^	
-\\b	|匹配单词边界|(^|\r|\n|\t| |$)	
-\\B|	匹配非单词边界|[^\r\n\t ]	
-\\c|插入控制字符|	\c	
-\\d	|匹配数字|	[0-9]	
-\\D|	匹配非数字|	[^0-9]	
-\\e	|插入转义字符|\e	
-\\f	|插入表单输入字符|\f	
-\\n	|插入表单换行字符|	\n	
-\\r|插入回车字符	|	\r	
-\\s|匹配空格	|	[\r\n\t ]	
-\\S	|匹配非空格	|[^\r\n\t ]	
-\\t	|插入 tab 字符|\t	
-\\w|	匹配字母、数字和下划线|	[A-Za-z0-9_]	
-\\W	|匹配非字母、数字和下划线|[^A-Za-z0-9_]	
-\\x	|插入十六进制字符|\x	
-\\Z|	匹配字符串结束|$
-
-`\s` 匹配一个空格，`\s+` 匹配一个或多个空格。
-
-**Color triggers**
-
-使文本触发器更容易匹配，(Actions, Gags, Highlights, Prompts, and Substitutes)的颜色代码会被删除。如果要创建颜色触发器，必须使用 ~(tilda) 启动触发器。使用 #config {convert meta} on 使转义代码可见。
-```
-示例: 
-#action {~\e[1;37m%1} {#var roomname %1}
-```
-如果房间名称是亮白色MUDs上唯一的一行，这个颜色触发器将保存房间名称。
-
-***
-
-这涵盖了基础知识。PCRE 有更多的选择，其中大部分有点模糊，所以你必须阅读 PCRE 手册才能获得更多信息。
-
-另可参见: [Colors](#colors), [Escape Codes](#escape-codes) and [Mathematics](#mathematics).
 
 # Repeat
 
@@ -6334,7 +6546,7 @@ TinTin++ 理解以下声明。
 
 #Substitute 命令允许您更改MUDs输出。%1-99 变量从消息中被替换，可以在替换的新消息部分使用。消息部分不应使用 %0 变量。优先级部分是可选的，并确定替代部分的优先级，默认为 5。
 
-有关模式匹配的信息，请参见正则表达式[Regular Expressions'](#regular-expressions)一节。
+有关模式匹配的信息，请参见正则表达式 [「PCRE」](pcre) 一节。
 
 您可以在新消息部分添加TinTin颜色代码来更改消息的颜色，默认情况下，删除所有以前的MUDs消息颜色代码。有关更多信息，请参见颜色[Colors](#colors)。
 ```
@@ -6552,7 +6764,7 @@ While 命令的工作方式类似于 c 中的 while 命令。一旦条件等于 
 示例: #showme ${map_%*}
 显示以 map_ 开头的所有变量
 ```
-另可参见: [Regular Expressions](#regular-expressions).
+另可参见: [PCRE](#pcre).
 
 # Write
 
