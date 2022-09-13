@@ -6284,9 +6284,7 @@ $lastid = {@_@)。(xgg}
 
 > 语法: #[number] {commands}
 
-有时您希望多次重复相同的命令。
-
-`#repeat` 是实现这一目标的最简单方法。
+`#repeat` 命令是实现重复相同命令最简单的方法。
 
 ```
 示例：
@@ -6325,7 +6323,7 @@ $lastid = {@_@)。(xgg}
 
 ```
 示例：
-#var {test} {aa\cc};#rep {\\} {bb};#var test
+#var {test} {aa\cc};#rep {test }{\\} {bb};#var test
 #VARIABLE {test} {aabbcc}
 ```
 
