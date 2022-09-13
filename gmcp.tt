@@ -1,0 +1,77 @@
+#class gmcp open;
+#nop 要在建立连接前加载该文件，否则会错过握手事件;
+#nop 在游戏中要打开接收gmcp消息，具体可以在游戏中输入gmcp查看，比如 gmcp status on;
+#EVENT {SESSION CONNECTED}
+{
+    #variable TELNET[IAC]  \xFF;
+    #variable TELNET[DONT] \xFE;
+    #variable TELNET[DO]   \xFD;
+    #variable TELNET[WONT] \xFC;
+    #variable TELNET[WILL] \xFB;
+    #variable TELNET[SB]   \xFA;
+    #variable TELNET[SE]   \xF0;
+    #variable TELNET[GMCP] \xC9;
+    #nop Turn telnet debug on to see telnet debugging information.;
+    #config {debug telnet} {off};
+    #split 1 1;
+	gmcpon;
+	gmcpdebugoff;
+};
+
+#EVENT {IAC WILL GMCP}
+{
+    #info SYSTEM save;
+	#nop 发送GMCP握手消息;
+    #send {$TELNET[IAC]$TELNET[DO]$TELNET[GMCP]\};
+    #send {$TELNET[IAC]$TELNET[SB]$TELNET[GMCP] core.hello { "client": "$info[SYSTEM][CLIENT_NAME]", "version": "$info[SYSTEM][CLIENT_VERSION]" } $TELNET[IAC]$TELNET[SE]\};
+};
+
+#EVENT {IAC SB GMCP} {
+	#if {$gmcpflag == 1}{
+		#if {$gmcpdebug == 1 } {
+			#nop 显示gmcp消息;
+			#sh =====%2=====;
+		};
+		#switch {"%0"} {
+			#case {"GMCP.Status"} {
+				#var chgst {%1};
+				#nop 战斗状态中包括敌人的信息，要做区分;
+				#if {"$chgst[id]"==""|"$chgst[id]"=="$myid"}{
+					#loop {1} {&chgst[]} {index} {#var myst[*chgst[+$index]] $chgst[+$index]};
+				} {
+					#loop {1} {&chgst[]} {index} {#var npcst[$chgst[id]][*chgst[+$index]] $chgst[+$index]};
+				};
+			};
+			#case {"GMCP.Move"}{
+				#var myroom {%1};
+			};
+			#case {"GMCP.Buff"}{
+				#var mybuff {%1};
+			};
+			#case {"GMCP.Combat"}{
+				#var mycombat {%1};
+			};
+		};
+	};	
+};
+
+
+#alias gmcpon {#var gmcpflag 1};
+#alias gmcpoff {#var gmcpflag 0;gmcpdebugoff};
+#nop 在屏幕上输出GMCP消息以便调试;
+#alias gmcpdebugon {#var gmcpdebug 1;gmcpon};
+#alias gmcpdebugoff {#var gmcpdebug 0};
+
+#TICKER {prompt_update}
+{
+	#nop 简单展示个人状态在顶部;
+    #format {prompt} {};
+	#math qi_p $myst[qi]*100/$myst[max_qi];
+	#math jing_p $myst[jing]*100/$myst[max_jing];
+    #format {prompt} {$prompt<038> 气血: $qi_p% 精神：$jing_p% $prompt<038> 内力: $myst[neili] 精力：$myst[jingli]};
+	#format {prompt} {$prompt<038> 食物: $myst[food] 水：$myst[water] 忙碌: $myst[is_busy]};
+	#if {$gmcpflag == 1 } {#line ignore #showme {$prompt} {1}};
+}
+{1};
+
+#class gmcp close;

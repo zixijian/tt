@@ -45,6 +45,7 @@
 |[ Format ](#format)
 |[ Function ](#function)|  
 |[ Gag ](#gag)
+|[ GMCP ](#gmcp)
 |[ Greeting ](#greeting)
 |[ Grep ](#Grep)|  
 |[ Help ](#help)
@@ -194,7 +195,8 @@ TinTin++ 具有快速而强大的基于 JIT(即时编译) 实现的内置脚本�
 
 ## 启动及结束
 
-启动 TinTin++ 的语法是:   
+启动 TinTin++ 的语法是：
+
 > ./tt++ <配置文件名>
 
 您应该了解一下相对路径和绝对路径的相关知识。
@@ -433,10 +435,12 @@ ssw2n
 
 当您使用 TinTin++ 读取命令文件时，它会解析文件中的所有文本。  
 
-你可以使用命令文件来保存别名/动作，登录到一个 MUDs (名称、密码等)。  
+你可以使用命令文件来保存别名/触发器，登录到一个 MUDs (账户、密码等)。  
+
 基本上各种命令都可以加载。
 
-您可以使用文本编辑器 (强烈建议) 制作命令文件，  
+您可以使用文本编辑器 (强烈建议) 制作命令文件。
+
 也可以使用 `#write` 命令将所有当前定义的内容列表写入文件。
 
 ```
@@ -450,7 +454,7 @@ ssw2n
 ## 重复命令
 
 > 语法:#number <指令>  
--- 可以重复一个命令
+--可以重复一个命令
 
 ```
 例子:
@@ -614,7 +618,7 @@ __注意：%0 永远不应用于触发器（会导致所有内容被响应）。
 {#showme {--用粗体白色显示: %1}}
 ```
 
-有关模式匹配的信息，请参见正则表达式 [「PCRE」](#pcre) 一节。
+有关正则匹配的信息，请参见正则表达式 [「PCRE」](#pcre) 一节。
 
 ```
 示例: 
@@ -2866,7 +2870,7 @@ epoch 就是 E 纪元，也称为 Unix 纪元。
 
 在屏幕上消除任何包含字符串的行的显示。
 
-有关模式匹配的信息，请参见正则表达式 [「PCRE」](#pcre) 一节。
+有关正则匹配的信息，请参见正则表达式 [「PCRE」](#pcre) 一节。
 
 ```
 示例: 
@@ -2893,6 +2897,70 @@ epoch 就是 E 纪元，也称为 Unix 纪元。
 注: 您可以使用 `#ungag` 命令删除文本消除。
 
 另可参见: [Action](#action)，[Event](#event)，[Highlight](#highlight)，[Prompt](#prompt)，[Substitute](#substitute)。
+
+# GMCP
+
+MUD 服务器通常希望向 MUD 客户端发送不一定需要显示的附加数据，以及需要一种方法来识别支持带外数据的客户端。
+
+GMCP 的历史始于使用 `TELNET code 200` 的 Achaea TELNET Client Protocol  (ATCP)，该协议于 2008 年由 cMUD 实现。
+
+但是，ATCP只允许发送纯文本。
+
+MSDP (Mud 服务器数据协议) 于2009年开发，提供了一种定义无类型变量、数组、表和命令的标准化方法。
+
+2010 年 IRE 推出 mudstandards.org 尝试更新 ATCP 协议。
+
+这产生了使用 `TELNET code 201` 的 ATCP2 概念协议，后来被重命名为 GMCP。
+
+GMCP 使用 JSON 语法定义类型化数据。
+
+2011 年 mudstandards.org 失效。
+
+此处提供了 GMCP 协议和 GMCP over MSDP 的技术描述。
+
+除了发送结构化数据之外，MSDP over GMCP 还提供标准化的事件处理。
+
+通过 GMCP over MSDP 的服务器将能够同时使用 MSDP 和 JSON 标准来定义结构化数据，并以任何一种格式执行 MSDP 事件处理。
+
+GMCP 实现为 Telnet 选项：[RFC854](https://tintin.mudhalla.net/rfc/rfc854)、[RFC855](https://tintin.mudhalla.net/rfc/rfc855)。
+
+服务器和客户端像协商任何其他 telnet 选项一样协商 GMCP 的使用。
+
+一旦就选项的使用达成一致，就使用选项子协商在服务器和客户端之间交换信息。
+
+**服务端命令**
+
+* IAC WILL GMCP  
+--表明服务器想开启 GMCP。
+
+* IAC WONT GMCP  
+--表明服务器想关闭 GMCP。
+
+**客户端命令**
+
+* IAC DO GMCP  
+--表明客户端接受 GMCP 子协商。
+
+* IAC DONT GMCP  
+--表明客户端拒绝 GMCP 子协商。
+
+**握手协议**
+
+当客户端连接到启用 GMCP 的服务器时，服务器应发送 `IAC WILL GMCP`。
+
+客户端应该用 `IAC DO GMCP` 或 `IAC DONT GMCP` 来回应。
+
+一旦服务器收到 `IAC DO GMCP`，客户端和服务器都可以发送 GMCP 子协商。
+
+客户端不应发起协商，如果发生这种情况，服务器应遵守状态更改。
+
+为了避免触发循环，服务器不应响应来自客户端的协商，除非它正确实现了 [RFC1143](https://tintin.mudhalla.net/rfc/rfc1143.html) 中的 Q 方法。
+
+更多信息请查看 [「GMCP 协议」](https://tintin.sourceforge.io/protocols/gmcp)。
+
+要查看 Telnet 协商信息，请使用：`#config telnet info`。
+
+另可参见：[MSDP](#msdp)，[MSLP](#mslp)。
 
 # Greeting
 
@@ -5259,7 +5327,7 @@ MSDP 实现为 Telnet 选项：[RFC854](https://tintin.mudhalla.net/rfc/rfc854)�
 
 更多信息请查看 [「MSDP 协议」](https://tintin.sourceforge.io/protocols/msdp)。
 
-另可参见：[Event](#event)，[Port](#port)。
+另可参见：[Event](#event)，[Port](#port)，[GMCP](#gmcp)。
 
 # MSLP
 
@@ -5314,8 +5382,8 @@ MSLP（Mud 服务器链接协议）需要启用 `#config mouse on`，并创建�
 示例：
 #sub {%* tells %*} {\e]68;2;EXEC;#cursor set tell %1 \a\e[4m%0\e[24m}
 #event {PRESSED SECURE LINK EXEC MOUSE BUTTON ONE} {%4}
+--这将使您在单击 tells 时开始回复。
 ```
-这将使您在单击 tells 时开始回复。
 
 ```
 来自 xgg@pkuxkx 的示例：
@@ -5693,22 +5761,26 @@ $ 匹配行尾。
 请记住，除非使用 %!{}，否则 {} 会自动替换为 ()。
 ```
 
-正则  | 描述                       | POSIX
-:---  |:---                     |:---
-\%d	  | 匹配零到任意量的数字       | ([0-9]*?)
-\%D	 | 匹配零到任意数量的非数字    | ([^0-9]*?)
-\%i	 | 匹配不区分大小写           | (?i)
-\%I  	| 匹配区分大小写(默认)       | (?-i)
-\%s   | 匹配零到任意数量的空格     |	 ([\r\n\t ]*?)
-\%S  	| 匹配零到任意数量的非空格    |	 ([^\r\n\t ]*?)
-\%w   | 	匹配零到任意数量的单词字符  | ([A-Za-z0-9_]*?)
-\%W   |	 匹配零到任意数量的非单词字符 | ([^A-Za-z0-9_]*?)
-\%?	 | 匹配 0 个或 1 个字符       | (.??)
-\%. 	 | 匹配一个字符               |	(.)
-\%+	 | 匹配一个到与任意数量的字符   | (.+?)
-\%\*	 | 匹配零到任意数量的字符      | (.*?)
+正则  | 描述                          | POSIX
+:---  |:---                           |:---
+\%d   | 匹配零到任意量的数字          | ([0-9]*?)
+\%D   | 匹配零到任意数量的非数字      | ([^0-9]*?)
+\%i   | 匹配不区分大小写              | (?i)
+\%I   | 匹配区分大小写(默认)          | (?-i)
+\%s   | 匹配零到任意数量的空格        |  ([\r\n\t ]*?)
+\%S   | 匹配零到任意数量的非空格      |  ([^\r\n\t ]*?)
+\%w   |  匹配零到任意数量的单词字符   | ([A-Za-z0-9_]*?)
+\%W   |  匹配零到任意数量的非单词字符 | ([^A-Za-z0-9_]*?)
+\%?   | 匹配 0 个或 1 个字符          | (.??)
+\%.   | 匹配一个字符                  | (.)
+\%+   | 匹配一个到与任意数量的字符    | (.+?)
+\%\*  | 匹配零到任意数量的字符        | (.*?)
 
-要匹配四个空格：`%+4s`。
+要匹配 4 个空格：`%+4s`。
+
+要匹配 2-5 个数字：`%+2..5d`。
+
+要匹配 0 到任意个字母：`%+0..w`。
 
 **Variables**
 
@@ -5842,27 +5914,30 @@ PCRE 中的圆括号导致执行优先级发生类似于数学表达式的变化
 
 PCRE 支持以下转义代码。
 
-PCRE	|描述	                |POSIX
-:-  |:-                   |:-
-\\A	| 匹配行首              | ^	
-\\b	| 匹配单词边界           | (^|\r|\n|\t| |$)	
-\\B |	匹配非单词边界         | [^\r\n\t ]	
-\\c | 插入控制字符           |	\c	
-\\d	| 匹配数字              |	[0-9]	
-\\D |	匹配非数字            |	[^0-9]	
-\\e	| 插入转义字符           | \e	
-\\f	| 插入表单输入字符        | \f	
-\\n	| 插入表单换行字符        |	\n	
-\\r | 插入回车字符	           |	\r	
-\\s | 匹配空格	              |	[\r\n\t ]	
-\\S	| 匹配非空格	             | [^\r\n\t ]	
-\\t	| 插入 tab 字符          | \t	
-\\w |	匹配字母、数字和下划线   |	[A-Za-z0-9_]	
-\\W	| 匹配非字母、数字和下划线  | [^A-Za-z0-9_]	
-\\x	| 插入十六进制字符         | \x	
-\\Z |	匹配字符串结束          | $
-\\Q | 开始引用               | /
-\\E | 结束引用               | /
+
+PCRE |描述                       |POSIX
+:-   |:-                         |:-
+\\A  | 匹配行首                  | ^ 
+\\b  | 匹配单词边界              | (^|\r|\n|\t| |$) 
+\\B  | 匹配非单词边界            | [^\r\n\t ] 
+\\c  | 插入控制字符              | \c 
+\\d  | 匹配数字                  | [0-9] 
+\\D  | 匹配非数字                | [^0-9] 
+\\e  | 插入转义字符              | \e 
+\\f  | 插入表单输入字符          | \f 
+\\n  | 插入表单换行字符          | \n 
+\\r  | 插入回车字符              | \r 
+\\s  | 匹配空格                  | [\r\n\t ] 
+\\S  | 匹配非空格                | [^\r\n\t ] 
+\\t  | 插入 tab 字符             | \t 
+\\w  | 匹配字母、数字和下划线    | [A-Za-z0-9_] 
+\\w+ | 匹配字母                  | [A-Za-z]
+\\W  | 匹配非字母、数字和下划线  | [^A-Za-z0-9_] 
+\\x  | 插入十六进制字符          | \x 
+\\Z  | 匹配字符串结束            | $
+\\Q  | 开始引用                  | /
+\\E  | 结束引用                  | /
+
 
 `\s` 匹配一个空格，`\s+` 匹配一个或多个空格，`\s+{4}` 匹配四个空格。
 
@@ -5912,7 +5987,7 @@ PCRE	|描述	                |POSIX
 
 在 Linux 和 macOS 下，使用 `man pcresyntax` 查看更多 PCRE 语法。
 
-另可参见: [Colors](#colors)，[Escape Codes](#escape-codes)，[Mathematics](#mathematics)。
+另可参见: [Colors](#colors)，[Escape Codes](#escape-codes)，[Mathematics](#mathematics)，[Regexp](#regexp)。
 
 # Port
 
@@ -6053,13 +6128,13 @@ PCRE	|描述	                |POSIX
 #prompt {bla} {bli} {-1} {1}
 ```
 
-[showme](#showme) 命令也可以使用 raw、col 参数，因此使用 `#show` 命令在也可以在分割窗口上显示文本。
+[showme](#showme) 和 [echo](#echo) 命令也可以使用 raw、col 参数，因此使用 `#show` 和 `#echo` 命令在也可以在分割窗口上显示文本。
 
 注: 有关拆分窗口模式的更多信息，请参阅 `#help split`。
 
 注: 有关替换文本的更多信息，请参见 `#help substitute`。
 
-有关模式匹配的信息，请参见正则表达式 [「PCRE」](#pcre) 一节。
+有关正则匹配的信息，请参见正则表达式 [「PCRE」](#pcre) 一节。
 
 ```
 示例: 
@@ -6106,36 +6181,69 @@ TinTin++ 将命令字符设置为命令文件中找到的第一个字符，默�
 
 # Regexp
 
-> 语法: #regex {string} {expression} {true} {false}
+> 语法: #regexp {string} {expression} {true} {false}
 
-#Regex 命令 (正则表达式的缩写) 用于将给定字符串与给定正则表达式进行比较。变量存储在 &1 到 &99 中，&0 保存整个匹配的子字符串。
+`#Regex` 命令 (正则表达式的缩写) 用于将给定字符串与给定正则表达式进行比较。
 
-有关模式匹配的信息，请参见正则表达式 [「PCRE」](#pcre) 一节。
+正则表达式可以包含转义，并且如果要匹配单个 `\` 字符您应该使用 `\\`。
+
+变量存储在 &1 到 &99 中，&0 保存整个匹配的子字符串。
+
+有关正则匹配的信息，请参见正则表达式 [「PCRE」](#pcre) 一节。
+
+正则表达式有以下支持。
+
+```
+^ 匹配行首。
+$ 匹配行尾。
+\ 转义字符。
+
+%1-%99 匹配任意文本并保存在相应索引中。
+%0 匹配所有文本。
+{ } 嵌入与 perl 兼容的正则表达式，存储匹配项。
+%!{ } 嵌入与 perl 兼容的正则表达式，不存储匹配项。
+[ ] . + | ( ) ? * 等符号除非在大括号内使用，否则被视为普通文本。
+请记住，除非使用 %!{}，否则 {} 会自动替换为 ()。
+```
 
 以下(懒惰)匹配项在 %1-%99 + 1 处可用：
 
 参数|说明
 :-|:-
-%a|匹配零到任意数量的除换行符以外的字符
-%A|匹配零到任意数量的换行符
 %d|匹配零到任意数量的数字
 %D|匹配零到任意数量的非数字
-%p|匹配零到任意数量的可打印字符
-%P|匹配零到任意数量的不可打印字符
 %s|匹配零到任意数量的空格
 %S|匹配零到任意数量的非空格
-%u|匹配零到任意数量的unicode字符
-%U|匹配零到任意数量的非unicode字符
 %w|匹配零到任意数量的字母
 %W|匹配零到任意数量的非字母
+
+实验性 (可能发生变化) 的匹配项有:
+
+参数|说明
+:-|:-
+%a|匹配零到任意数量的除换行符以外的字符
+%A|匹配零到任意数量的换行符
+%p|匹配零到任意数量的可打印字符
+%P|匹配零到任意数量的不可打印字符
+%u|匹配零到任意数量的 unicode 字符
+%U|匹配零到任意数量的非 unicode 字符
+
+如果要匹配 1 个数字，请使用 `%+1d`。
+
+如果要匹配 4 个空格，请使用 `%+4s`。
+
+如果要匹配 3-5 个空格，请使用 `%+3..5s`。
+
+如果要匹配 0 到任意个字母，请使用 `%+0..w`，以此类推。
+
+参数|说明
+:-|:-
 %+|匹配一到任意数量的字符
 %?|匹配零到一个字符
 %.|匹配一个字符
 %*|匹配零到任意数量的字符
 %i|匹配时不区分大小写
 %I|匹配时区分大小写(默认)
-
-如果要匹配 1 个数字，请使用 %+1d，如果要匹配 3-5 个空格使用 %+3..5s，如果你想在 0-1 个字母之间匹配使用 %+0..1w。
 
 匹配项将自动存储到 %1 和 %99 之间的值。从 %1 开始，每个正则表达式递增 1。
 
@@ -6145,15 +6253,13 @@ TinTin++ 将命令字符设置为命令文件中找到的第一个字符，默�
 
 ```
 示例: 
-#regex {Hello World} {%* World}
-{#showme Matched &1 World}
-{#showme no match}
+#regex {Hello World} {%* World} {#showme Matched &1 World} {#showme no match}
 
 示例: 
 #regexp {bli bla blo} {bli {.*} blo} {#showme &1}
 ```  
 ```
-来自xgg@pkuxkx的示例：
+来自 xgg@pkuxkx 的示例：
 
 在北侠中抓取闲聊频道id时，
 #act {^【闲聊】%!*(%1 ||} {
@@ -6168,41 +6274,62 @@ $lastid = {@_@)。(xgg}
 #act {^【闲聊】%!*(%w ||} {
   #var lastid %1
 };
-```  
+```
 
-另可参见: [Case](#case), [Default](#default), [Else](#else), [Elseif](#elseif), [If](#if) and [Switch](#switch).
+注：就像别名或函数一样，`#regex` 有自己的范围。
 
+另可参见: [PCRE](#pcre)，[Replace](#replace)。
 
 # Repeat
 
 > 语法: #[number] {commands}
 
-有时您希望多次重复相同的命令。这是实现这一目标的最简单方法。
+有时您希望多次重复相同的命令。
 
-> 示例: #10 buy bread
+`#repeat` 是实现这一目标的最简单方法。
 
-这将使你执行 “买面包” 10 次。
+```
+示例：
+#10 buy bread
+--这将使你执行 “by bread” 10 次。
+```
 
-另可参见: [Break](#break), [Continue](#continue), [Foreach](#foreach), [List](#list), [Loop](#loop), [Parse](#parse), [Return](#return) and [While](#while).
+另可参见: [Break](#break)，[Continue](#continue)，[Foreach](#foreach)，[List](#list)，[Loop](#loop)，[Parse](#parse)，[Return](#return)，[While](#while)。
 
 # Replace
 
 > 语法: #replace {variable} {oldtext} {newtext}
 
-此命令将在 oldtext 中搜索给定字符串的变量，并将其替换为 newtext 中给出的字符串。
+搜索给定变量，并将每次出现的 'oldtext' 替换为 'newtext'。
 
-如果将 newtext 留空，则将删除旧文本匹配。
+变量存储在 &1 到 &99中，&0 保存整个匹配子字符串。
+
+'oldtext' 参数是正则表达式。
+
+有关正则匹配的信息，请参见正则表达式 [「PCRE」](#pcre) 一节。
+
+如果将 'newtext' 留空，则将删除 'oldtext'。
 
 ```
 示例: 
 #var {test} {bli bla blo};
 #replace {test} {bl} {tr}
+--将变量 test 从 “bli bla blo” 更改为 “tri tra tro”。
+
+示例：
+#function rnd #math result 1d9;
+#replace test {%.} {@rnd{}}
 ```
-这将变量测试从 “bli bla blo” 更改为 “tri tra tro”。
 
-请记住，旧文本已经替换了转义代码 (而新文本没有)，所以如果你想替换一个 “\” 字符，你需要输入 “\\\”
+如果你想替换一个 `\` 字符，需要输入 `\\`。
 
-另可参见: [Format](#format), [Function](#function), [Local](#local), [Math](#math), [Script](#script) and [Variable](#variable).
+```
+示例：
+#var {test} {aa\cc};#rep {\\} {bb};#var test
+#VARIABLE {test} {aabbcc}
+```
+
+另可参见: [Cat](#cat)，[Format](#format)，[Function](#function)，[Local](#local)，[Math](#math)，[PCRE](#pcre)，[Script](#script)，[Variable](#variable)。
 
 # Return
 
@@ -6546,7 +6673,7 @@ TinTin++ 理解以下声明。
 
 #Substitute 命令允许您更改MUDs输出。%1-99 变量从消息中被替换，可以在替换的新消息部分使用。消息部分不应使用 %0 变量。优先级部分是可选的，并确定替代部分的优先级，默认为 5。
 
-有关模式匹配的信息，请参见正则表达式 [「PCRE」](pcre) 一节。
+有关正则匹配的信息，请参见正则表达式 [「PCRE」](#pcre) 一节。
 
 您可以在新消息部分添加TinTin颜色代码来更改消息的颜色，默认情况下，删除所有以前的MUDs消息颜色代码。有关更多信息，请参见颜色[Colors](#colors)。
 ```
