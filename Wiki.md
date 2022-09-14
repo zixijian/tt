@@ -319,7 +319,7 @@ w;u;look;say dzp我要买药！
 
 ```
 示例: #alias nice helo Mr %1
---如果别右侧没有定义的变量，那么别名指令后面的所有参数都将附加到命令字符串中。
+--如果别名右侧没有定义的变量，那么别名指令后面的所有参数都将附加到命令字符串中。
 ```
 
 ```
@@ -2831,18 +2831,15 @@ epoch 就是 E 纪元，也称为 Unix 纪元。
 ```
 ```
 示例:
-#function {time}
-{
-	#if {"%0" == ""}
-	{
-		#format {epoch} {%T}
-	};
-	#else
-	{
-		#var epoch %0
-	};
-	#format {time} {%t} {{%T}{$epoch}};
-	#return $time
+#function {time} {
+  #if {"%0" == ""} {
+    #format {epoch} {%T}
+	 };
+  #else 	{
+    	#var epoch %0
+  };
+  #format {time} {%t} {{%T}{$epoch}};
+  #return $time
 }
 #showme The time is @time{}
 ```
@@ -2862,7 +2859,7 @@ epoch 就是 E 纪元，也称为 Unix 纪元。
 
 注: 您可以使用 `#unfunction` 命令删除函数。
 
-另可参见: [Format](#format)，[Local](#local)，[Math](#math)，[Replace](#replace)，[Script](#script)，[Variable](#variable)。
+另可参见: [Format](#format)，[Local](#local)，[Math](#math)，[Replace](#replace)，[Return](#return)，[Script](#script)，[Variable](#variable)。
 
 # Gag
 
@@ -3009,9 +3006,6 @@ BUFF(Buff)         〖开〗
   #echo {<139>参数0:<099>%0};
   #echo {<139>参数1:<099>%1};
   #echo {<139>参数2:<099>%2};
-  #echo {<139>参数3:<099>%3};
-  #echo {<139>参数4:<099>%4};
-  #echo {<139>参数5:<099>%5};
   #echo {%c%h} {light green};
 };
 
@@ -5660,7 +5654,7 @@ zip     | 把路径变成快速行走。
 
 使用 `#path new` 启动路径跟踪后，您可以使用 `#path end` 停止。
 
-这不会删除创建的路径，尽管再次键入 `#path new` 会。
+这不会删除创建的路径，除非再次键入 `#path new`。
 
 **#path {map}**
 
@@ -6419,93 +6413,239 @@ $lastid = {@_@)。(xgg}
 
 > 语法: #return {text}
 
-可以使用 return 命令从正在执行的触发器中断开。
+可以使用 `#return` 命令从正在执行的命令中断开。
 
-在 #function 函数中，您可以使用 #return 和参数来断开函数并设置结果变量。
+在 `#function` 中你可以用带参数的 `#return` 命令中断函数执行，同时设置 'result' 变量。
 
-另可参见: [Break](#break), [Continue](#continue), [Foreach](#foreach), [List](#list), [Loop](#loop), [Parse](#parse), [Repeat](#repeat) and [While](#while).
+```
+示例：
+#nop  剥离前后空格;
+#function {trim} {
+  #format result {%p} {%1};
+  #return $result;
+};
+--定义了名为 'result' 的特定变量时，可以省略带参数的 #return。
+```
+
+另可参见: [Break](#break)，[Continue](#continue)，[Foreach](#foreach)，[Function](#function)，[List](#list)，[Loop](#loop)，[Parse](#parse)，[Repeat](#repeat)，[While](#while)。
 
 # Run
 
 > 语法: #run {session name} {shell commands} {file}
 
-Run 命令以交互方式运行 shell 命令或控制台应用程序。当应用程序终止时，会话也会像正常会话一样终止。
+`#Run(运行)` 命令以交互方式运行 shell 命令或控制台应用程序。
 
-无论是 ssh 、 telnet 、 python 、 php 、 perl 还是 ruby，您都可以运行任何 shell 命令。
+该命令还会创建将给定 shell 命令视为服务器的会话。
 
-默认情况下，#run 命令将使您处于字符模式，这意味着每个按键都直接传输到应用程序。按下 enter 键后，可以输入 tintin 命令。要禁用字符模式，请按 enter 键并输入: #cursor echo on。
+当应用程序终止时，会话也会像正常会话一样终止。
+
+无论是 ssh、telnet、python、php、perl 还是 ruby，您可以使用 `#run` 运行任何 shell 命令，并带有完整的 tintin 脚本功能支持。
+
+如果给定文件名，文件将在执行之前加载。
+
+```
+示例：
+#run {somewhere} {ssh someone@somewhere.com}
+示例：
+#run {something} {tail -f chats.log}
+```
+
+默认情况下，`#run` 命令处于字符模式，这意味着每个按键都直接传输到应用程序。
+
+按下 enter 键后，可以输入 tintin 命令。
+
+要禁用字符模式，请按 enter 键并输入: `#cursor echo on`。
+
 ```
 示例: 
 #run myserver ssh myname@myserver.com
-```
+--这将创建具有完整 tintin 脚本功能的 *nix 服务器的 ssh 会话。
 
-这将创建到具有完整 tintin 脚本功能的 * nix 服务器的 ssh 会话。
-```
 示例: 
 #run python python;
 #act {^cmd %1} {%1};
 print "cmd #showme <118>Hello World!"
+--启动一个 python shell，创建一个触发器来执行 “cmd” 跟随的任何文本。
 ```
-这将启动一个 python shell，创建一个触发器来执行 “cmd” 前面的任何文本，并打印一条红色的线。
 
-注意: 您也可以使用 #script 和 #system 命令执行 shell 命令。
+注: 您也可以使用 `#script` 和 `#system` 命令执行 shell 命令。
 
-另可参见: [All](#all), [Port](#port), [Session](#session), [Session Name](#session-name), [Snoop](#snoop), [SSL](#ssl) and [Zap](#zap).
+另可参见: [All](#all)，[Port](#port)，[Session](#session)，[Session Name](#session-name)，[Script](#script)，[System](#system)，[Snoop](#snoop)，[SSL](#ssl)，[Zap](#zap)。
 
 # Scan
 
-> 语法: #scan {abort|read}
+> 语法: #scan {abort|csv|tsv|txt} {filename}
 
-Scan 命令读取文件名并将其发送到屏幕上，就好像它是MUDs输出一样。这对于将 ansi 文件转换为 html 和读取日志文件非常有用。
+`#Scan(扫描)` 命令是一个文件读取实用程序。
 
-包括接收到的行事件在内的操作和其他触发器将在每一行触发，并且可以通过发出: #scan abort 来中止扫描。
+> #scan {abort}
 
-另可参见: [Log](#log), [Read](#read), [Scan](#scan), [Textin](#textin) and [Write](#write).
+必须从扫描事件从调用此命令，并且如果正在进行扫描，将中止扫描。
+
+> #scan {csv} \<filename>
+
+读取逗号分隔值的文件，不将内容打印到屏幕上。
+
+它触发两个事件之一：
+
+* SCAN CSV HEADER  
+--在 csv 文件的第一行触发。
+
+* SCAN CSV LINE  
+--在 csv 文件的第二行和后续所有行触发。
+
+%0 参数包含整行，其中 %1 包含第一个值，%2 包含第二个值等，一直到 %99。
+
+包含空格的值必须用引号括起来，请记住不支持引号中的换行符。
+
+用两个引号打印一个单独的引号字符。
+
+> #scan {dir} \<filename> \<variable>
+
+将读取给定的文件名或目录，并且将收集的任何信息存储到提供的变量中。
+
+> #scan {tsv} \<filename>
+
+读取 tab 分隔值的文件，不将内容打印到屏幕上。
+
+`SCAN TSV HEADER` 事件触发第一行，`SCAN TSV LINE` 事件触发所有后续行。
+
+> #scan {file} \<filename> {commands}
+
+读取给定文件并执行命令参数。
+
+变量|内容
+:- |:-
+&0 |包含文件的原始内容
+&1 |包含文件的纯文本
+&2 |包含文件的原始字节大小
+&3 |包含文件纯文本字节大小
+&5 |包含文件的行数
+
+> #scan {txt} \<filename>
+
+读取文件并发送其内容到屏幕上，就像它是由服务器发送一样。
+
+您可以使用 page-up 和 down 查看文件。
+
+这对于将 ansi 文件转换为 html 文件和读取日志文件非常有用。
+
+***
+
+Actions，highlights，substitutions 等可以正常触发。
+
+可以创建一个触发器执行 `#scan abort` 提前停止扫描。
+
+另可参见: [Log](#log)，[Read](#read)，[Textin](#textin)，[Write](#write)。
 
 # Screen
 
 > 语法：#screen {option} {argument}
 
-Screen 屏幕命令提供了各种屏幕操作命令和实用程序。
+`#Screen(屏幕)` 命令提供了各种屏幕操作命令和实用程序。
 
-指令|效果
-:-|:-
-#screen blur|将终端移动到堆栈的后面。
-#screen clear [all\|scroll region\|square] \<args>|当清屏时提供 4 个参数，定义顶部、左角、底部、右角。
-#screen focus|将终端移动到堆栈的前面。
-#screen fullscreen [on\|off]|在没有参数的情况下使用时切换全屏模式。
-#screen get \<option> \<var>|获取各种屏幕选项并将其保存到 \<var>。使用 #screen 无需参数即可查看所有可用选项。
-#screen info|调试信息。
-#screen input \<square>|设置输入区域。
-#screen load \<both\|label\|title>|重新加载保存的标题、标签或两者。
-#screen minimize \<on\|off>|打开时最小化，关闭时恢复。
-#screen maximize [on\|off]|打开时最大化，关闭时恢复。
-#screen move \<height> \<width>|将终端的左上角移动到像素坐标。
-#screen raise \<event>|这将引发几个带有 %1 和 %2 参数的屏幕事件。
-#screen refresh|终端dependant，可能什么也不做。
-#screen rescale \<height> \<width>|将屏幕调整到给定的高度和宽度 (以像素为单位)。
-#screen resize \<rows> \<cols>|将屏幕调整为给定的高度和宽度 (以字符为单位)。
-#screen save \<both\|label\|title>|保存标题、标签或两者。
-#screen scroll \<square>|设置滚动区域，更改拆分设置。
-#screen set \<both\|label\|title>|设置标题、标签或两者。标题只在 Windows 上有效。
+> #screen blur
 
-另可参见：[Bell](#bell).
+将终端移动到堆栈的后面。
+
+> #screen clear [all\|scroll region\|square] \<args>  
+
+当擦除正方形时提供 4 个参数，定义左上角和右下角。
+
+> #screen focus
+
+将终端移动到堆栈的前面。
+
+> #screen fullscreen [on\|off]
+
+在没有参数时切换全屏模式。
+
+> #screen get \<option> \<var>
+
+获取各种屏幕选项并将其保存到 \<var>。无参数查看所有可用选项。
+
+> #screen info
+
+调试信息。
+
+> #screen input \<square> [name]
+
+设置输入区域。name 是可选的，并可以用于创建 `RECEIVED INPUT [NAME]`事件。
+
+> #screen load \<both\|label\|title>
+
+重新加载保存的标题、标签或全部重新加载。
+
+> #screen minimize \<on\|off>
+
+打开时最小化，关闭时恢复。
+
+> #screen maximize [on\|off]
+
+打开时最大化，关闭时恢复。
+
+> #screen move \<height> \<width>
+
+将终端的左上角移动到像素坐标。
+
+> #screen raise \<event>
+
+这将引发多个个带有 %1 和 %2 参数的屏幕事件。
+
+> #screen refresh
+
+终端 dependant，可能什么也不做。
+
+> #screen rescale \<height> \<width>
+
+将屏幕调整到给定的高度和宽度 (以像素为单位)。
+
+> #screen resize \<rows> \<cols>
+
+将屏幕调整为给定的高度和宽度 (以字符为单位)。
+
+> #screen save \<both\|label\|title>
+
+保存标题、标签或全部保存。
+
+> #screen scroll \<square>
+
+设置滚动区域，更改 `#split` 设置。
+
+> #screen set \<both\|label\|title>
+
+设置标题、标签或全部设置。标题只在 Windows 上有效。
+
+> #screen swap
+
+交换输入和滚动区域。
+
+另可参见：[Bell](#bell)。
 
 # Screen Reader
 
 > 语法：#config {SCREEN READER} {ON|OFF}
 
-屏幕阅读器模式通过使用 `#config screen on` 启用。屏幕阅读器模式的主要目的是向服务器报告屏幕阅读器正在使用 [MTTS 标准](http://tintin.sourceforge.net/protocols/mtts)。  
+屏幕阅读器模式通过 `#config screen on` 启用。
 
-启用屏幕阅读器模式后，TinTin++ 将尝试删除可能可视的元素。
+其主要目的是向服务器报告正在使用 [「MTTS 标准」](http://tintin.sourceforge.net/protocols/mtts)。  
 
-另可参见：[Config](#config).
+启用屏幕阅读器模式后，TinTin++ 将尝试删除可能的视觉元素。
+
+另可参见：[Config](#config)。
 
 # Script
 
 > 语法: #script {variable} {shell commands}
 
-脚本命令允许您在 shell 中执行命令。这些命令的输出将作为列表存储在给定变量中。可以使用 script 命令执行 Lua 、 PHP 、 Perl 、 Python 、 Tcl 和 Ruby 脚本。
+`#Script(脚本)` 命令允许您在 shell 中执行命令。
+
+如果未给定变量参数，则将这些命令的输出视为命令。
+
+可以使用 `#script` 命令执行 Lua、PHP、Perl、Python、Tcl 和 Ruby 脚本。
+
+可以从文件或在 tintin 中运行这些脚本，如果脚本语言允许这样做。
+
 ```
 示例: 
 #script {result} {lua -e 'print("Hello TinTin++")'
@@ -6526,42 +6666,85 @@ Screen 屏幕命令提供了各种屏幕操作命令和实用程序。
 #script {path} {pwd}
 ```
 
-如果没有给出变量参数，脚本输出将被视为 tintin 输入，允许您使用 #showme 和 #send 命令来处理脚本的输出。请记住，您也可以执行脚本文件。
+可以使用 `#showme` 和 `#send` 命令来处理 `#script` 的输出。
 
-如果给定变量参数，脚本的输出将作为列表存储在变量中。使用 $variable[1] 、 $variable[2] 等查看列表。
+如果给定变量参数，`#script` 的输出将作为列表存储在变量中。
+
+使用 `$variable[1]`、`$variable[2]` 等来查看变量。
+
 ```
 示例: 
 #script {OS} {uname -s};
 #showme My OS is: $OS[1]
 ```
-注意: 您也可以使用 #run 和 #system 命令来执行 shell 命令。
 
-另可参见: [Format](#format), [Function](#function), [Local](#local), [Math](#)math, [Replace](#replace) and [Variable](#variable).
+注: 您也可以使用 `#run` 和 `#system` 命令来执行 shell 命令。
+
+另可参见: [Format](#format)，[Function](#function)，[Local](#local)， [Math](#math)，[Replace](#replace)，[Run](#run)，[System](#system)，[Variable](#variable)。
 
 # Send
 
 > 语法: #send {text}
 
-直接将文本发送到 MUD，如果你想从转义代码开始，这很有用。
+直接将文本发送到服务器。
 
-#send 将自动附加换行符，您可以用 \ 结束换行，以防止这种情况发生。
+如果你不想转义代码被解析，这很有用。
 
-另可参见：[Textin](#textin).
+`#send` 将自动附加换行符，您可以在末尾用 `\` 阻止附加换行符。
+
+另可参见：[Textin](#textin)。
 
 # Session
 
-> 语法: #session {name} {address} {port} {file}
+> 语法: #session {name} {host} {port} {file}
 
-将以给定的名称开始会话，连接到指定的地址和端口，加载可选文件。
+将以给定的名称开始 Telnet 会话，连接到指定的地址和端口，加载文件（可选）。
+
+名称可以是任何您想要的，除了现有会话名称、数字或关键字 “+” 和 “-”。
+
+如果指定了文件名，则仅在会话成功连接时读取文件。
+
+没有参数 `#session` 将显示当前定义的会话。
+
 ```
 示例: 
-#ses pku mud.pkuxkx.com 8080
+#ses pku mud.pkuxkx.com 8080 init.tt
 ```
-当然，如果你真的想去某个地方，你必须填写其他东西。Mud 连接器提供了大量可搜索的 muds 列表。
 
-其他选项是 #session + 和 - 转到下一个或上一个会话。只有当你正在多次播放时，这才有效。`#session <number>` 激活对应于给定号码的 session。
+如果您有多个会话，则可以使用以下命令:
 
-另可参见: [All](#all), [Port](#port), [Run](#run), [Session Name](#session-name), [Snoop](#snoop), [SSL](#ssl) and [Zap](#zap).
+`#session +` 和 `#session -` 转到下一个或上一个会话。
+
+`#session <number>` 激活对应于给定号码的会话。
+
+启动会话，+1 第一个，+2 第二个，-1 是最后一个会话。
+
+会话（当前）按创建顺序排序。
+
+`#gts` 切换到启动会话。会话名 gts 代表全局 tintin 会话。
+
+`#ats` 切换到活动会话。会话名 ats 代表活动的 tintin 会话。
+
+不一定是调用会话。
+
+`#{name}`：使用给定名称激活会话。
+
+`#{name} {command}`：使用给定会话执行命令，但不更改活动会话。
+
+`@<name> {text}`：解析给定会话中的文本，替换变量和函数，并将结果打印在当前活动会话。
+
+启动会话名为 “gts”，可用于重载脚本。
+
+请记住，定时器在启动会话中不起作用。
+
+```
+示例：
+#event {SESSION DISCONNECTED} {
+  #gts #delay 10 #ses %0 tintin.net 4321
+}
+```
+
+另可参见: [All](#all)，[Port](#port)，[Run](#run)，[Session Name](#session-name)，[Snoop](#snoop)，[SSL](#ssl)，[Zap](#zap)。
 
 # Session name
 
