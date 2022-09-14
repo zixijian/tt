@@ -2960,6 +2960,8 @@ GMCP 实现为 Telnet 选项：[RFC854](https://tintin.mudhalla.net/rfc/rfc854)�
 
 要查看 Telnet 协商信息，请使用：`#config telnet info`。
 
+要查看 Telnet 事件，请查看[「Event」](#event) TELNET EVENTS 相关条目。
+
 ```
 北大侠客行 GMCP 协商
 
@@ -2994,12 +2996,8 @@ BUFF(Buff)         〖开〗
 #var TELNET[GMCP] \xC9;
 
 #nop GMCP 握手事件;
-#EVENT {IAC WILL GMCP}
-{
-    #info SYSTEM save;
-	#nop 发送GMCP握手消息;
-    #send {$TELNET[IAC]$TELNET[DO]$TELNET[GMCP]\};
-    #send {$TELNET[IAC]$TELNET[SB]$TELNET[GMCP] core.hello { "client": "$info[SYSTEM][CLIENT_NAME]", "version": "$info[SYSTEM][CLIENT_VERSION]" } $TELNET[IAC]$TELNET[SE]\};
+#EVENT {IAC WILL GMCP} {
+  #send {$TELNET[IAC]$TELNET[DO]$TELNET[GMCP]\};
 };
 
 #nop GMCP 调试;
@@ -5519,7 +5517,9 @@ MSLP（Mud 服务器链接协议）需要启用 `#config mouse on`，并创建�
 
 因此，如果消息包含 “&” 字符，则不会触发易受攻击的操作，因为一次只允许触发 1 个操作。
 
-用于注释掉整个触发，尤其是包含大量内容的可以使用 `/* 文本 */`。
+要注释掉整个触发，尤其是包含大量内容的可以使用 `/* test */`。
+
+注：`/* */` 只能写在行首位置，且不能插入 `{}` 中。
 
 ```
 示例：
@@ -6409,7 +6409,7 @@ $lastid = {@_@)。(xgg}
 
 ```
 示例：
-#var {test} {aa\cc};#rep {test }{\\} {bb};#var test
+#var {test} {aa\cc};#rep {test} {\\} {bb};#var test
 #VARIABLE {test} {aabbcc}
 ```
 
