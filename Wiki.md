@@ -2960,6 +2960,92 @@ GMCP 实现为 Telnet 选项：[RFC854](https://tintin.mudhalla.net/rfc/rfc854)�
 
 要查看 Telnet 协商信息，请使用：`#config telnet info`。
 
+```
+北大侠客行 GMCP 协商
+
+/* ====== 说明 ======
+
+需要在游戏中打开接收 gmcp 频道。
+
+在游戏中输入 gmcp 查看：
+
+GMCP 频道收听汇总：
+BUFF(Buff)         〖开〗
+移动信息(Move)      〖开〗
+战斗相关(Combat)    〖开〗
+人物状态(Status)    〖开〗
+
+你接收 GMCP 信息的格式为 raw。
+你可以用 gmcp <channel> on/off 开关 GMCP 频道。
+
+需要在连接服务器之前加载握手事件。
+*/
+
+#class gmcp open;
+
+#nop 定义字符;
+#var TELNET[IAC]  \xFF;
+#var TELNET[DONT] \xFE;
+#var TELNET[DO]   \xFD;
+#var TELNET[WONT] \xFC;
+#var TELNET[WILL] \xFB;
+#var TELNET[SB]   \xFA;
+#var TELNET[SE]   \xF0;
+#var TELNET[GMCP] \xC9;
+
+#nop GMCP 握手事件;
+#EVENT {IAC WILL GMCP}
+{
+    #info SYSTEM save;
+	#nop 发送GMCP握手消息;
+    #send {$TELNET[IAC]$TELNET[DO]$TELNET[GMCP]\};
+    #send {$TELNET[IAC]$TELNET[SB]$TELNET[GMCP] core.hello { "client": "$info[SYSTEM][CLIENT_NAME]", "version": "$info[SYSTEM][CLIENT_VERSION]" } $TELNET[IAC]$TELNET[SE]\};
+};
+
+#nop GMCP 调试;
+
+#config {debug telnet} {on};
+
+#eve {IAC SB GMCP} {
+  #echo {%c%h} {light green} {【GMCP 事件：%0】};
+  #echo {<139>参数0:<099>%0};
+  #echo {<139>参数1:<099>%1};
+  #echo {<139>参数2:<099>%2};
+  #echo {<139>参数3:<099>%3};
+  #echo {<139>参数4:<099>%4};
+  #echo {<139>参数5:<099>%5};
+  #echo {%c%h} {light green};
+};
+
+/* ======= 数据示例 ============
+
+RCVD IAC SB GMCP
+IAC SB GMCP GMCP.Status IAC SE
+#########【GMCP 事件：GMCP.Status】#########
+参数0:GMCP.Status
+参数1:{qi}{497}{food}{218}{water}{259}{jing}{397}
+参数2:GMCP.Status {"qi":497,"food":218,"water":259,"jing":397}
+参数3:有
+参数4: northwest、north 和 east
+参数5:
+###########################################
+
+RCVD IAC SB GMCP
+IAC SB GMCP GMCP.Move IAC SE
+##########【GMCP 事件：GMCP.Move】#########
+参数0:GMCP.Move
+参数1:{1}{{result}{true}{dir}{{1}{south}{2}{north}{3}{east}{4}{west}}{short}{西大街}}
+参数2:GMCP.Move [{"result":"true","dir":["south","north","east","west"],"short":"西大街"}]
+参数3:有
+参数4: northwest、north 和 east
+参数5:
+###########################################
+
+*/
+
+#class gmcp close;
+```
+
 另可参见：[MSDP](#msdp)，[MSLP](#mslp)。
 
 # Greeting

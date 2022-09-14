@@ -75,7 +75,7 @@ mlo;
 };
 #nop »ÆÉ«;
 #function bc3 {
-  #local tmp {<139>***%0***<099>};
+  #local tmp {---<139>%0<099>---};
   #return $tmp;
 };
 #nop ==ÃüÁî»ØÏÔ==;
