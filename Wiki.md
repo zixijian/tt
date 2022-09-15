@@ -1761,7 +1761,7 @@ FORWARD     |指定自动补全向前
 }
 ```
 
-另可参见: [Case](#case)，[Default](#default)，[Else](#else)，[Elseif](#elseif)，[If](#if)，[Switch](#switch)，[Regex](#regex)。
+另可参见: [Case](#case)，[Else](#else)，[Elseif](#elseif)，[If](#if)，[Switch](#switch)，[Regex](#regex)。
 
 # Delay
 
@@ -6524,9 +6524,9 @@ print "cmd #showme <118>Hello World!"
 
 > #scan {txt} \<filename>
 
-读取文件并发送其内容到屏幕上，就像它是由服务器发送一样。
+读取文件并发送其内容到屏幕上，就像它是由服务器发送的一样。
 
-您可以使用 page-up 和 down 查看文件。
+默认不显示，使用 page-up 和 page-down 或 `#buffer end` 查看。
 
 这对于将 ansi 文件转换为 html 文件和读取日志文件非常有用。
 
@@ -6750,62 +6750,89 @@ Actions，highlights，substitutions 等可以正常触发。
 
 > 语法: #[sessionname] {commands}
 
-您可以使用 #session 命令创建多个会话。默认情况下，只有一个会话处于活动状态，这意味着您输入的命令在活动会话中执行，当所有会话接收输出时，只显示发送到活动会话的输出。
+您可以使用 `#session` 命令创建多个会话。
 
-当您使用 #session 命令创建会话时，您必须指定会话名称，在没有参数的情况下使用时，可以使用带有 hashtag 的会话名称来激活会话。如果给定参数，该会话将作为命令执行该参数，则不会激活会话。
+默认情况下，只有一个会话处于活动状态，这意味着您输入的命令在活动会话中执行，当所有会话接收输出时，只显示发送到活动会话的输出。
+
+当您使用 `#session` 命令创建会话时，您必须指定会话名称，在没有参数的情况下使用时，可以使用带有 `#` 的会话名称来激活会话。
+
+如果给定参数，该会话将该参数作为命令执行，不会激活会话。
+
 ```
-示例: 
-#ses one mymud.com 23;
-#ses two mymud.com 23;
+示例：
+#ses one tintin.net 23;
+#ses two tintin.net 23;
 #one;
-#two wiggle
+#two grin
 ```
-这将创建两个会话，最后创建的会话 (在本例中为两个) 将被激活。使用 #one 激活会话 1。使用 #two wiggle，wiggle social 将由会话 2 执行，会话 1 将保持活动。
 
-另可参见: [All](#all), [Port](#port), [Run](#run), [Session](#session), [Snoop](#snoop), [SSL](#ssl) and [Zap](#zap).
+这将创建两个会话，最后创建的会话 (在本例中为两个) 将被激活。
+
+使用 `#one` 激活会话 1。
+
+使用 `#two grin`，`grin social` 将由会话 2 执行，会话 1 将保持活动。
+
+另可参见: [All](#all)，[Port](#port)，[Run](#run)，[Session](#session)，[Snoop](#snoop)，[SSL](#ssl)，[Zap](#zap)。
 
 # Showme
 
-> 语法: #show {string} {row} {col}
+> 语法: #showme {string} {row} {col}
 
-show 命令将字符串显示到终端，不会发送到服务器，可用于状态、警告等。 
- 
-show 命令显示的消息可以被触发，并且可以用于调试操作、替换等。由于变量也被替换，这也可以用于显示信息。
+`#Show` 命令将字符串显示到终端，不会发送到服务器，可用于状态、警告等。 
 
-如果你想避免 `#show` 显示的信息被触发，  
-可以使用：`#line ignore #show {<string>}`.
+行号和列号是可选的，工作方式与 [prompt](#prompt) 命令相同。
+
+`#show` 命令显示的消息可以被触发，并且可以用于调试触发器、替换等。
+
+由于变量也被替换，这也可以用于显示信息。
+
+要避免 `#show` 显示的信息被触发，使用：`#line ignore #show {<string>}`。
 
 ```
 示例：
 #tick {TICK} {#delay 50 #show 10秒后警告!!!} {60}
 
-示例: 
+示例：
 #showme $bla
 如果定义了变量 “bla”，这将显示 bla 设置为的任何内容。
 ```
 
-行号和列号是可选的，  
-工作方式与 [#prompt](#prompt) 命令相同。
+注：`#Prompt` 帮助文件包含有关使用 {row} 和 {col} 参数的更多信息。
 
-另可参见: [Buffer](#buffer), [Echo](#echo) and [Grep](#grep).
+另可参见: [Buffer](#buffer)，[Draw](#draw)，[Echo](#echo)，[Grep](#grep)，[Prompt](#prompt)。
 
 # Snoop
 
-> 语法: #snoop {sessionname}
+> 语法: #snoop {sessionname} {on|off|scroll}
 
-此命令将切换会话的 snoop 状态。即使会话在后台，窥探会话也会显示其服务器输出。
+如果有多个会话处于活动状态，此命令允许您监视当前未激活的会话中正在发生的事情。
 
-另可参见: [All](#all), [Port](#port), [Run](#run), [Session](#session), [Session Name](#session-name), [SSL](#ssl) and [Zap](#zap).
+其他会话的文本行将自动添加会话名称作为前缀。
+
+您可以通过第二次执行 `#snoop` 来关闭监视模式。
+
+通过使用 `scroll` 参数，您将监视会话的滚动区域，这将覆盖任何活动会话的显示。
+
+您可以通过以下方式更改会话滚动区域的大小和位置：
+
+使用 `#split` 和 `#screen scrollregion` 命令。
+
+另可参见: [All](#all)，[Port](#port)，[Run](#run)，[Session](#session)，[Session Name](#session-name)，[SSL](#ssl)，[Zap](#zap)。
 
 # Speedwalk
 
-Speedwalking 允许您键入不以分号分隔的多个方向，现在它允许您用数字为方向加前缀，以表示前进该方向的次数。您可以使用 #config 打开/关闭它。
+## SPEEDWALK V1
 
-> 示例: 2s5w3s3w2nw
+快速行走允许您键入不以分号分隔的多个方向，方向以数字为前缀，以表示执行该方向的次数。
 
-如果没有打开快速行走，你需要输入:<br> s;s;w;w;w;w;w;s;s;s;w;w;w;n;n;w
+您可以使用 `#CONFIG {SPEEDWALK} {ON}` 打开快速行走。
+
+如果没有打开快速行走，你需要输入:s;s;w;w;w;w;w;s;s;s;w;w;w;n;n;w。
+
+如果打开快速行走，仅需输入：2s5w3s3w2nw。
 
 如果你想使用.2s5w3s3w2w 来执行快速行走，你可以尝试下面的脚本。
+
 ```
 示例:
 #alias {.%0}
@@ -6834,15 +6861,32 @@ Speedwalking 允许您键入不以分号分隔的多个方向，现在它允许�
         }
 }
 ```
-另可参见: [Alias](#alias), [Cursor](#cursor), [History](#history), [Keypad](#keypad), [Macro](#macro) and [Tab](#tab).
+
+## SPEEDWALK V2
+
+现代 MUDs 越来越多地采用对角线出口，比如：ne，nw，sw，se。
+
+为了适应这一点，`#map` 和 `#path` 命令不再将 nesw 解释为快速行走，并要求
+写成 1n1e1s1w，然后允许 2ne2e 执行 ne;ne;e;e。
+
+输入行上输入的快速行走继续使用 v1 系统。
+
+```
+示例：
+#path unzip 3n1e2nw
+示例：
+#map move 3ne1d
+```
+
+另可参见: [Alias](#alias)，[Cursor](#cursor)，[History](#history)， [Keypad](#keypad)，[Macro](#macro)，[Tab](#tab)。
 
 # Split
 
 > 语法: #split {top bar} {bottom bar} {left bar} {right bar} {input bar}
 
-此选项要求您的终端支持VT100仿真。
+此选项要求您的终端支持 VT100 仿真。
 
-split 命令允许创建顶部状态栏，左右状态条，滚动区域，底部状态栏和输入行。 
+`#Split` 命令允许创建顶部状态栏，左右状态条，滚动区域，底部状态栏和输入行。 
 
 屏幕分割区域如下表所示：  
 <table>
@@ -6862,9 +6906,11 @@ split 命令允许创建顶部状态栏，左右状态条，滚动区域，底�
 	</tr>
 </table>
 
-默认情况下，底部状态栏填充有破折号 ---，破折号线条也被称为分割线。滚动区域也被称为主屏幕，所有传入文本默认显示在这里。
+默认情况下，底部状态栏填充有破折号 ---，破折号线条也被称为分割线。
 
-如果您在没有参数的情况下使用 `#split`，它将设置顶部状态栏高度为0 行，底部状态栏为 1 行。
+滚动区域也被称为主屏幕，所有传入文本默认显示在这里。
+
+如果您在没有参数的情况下使用 `#split`，它将设置顶部状态栏高度为 0 行，底部状态栏为 1 行。
 
 如果将 `#split` 与一个参数一起使用，它将设置顶部状态栏的高度到给定的行数，底部状态栏将为 1 行。
 
@@ -6872,25 +6918,28 @@ split 命令允许创建顶部状态栏，左右状态条，滚动区域，底�
 
 第三和第四个参数是可选的，默认为 0。
 
-第五个参数是可选的，它用来设置输入栏的尺寸，它的默认值为 1。
+第五个参数是可选的，它用来设置输入条的尺寸，默认值为 1。
 
 可以使用负参数，在这种情况下，状态栏宽度被定义为滚动区域的最小宽度。
 
 ```
-示例: #split 0 0
-这将只分割出滚动区域和输入行。
-非常适合极简主义者。
+示例：
+#split 0 0
+--这将只分割出滚动区域和输入行，非常适合极简主义者。
 
-示例: #split 1 1 0 -80
-这将分割出单独一行顶部状态栏和底部状态栏。
-左栏的宽度为0，而右栏的宽度为可变宽度。
-例如：如果屏幕列宽是100，80列将用于滚动区域，留下一个右栏宽度为20列。
+示例：
+#split 1 1 0 -80
+--这将分割出单独一行顶部状态栏和底部状态栏。
+--左栏的宽度为 0，而右栏的宽度为可变宽度。
+--如果屏幕列宽是 100，80 列将用于滚动区域，留下一个右栏宽度为 20 列。
 ```
 
-注意：您可以使用[ #promt ](#prompt)及 `#show {line} {row}` 命令在分割区域中显示文本。  
-注意: 您可以使用 #unsplit 命令关闭分割模式。
+注：您可以使用[ promt ](#prompt)及 `#show {line} {row}` 命令在分割区域中显示文本。  
 
-如果您使用的是 #map 命令，您可以通过使用: #map flag vtmap 在顶部分割部分显示自动地图。
+注: 您可以使用 `#unsplit` 命令关闭屏幕分割模式。
+
+如果您使用的是 `#map` 命令，您可以通过使用: `#map flag vtmap` 在顶部分割部分显示自动地图。
+
 ```
 示例: 
 #map create;
@@ -6900,74 +6949,122 @@ split 命令允许创建顶部状态栏，左右状态条，滚动区域，底�
 #parse eewssdeeeunnweewssdeeeunwesnewnssdeeeunnsewsnwesdwwwunw tmp #map move $tmp
 ```
 
+另可参见: [Echo](#echo)，[Map](#map)，[Prompt](#prompt)，[Showme](#showme)。
+
 # SSL
 
-> 语法: #ssl {name} {address} {port} {file}
+> 语法: #ssl {name} {host} {port} {file}
 
-将以给定的名称开始会话，连接到指定的地址和端口，加载可选的文件名。
+将以给定的名称开始安全套接字远程登录会话，连接到指定的地址和端口，加载文件（可选）。
 
-> 示例: 
-#ssl pku mud.pkuxkx.com 8080
+例如：`#ssl pku mud.pkuxkx.com 8080`。
 
-除了将 ssl (安全套接字层) 添加到会话之外，#SSL 命令类似于 #session。为了 SSL 工作，需要安装 GnuTLS。
+除了将 SSL (安全套接字层) 添加到会话之外，`#ssl` 命令类似于 `#session`。
 
+为了使 SSL 工作，需要安装 GnuTLS。
 
-另可参见: [All](#all), [Port](#port), [Run](#run), [Session Name](#session-name), [Snoop](#snoop), [SSL](#ssl) and [Zap](#zap).
+另可参见: [All](#all)，[Port](#port)，[Run](#run)，[Session Name](#session-name)，[Snoop](#snoop)，[SSL](#ssl)，[Zap](#zap)。
 
 # Statements
 
-TinTin++ 理解以下声明。
+TinTin++ 理解以下语句。
 
-#break  
-#case {value} {true}  
-#continue  
-#default {commands}   
-#else {commands}  
-#elseif {expression} {true}  
-#foreach {list} {variable} {commands}  
-#if {expression} {true}  
-#loop {min} {max} {variable} {commands}  
-#parse {string} {variable} {commands}  
-#return {value}  
-#switch {expression} {commands}  
-#while {expression} {commands}  
+* #break  
+* #case {value} {true}  
+* #continue  
+* #default {commands}   
+* #else {commands}  
+* #elseif {expression} {true}  
+* #foreach {list} {variable} {commands}  
+* #if {expression} {true}  
+* #loop {min} {max} {variable} {commands}  
+* #parse {string} {variable} {commands}  
+* #return {value}  
+* #switch {expression} {commands}  
+* #while {expression} {commands}  
 
-另可参见：[Commands](#commands),[Help](#help) and [Info](#info).
+另可参见：[Commands](#commands)，[Help](#help)，[Info](#info)。
 
 # Substitute
 
-> 语法: #substitute {message} {newmessage} {priority}
+> 语法: #substitute {text} {new text} {priority}
 
-#Substitute 命令允许您更改MUDs输出。%1-99 变量从消息中被替换，可以在替换的新消息部分使用。消息部分不应使用 %0 变量。优先级部分是可选的，并确定替代部分的优先级，默认为 5。
+`#Substitute(替换)` 命令允许您将来自服务器中的文本替换为新文本。
+
+%1-%99 变量可用于捕获文本并将其用作新输出。
+
+文本部分不应使用 %0 变量。
+
+优先级是可选的，并确定替换的优先级，默认为 5。
 
 有关正则匹配的信息，请参见正则表达式 [「PCRE」](#pcre) 一节。
 
-您可以在新消息部分添加TinTin颜色代码来更改消息的颜色，默认情况下，删除所有以前的MUDs消息颜色代码。有关更多信息，请参见颜色[Colors](#colors)。
-```
-示例: 
-#substitute {%1 tells you '%2'} {
-   <128>%1 <138>tells you '<128>%2<138>'
-}
-```
-添加这个替换，并告诉自己看到结果。
+颜色代码可用于为新文本着色，要将颜色恢复到原始行，使用 `<900>` 颜色代码。
 
-注意: 您可以使用 #unsubstitute 命令删除替换。
+有关颜色的更多信息，请参见：[Colors](#colors)。
 
-另可参见: [Action](#action), [Gag](#gag), [Highlight](#highlight) and [Prompt](#prompt).
+如果仅给出一个参数，则显示所有与活动替换匹配的参数。
+
+可以使用通配符，请参阅 `#help regex`。
+
+如果没有给出参数，则显示所有子项。
+
+```
+示例：
+#sub {Zoe} {ZOE}
+--任何 Zoe 实例都将替换为 ZOE。
+
+示例：
+#sub {~\e[0;34m} {\e[1;34m}
+--用亮蓝色替换深蓝色代码。
+
+示例：
+#sub {%1massacres%2} {<018>%1<118>MASSACRES<018>%2}
+--用红色的 'MASSACRES' 替换所有出现的 'massacres'。
+
+示例：
+#sub {\b{n|e|s|w|u|d}\b} {\e[4m%1\e[24m}
+--为替换匹配到的方向添加 MSLP 标签。
+
+示例：
+#sub {%1 tells you '%2'} {<128>%1 <138>tells you '<128>%2<138>'}
+--为收到的消息突出显示。
+```
+
+注: 您可以使用 `#unsubstitute` 命令删除替换。
+
+另可参见: [Action](#action)，[Gag](#gag)，[Highlight](#highlight)，[Prompt](#prompt)。
 
 # Suspend
 
-> 语法: #suspend
+> 语法: #cursor suspend
 
-这将在后台放置TinTin++，您将返回到 shell。按 ctrl-z 会做同样的事情。你可以通过键入 fg 来返回TinTin++。
+这将在挂起 TinTin++ 并将返回到 shell。
+
+按 `ctrl-z` 会做同样的事情。
+
+你可以通过键入 fg 来返回 TinTin++。
+
+挂起时，您的 tintin 会话将冻结。
+
+要保持一个挂起的会话运行，使用 `#detach` 命令。
+
+另可参见：[End](#end)，[Detach](#detach)。
 
 # Switch
 
 > 语法: #switch {condition} {arguments}
 
-#Switch 命令的工作方式类似于其他语言中的 switch 语句。当遇到 #switch 命令时，它的主体被解析，找到的每个 #case 命令将与 switch 的条件参数进行比较，如果有匹配，则执行。如果找到 #default 命令并且没有匹配 #case 语句，则执行 #default 命令的参数。
+`#Switch(选择)` 命令的工作方式类似于其他语言中的 switch 语句。
 
-#Break 命令可用于从switch中断开，但不像在 C 中那样需要，因为每个switch只能执行一个 #case 命令。
+当遇到 `#switch` 命令时，它的主体被解析，找到的每个 `#case` 命令将与 `#switch` 的条件参数进行比较，如果匹配，则执行。
+
+当比较字符串时，`#switch` 和 `#case` 的参数必须用引号括起。
+
+如果找到 `#default` 命令且没有匹配的 `#case` 语句，则执行 `#default` 命令的参数。
+
+`#Break` 命令可用于从 `#switch` 中断开，但不像在 C 中那样需要，因为每个`#switch` 只能执行一个 `#case` 命令。
+
 ```
 示例: 
 #switch {1d4} {
@@ -6976,37 +7073,44 @@ TinTin++ 理解以下声明。
    #default giggle
 }
 ```
-另可参见: [Case](#case), [Default](#default), [Else](#else), [Elseif](#elseif), [If](#if) and [Regex](#regex).
+
+另可参见: [Case](#case)，[Default](#default)，[Else](#else)，[Elseif](#elseif)，[If](#if)，[Regex](#regex)，[Statements](#statements)。
 
 # System
 
 > 语法: #system {commands}
 
-系统命令允许您在 shell 中执行命令。
+`#System` 命令允许您在 shell 中执行命令。
 
-> 示例: #system ls
+例如：`#system ls`
 
 如果你忘记了你想阅读的文件的确切名称或顺序，这很有用。
 
-注意: 您也可以使用 #script 和 #run 命令来执行 shell 命令。
+注: 您也可以使用 `#script` 和 `#run` 命令来执行 shell 命令。
 
-另可参见: [Script](#script) and [Run](#run).
+另可参见：[Detach](#detach)，[Script](#script)，[Run](#run)。
 
 # Tab
 
-> 语法: #tab {completionword}
+> 语法: #tab {word}
 
-Tab 命令将完成 word 添加到选项卡完成列表中。按下 “tab” 键时，TinTin将在您的 tab 列表中搜索最佳匹配。对于长命令很有用。
+`#Tab` 命令将 word 添加到自动补全列表中，按字母顺序排序。
 
-如果您在没有定义标签的情况下单击标签，tintin 将使用 scrollback buffer 查找匹配项。
+按下 “Tab” 键时，TinTin 将在您的自动补全列表列表中搜索最佳匹配，对于长命令很有用。
 
-> 示例: #tab muhahaha
+如果您在没有定义自动补全列表的情况下使用 ＂Tab＂ 键，tintin 将查找回滚缓冲区进行自动补全。
 
-键入 mu，然后按 tab，会出现这个邪恶的命令。
+可以使用 `#cursor tab` 命令设置自动补全行为，默认情况下绑定到 ＂Tab＂ 键。
 
-注意: 您可以使用 “untab” 命令删除标签。
+```
+示例：
+#tab muhahaha
+--键入 mu，然后按 Tab，会出现 muhahaha。
+```
 
-另可参见: [Alias](#alias), [Cursor](#curse), [History](#history), [Keypad](#keypad), [Macro](#macro) and [Speedwalk](#speedwalk).
+注: 您可以使用 `#untab` 命令删除 tab。
+
+另可参见: [Alias](#alias)，[Cursor](#curse)，[History](#history)， [Keypad](#keypad)，[Macro](#macro)，[Speedwalk](#speedwalk)。
 
 # Textin
 
