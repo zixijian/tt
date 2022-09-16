@@ -5220,7 +5220,7 @@ True 是任何非零数字，False 是零。
 如果你需要 0 到 9 之间的随机数，你可以使用 1d10-1。
 
 ```
-来自xgg@pkuxkx的注释：
+来自 xgg@pkuxkx 的注释：
 
 一个骰子只能从 1 开始，
 所以当范围不是从 1 开始时，需要对数值进行差值运算。
@@ -5348,7 +5348,7 @@ d    |  1 | 整数随机骰子
 
 可以使用 MSLP 协议创建链接，该协议将生成链接单击时的特定事件。
 
-另可参见：[Button](#button)，[Draw](#draw)，[Event](#event)，[MSLP](#mslp)。
+另可参见：[Button](#button)，[Draw](#draw)，[Event](#event)，[MSLP](#mslp)，[Sceen](#screen)。
 
 # MSDP
 
@@ -5468,7 +5468,7 @@ MSLP（Mud 服务器链接协议）需要启用 `#config mouse on`，并创建�
 
 #nop 匹配方向替换为带有下划线标签的可点击链接;
 #action  {^    这里{唯一|明显}的{出口|方向}{有|是}%*。$} {
-  #local {dir_all} {%3};
+  #local {dir_all} {%4};
   #replace {dir_all} {{\w+}} {<139>\e[4m&1\e[24m<099>};
   #line ignore #show {    这里%1的%2%3$dir_all。};
   #line gag;
@@ -7325,7 +7325,7 @@ TinTin++ 理解以下语句。
 
 当执行 `#while` 命令时，评估其条件，如果为 TRUE (任何非零结果)，则执行命令。
 
-`#While` 循环将无限重复，直到条件为 FALSE 或找到 `#BREAK` 或 `#RETURN` 命令。
+`#while` 循环将无限重复，直到条件为 FALSE 或找到 `#BREAK` 或 `#RETURN` 命令。
 
 `#while` 语句仅在读取时计算，因此您必须将其嵌套在触发器中，如 `#alias` 或 `#action`。
 
