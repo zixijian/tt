@@ -5348,7 +5348,7 @@ d    |  1 | 整数随机骰子
 
 可以使用 MSLP 协议创建链接，该协议将生成链接单击时的特定事件。
 
-另可参见：[Button](#button)，[Draw](#draw)，[Event](#event)，[MSLP](#mslp)，[Sceen](#screen)。
+另可参见：[Button](#button)，[Draw](#draw)，[Event](#event)，[MSLP](#mslp)，[Screen](#screen)。
 
 # MSDP
 
