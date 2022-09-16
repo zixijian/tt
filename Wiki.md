@@ -1,7 +1,6 @@
-# TINTIN++中文手册
+# TINTIN++ 中文手册
 
 > 日拱一卒，功不唐捐。  
-技术交流 QQ 群：951665549。
 
 # 导航
 
@@ -1914,9 +1913,9 @@ VERTICAL|如果可能的话，将垂直绘制。
 
 # Echo
 
-> 语法: #echo {format} {argument1} {argument2} {etc}
+> 语法: #echo {format} {arg1} {arg2} {etc}
 
-`#Echo(显示)` 在屏幕上显示带有格式选项的文本，请使用 `#help format` 查看更多信息。
+`#Echo` 在屏幕上显示带有格式选项的文本。
 
 与 `#showme` 命令不同，`#echo` 命令不会触发 `#action`。
 
@@ -3017,9 +3016,6 @@ IAC SB GMCP GMCP.Status IAC SE
 参数0:GMCP.Status
 参数1:{qi}{497}{food}{218}{water}{259}{jing}{397}
 参数2:GMCP.Status {"qi":497,"food":218,"water":259,"jing":397}
-参数3:有
-参数4: northwest、north 和 east
-参数5:
 ###########################################
 
 RCVD IAC SB GMCP
@@ -3028,9 +3024,6 @@ IAC SB GMCP GMCP.Move IAC SE
 参数0:GMCP.Move
 参数1:{1}{{result}{true}{dir}{{1}{south}{2}{north}{3}{east}{4}{west}}{short}{西大街}}
 参数2:GMCP.Move [{"result":"true","dir":["south","north","east","west"],"short":"西大街"}]
-参数3:有
-参数4: northwest、north 和 east
-参数5:
 ###########################################
 
 */
@@ -5853,7 +5846,7 @@ $ 匹配行尾。
 \%W   |  匹配零到任意数量的非单词字符 | ([^A-Za-z0-9_]*?)
 \%?   | 匹配 0 个或 1 个字符          | (.??)
 \%.   | 匹配一个字符                  | (.)
-\%+   | 匹配一个到与任意数量的字符    | (.+?)
+\%+   | 匹配一个到任意数量的字符    | (.+?)
 \%\*  | 匹配零到任意数量的字符        | (.*?)
 
 要匹配 4 个空格：`%+4s`。
@@ -6562,7 +6555,22 @@ Actions，highlights，substitutions 等可以正常触发。
 
 > #screen get \<option> \<var>
 
-获取各种屏幕选项并将其保存到 \<var>。无参数查看所有可用选项。
+获取各种屏幕选项并将其保存到 \<var>。
+
+无参数使用 `#screen get` 查看所有可用选项：
+
+* #SCREEN {GET} {FOCUS} {\<VAR>}
+* #SCREEN {GET} {ROWS|COLS|HEIGHT|WIDTH} {\<VAR>}
+* #SCREEN {GET} {CHAR_HEIGHT|CHAR_WIDTH}
+* #SCREEN {GET} {SPLIT_TOP_BAR|SPLIT_BOT_BAR|SPLIT_LEFT_BAR|SPLIT_RIGHT_BAR}
+{\<VAR>}
+* #SCREEN {GET} {SCROLL_TOP_ROW|SCROLL_TOP_COL|SCROLL_BOT_ROW|SCROLL_BOT_COL}
+{\<VAR>}
+* #SCREEN {GET} {INPUT_TOP_ROW|INPUT_TOP_COL|INPUT_BOT_ROW|INPUT_BOT_COL}
+{\<VAR>}
+* #SCREEN {GET} {SCROLL_ROWS|SCROLL_COLS|INPUT_ROWS|INPUT_COLS} {\<VAR>}
+* #SCREEN {GET} {INPUT_NAME} {\<VAR>}
+* #SCREEN {GET} {CUR_ROW|CUR_COL} {\<VAR>}
 
 > #screen info
 
@@ -7084,7 +7092,7 @@ TinTin++ 理解以下语句。
 
 例如：`#system ls`
 
-如果你忘记了你想阅读的文件的确切名称或顺序，这很有用。
+如果你忘记了你想读取的文件的确切名称或路径，这很有用。
 
 注: 您也可以使用 `#script` 和 `#run` 命令来执行 shell 命令。
 
@@ -7116,66 +7124,84 @@ TinTin++ 理解以下语句。
 
 > 语法: #textin {filename} {delay}
 
-这将在文件中读取，并将每一行发送到MUDs。Tintin 不会解析文本。将脚本文件转储到 mud 的注释编辑器或类似的命令中很有用。请记住，如果您一次发送太多数据，大多数 muds 都会关闭您的连接。使用可选的延迟参数在每个命令之间添加一个小延迟。
+`#Textin` 允许在文件中读取内容，并将每一行发送到服务器。
 
-> 示例: #textin desc1.txt 0.2
+对于在线创作或发出已经写好的内容很有用。
 
-会在 olc 编辑器中加载 desc1 的数据。
+请记住，如果您一次发送太多数据，大多数 muds 都会关闭您的连接。
 
-另可参见: [Log](#log), [Read](#read), [Scan](#scan) and [Write](#write).
+使用可选的延迟参数在发出的每行之间添加一个小延迟。
+
+延迟以秒为单位，采用浮点数。
+
+```
+示例：
+#textin desc1.txt 0.2
+--会在 olc 编辑器中加载 desc1 的数据。
+```
+
+另可参见: [Read](#read)，[Scan](#scan)，[Send](#send)，[Write](#write)。
 
 # Ticker
 
-> 语法: #ticker {name} {commands} {interval}
+> 语法: #ticker {name} {commands} {interval in seconds}
 
-名称部分可以是任何你想要的，取消只需要 unticker 命令。每隔 x 秒执行一次命令，这在间隔部分中指定。
+`#Ticker(定时器)` 每隔 x 秒执行一次命令。
 
-> 示例: #ticker {autosave} {save} {300}
+定时器执行每秒不能超过 10 次。
 
-这将使 TinTin 每 300 秒执行一次save命令。
+```
+示例：
+#ticker {autosave} {save} {300}
+--每 300 秒执行一次 save 命令。
+```
 
-注意: 您可以使用 #untic 命令删除定时器。
+注: 您可以使用 `#unticker` 命令删除定时器。
 
-另可参见: [Delay](#delay) and [Event](#event).
+另可参见: [Delay](#delay)，[Event](#event)。
 
 # Time
 
 > 语法：#format {variable} {%t} {argument}
 
-#format 命令的 %t 参数使 strftime() 打印日期。
+`#Format` 命令的 `%t` 格式说明符使用 `strftime()` 格式说明符打印日期。
 
 默认情况下，使用的时间戳是当前时间，如果要打印过去或将来的日期，请使用:
 
-> 指令：#format {variable} {%t} {{argument} {{epoch time}}
+> 指令：#format {variable} {%t} {{argument} {epoch time}}
 
-当前时间戳是使用 #format {time} {%T} 获得的。
+当前时间戳是使用 `#format {time} {%T}` 获得的。
 
-使用 %t 时，参数应包含 strftime 格式说明符。输出值可能因您的本地化设置而异。
+使用 `%t` 时，参数应包含 `strftime` 格式说明符。
+
+输出值可能因您的本地化设置而异。
 
 参数|说明
 :-|:-
-%a|星期几的缩写名称(周一...周日)
-%A|星期几的全名(周一...周日)
-%b|月份的缩写名称 (1月..12月)
-%B|月份的全名(1月...12月)
-%C|2位数字 世纪。(19...20)
-%d|2位数字 月份中的天。(0...31)
-%H|2位数字 24 小时制。(00...23)
-%I|2位数字 12 小时制。(01...12)
-%j|3 位数 一年中的第几天。 (001...366)
-%m|2位数字 年份中的月份 (01...12)
-%M|2位数字 小时中的分钟 (00...59)
-%p|缩写 12 小时制 (AM...PM)
-%P|缩写 12 小时制 (am...pm)
-%S|2位数字 分钟中的秒 (00...59)
-%u|1位数字 星期几 (1...7)
-%U|2位数字 一年中的下周日 (00...53)
-%w|1位数字 一周中的第几天 (0...6)
-%W|2位数字 一年中的下周一 (00...53)
-%y|2位数字 年份(70...38)
-%Y|4位数字 年份(1970...2038)
-%z|5位时区偏移量(-1200...+1400)
+%a|星期几的缩写(Mon...Sun)
+%A|星期几的全称(Monday...Sunday)
+%b|月份的缩写(Jan..Dec)
+%B|月份的全称(January...December)
+%C|2 位数字 世纪(19...20)
+%d|2 位数字 月份中的天(0...31)
+%H|2 位数字 24 小时制(00...23)
+%I|2 位数字 12 小时制(01...12)
+%j|3 位数字 一年中的第几天(001...366)
+%m|2 位数字 年份中的月份(01...12)
+%M|2 位数字 小时中的分钟(00...59)
+%p|缩写 12 小时制(AM...PM)
+%P|缩写 12 小时制(am...pm)
+%S|2 位数字 分钟中的秒(00...59)
+%u|1 位数字 星期几(1...7)
+%U|2 位数字 一年中的下周日(00...53)
+%w|1 位数字 一周中的第几天(0...6)
+%W|2 位数字 一年中的下周一(00...53)
+%y|2 位数字 年份(70...38)
+%Y|4 位数字 年份(1970...2038)
+%z|5 位数字 时区偏移量(-1200...+1400)
 %Z|时区的缩写名称
+
+`%P` 参数不适用于 macOS。
 
 ```
 获取当前年月日：
@@ -7183,124 +7209,234 @@ TinTin++ 理解以下语句。
 #OK. VARIABLE {foo} HAS BEEN SET TO {2020-04-07}.
 ```
 
-另可参见：[Echo](#echo),[Event](#event) and [Format](#format).
+另可参见：[Echo](#echo)，[Event](#event)，[Format](#format)。
 
 # Variable
 
-> 语法: #variable {name} {string}
+> 语法: #variable #variable {variable name} {text to fill variable}
 
-变量不同于 %0-99 个参数，因为您可以将完整单词指定为变量，除非它们被更改，否则它们会保留在完整会话的内存中。它们可以保存在 coms 文件中，如果您同时运行两个或多个会话，则可以将它们设置为不同的值。变量对于每个会话都是全局的，可以通过在变量名之前添加 $ 来访问。  
+`#Variable(变量)` 不同于 %0-99 参数，因为您可以将完整单词指定为变量，除非它们被更改，否则它们会一直保留在会话的内存中。
+
+变量可以保存在命令文件中，如果您同时运行两个或多个会话，则可以将它们设置为不同的值。
+
+变量对于每个会话都是全局的，可以通过在变量名之前添加 `$` 来访问。  
 
 ```
 示例:
 #alias {target} {#var target %0}
-#alias {x} {cast 'acid blast' $target}
+#alias {x} {kick $target}
 ```  
-变量的名称必须只存在字母、数字、下划线，变量名称的第一个字符必须始终是字母。如果不满足这些要求，请不要惊慌，只需将变量封装在大括号中。  
+
+变量的名称必须只存在字母、数字、下划线，变量名称的第一个字符必须始终是字母。
+
+如果不满足这些要求，只需将变量名称封装在大括号中。  
 
 ```
-示例: #variable {cool website!} {http://tintin.sourceforge.net} 
-chat I was on ${cool website!} yesterday!
+示例：
+#variable {cool website!} {http://tintin.sourceforge.net} 
+#chat I was on ${cool website!} yesterday!
 ```  
-可以使用括号嵌套变量，使变量的行为类似于关联数组。  
+
+可以通过添加其他 `$` 符号来转义变量。
+
+```
+示例：
+#var test 42;#showme $$test
+```
+
+可以使用方括号 `[]` 嵌套变量，使变量的行为类似于关联数组。  
 
 ```
 示例: 
 #var hp[self] 34;
 #var hp[target] 46
-```  
-使用 `$variable[+1]` 可以看到变量的第一个嵌套的值，使用 `$variable[-1]` 可以看到最后一个嵌套的值。使用 `$variable[-2]` 将报告倒数第二个值，依此类推。
+```
 
-您可以使用 `*variable[+1]` 看到变量第一个嵌套的键，查看所有键使用 `*variable[]` 或 `*variable[%*]`。
+使用 `$variable[+1]` 可以看到变量的第一个嵌套的值。
 
-查看变量使用 `&variable` 的嵌套索引。查看变量索引总数使用 `&variable[]`。
+使用 `$variable[-1]` 可以看到最后一个嵌套的值。
 
-注意: 不存在变量的嵌套索引为 0，因此您可以使用 `#if {&{variable}}` 检查变量是否存在。
+使用 `$variable[-2]` 将看到倒数第二个值，以此类推。
 
-注意: 您可以使用 #unvariable 命令删除变量（对套嵌中的变量也适用）。
+要显示所有索引，请使用 `*variable[]`。
+
+要显示所有值，请使用 `$variable[]`。
+
+显示索引 2 到 4 的所有值使用 `$variable[+2..4]`。
+
+`Nested variables(嵌套变量)` 也称为 `tables(表)`，通常使用表引用嵌套在一个特定变量中的多个变量。
+
+可以使用正则表达式。
 
 ```
-来自蓝日的疑问：
+示例：
+#show {Targets starting with the letter A: $targets[A%*]
+```
+
+要查看变量的内部索引，请使用 `&<变量名称>`。
+
+要查看表的大小：`&targets[]` 或 `&targets[%*]`。
+
+不存在的嵌套变量索引为 0，可以使用 `#if {&{variable[]}}` 检查变量是否存在。
+
+```
+示例：
+#show {Number of targets starting with A: &targets[A%*]
+```
+
+在某些脚本中，您需要知道嵌套变量的名称。
+
+这个也称为键，您可以使用 `*variable` 获取它。
+
+例如：`*target[+1]`。
+
+要获取第一个变量的名称，请使用 `*{+1}`。
+
+也可以使用大括号表示法声明表。
+
+使用 `#var hp[self] 34` 等同于 `#var {hp} {{self}{34}}`。
+
+这还允许合并表。
+
+`#var hp[self] 34;#var hp[target] 46` 等同于 `#var {hp} {{self}{34} {target}{46}}` 以及 `#var {hp} {{self}{34}} {{target}{46}}`。
+
+如果你想变得有创意，还相当于：`hp[self] 34;#var {hp} {$hp} {{target}{46}}`。
+
+注: 您可以使用 `#unvariable` 命令删除变量（对套嵌变量也适用）。
+
+```
+来自蓝日的疑问：如何删除 '{c} {str3}' 这对键值？
 #var mylist {
-	{a} {str1}
-	{b} {str2}
-	{c}	{str3}
+  {a} {str1}
+  {b} {str2}
+  {c}	{str3}
 };
-如何删除{c} {str3}这对键值？
 
-答：
-#unvar mylist[c]
+答：#unvar mylist[c]。
 ```
 
-另可参见: [Format](#format), [Function](#function), [Local](#local), [Math](#math), [List](#list), [Replace](#replace) and [Script](#script).
+另可参见: [Cat](#cat)，[Format](#format)，[Function](#function)，[Local](#local)，[Math](#math)，[List](#list)，[Replace](#replace)，[Script](#script)。
 
 # While
 
-> 语法: #while {variable} {commands}
+> 语法: #while {conditional} {commands}
 
-While 命令的工作方式类似于 c 中的 while 命令。一旦条件等于 0，while 循环将停止。
+`#While(当)` 命令的工作方式类似于其他语言中的 ＂while＂ 命令。
+
+当执行 `#while` 命令时，评估其条件，如果为 TRUE (任何非零结果)，则执行命令。
+
+`#While` 循环将无限重复，直到条件为 FALSE 或找到 `#BREAK` 或 `#RETURN` 命令。
+
+`#while` 语句仅在读取时计算，因此您必须将其嵌套在触发器中，如 `#alias` 或 `#action`。
+
+`#while` 条件的求值方式与 `#math` 命令完全相同。
 
 ```
+示例
+#math cnt 0;
+#while {$cnt < 20} {
+  #math cnt $cnt + 1;
+  say $cnt
+}
+
 示例:
-#list var create a b c d
-#while {\&var[]} {#showme $var[+1];#unvar var[+1]}
+#list var create a b c d;
+#while {\&var[]} {
+  #showme $var[+1];
+  #unvar var[+1]
+}
 ```
-另可参见: [Break](#break), [Continue](#continue), [Foreach](#foreach), [List](#list), [Loop](#loop), [Parse](#parse), [Repeat](#repeat) and [Return](#return).
+
+注：使用 `#help math` 查看更多信息。
+
+另可参见: [Break](#break)，[Continue](#continue)，[Foreach](#foreach)，[List](#list)，[Loop](#loop)，[Math](#math)，[Parse](#parse)，[Repeat](#repeat)，[Return](#return)，[Statements](#statements)。
 
 # Wildcards
 
-在 TinTin++ 中，所有的通配符/globs 都是由正则表达式处理的。许多命令以某种形式或方式支持通配符。
+在 TinTin++ 中，所有的通配符/globs 都是由正则表达式处理的。
+
+许多命令以某种形式或方式支持通配符。
+
 ```
-示例: #alias {a%*}
-显示以 “a” 开头的所有别名。
-示例: #help {A%*}
-显示以 “A” 开头的所有别名。
-示例: #kill action %*Bubba%*
-删除包含单词 Bubba 的所有act。
-示例: #grep ^Bubba %*
-显示所有以 Bubba 开头的 scrollback buffer 中的行。
-示例: #showme ${map_%*}
-显示以 map_ 开头的所有变量
+示例：
+#alias {a%*}
+--显示以 “a” 开头的所有别名。
+
+示例：
+#help {A%*}
+--显示以 “A” 开头的所有别名。
+
+示例：
+#kill action %*Bubba%*
+--删除包含单词 Bubba 的所有触发器。
+
+示例：
+#grep ^Bubba %*
+--显示所有以 Bubba 开头的回滚缓冲区中的行。
+
+示例：
+#showme ${map_%*}
+--显示以 map_ 开头的所有变量
 ```
-另可参见: [PCRE](#pcre).
+
+另可参见: [PCRE](#pcre)。
 
 # Write
 
-> 语法: #write {filename}
+> 语法: #write {filename} {[FORCE]}
 
-这个命令会将你所有的TinTin列表写入文件。
+写入所有当前 actions，aliases，subs，highlights，variables 到命令文件。
 
-> 示例: #write bla.tin
+默认情况下，您不能写入 `.map` 文件以防止意外覆盖地图文件。
 
-会把你的TinTin别名、触发器等写给 bla.tin。
+使用 FORCE 参数忽略写入保护。
+
 ```
-来自dzp@pkuxkx的注释：
+示例：
+#write bla.tin
+--把你的别名、触发器等写入 bla.tin。
+```
+
+```
+来自 dzp@pkuxkx 的注释：
 
 单独 #write 变量、别名等出来，
-可以写到一个单独的 class 里，
+可以写到一个单独的 #class 里，
 使用下列命令保存：
-#class {<classname>} {write} {<filename>}。
+#class {<classname>} {write} {<filename>}
 ```
-另可参见: [Log](#log), [Read](#read), [Scan](#scan) and [Textin](#textin).
+
+另可参见: [Log](#log)，[Read](#read)，[Scan](#scan)，[Textin](#textin)。
 
 # Zap
 
 > 语法: #zap {session}
 
-如果没有参数，这将关闭当前活动会话。  
+如果没有参数，这将关闭当前活动会话。
+
 如果没有活动会话，它将关闭 TinTin++。  
+
 如果提供会话名称，它将关闭给定的会话。
 
-通常可使用组合键 ctrl-d 关闭会话。
+通常可使用组合键 `ctrl-d` 关闭会话。
 
-另可参见: [All](#all), [Port](#port), [Run](#run), [Session](#session), [Session Name](#session-name), [Snoop](#snoop) and [SSL](#ssl).
+另可参见: [All](#all)，[Port](#port)，[Run](#run)，[Session](#session)，[Session Name](#session-name)，[Snoop](#snoop)，[SSL](#ssl)。
 
 # 关于
+
 ***
 **文档来自[「TinTin++ 官网」](https://tintin.sourceforge.io/)**  
 
+**本手册最新地址[「Github」](https://github.com/zixijian/tt/blob/master/Wiki.md)**
+
 **翻译者：xgg@pkuxkx**  
+
 **贡献者：dzp@pkuxkx**  
 
+**技术交流 QQ 群：951665549**
+
+**可通过 qq、issue、PR 等方式参与贡献**
+
 **继续阅读:[ 返回导航 ](#导航)**
+
 ***
