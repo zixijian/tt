@@ -1,5 +1,10 @@
 #nop 北大侠客行连接信息;
 #nop #event {SCREEN RESIZE} {#split};
 #split;
+#nop 加载 prompt 插件;
+#read {plugin/prompt.tin};
+#nop 启用 GMCP;
+#read {gmcp.tt};
+#nop 创建会话;
 #ses pku mud.pkuxkx.net 8080;
 

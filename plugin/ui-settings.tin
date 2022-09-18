@@ -1,0 +1,84 @@
+#nop Prompt 插件示例文件。
+
+#nop {Top} {TopSepBar} {MidSepBar} {Bot} {BotSepBar};
+
+#list prompt-fields create {
+    { {place}{MidSepBar}        {label}{挂机中}     {name}{afk}      }
+    { {place}{MidSepBar}        {label}{重启}       {name}{reboot}   {countdown}{Auto} }
+    { {place}{MidSepBar}        {label}{经验转化率} {name}{pot/exp}  }
+    { {place}{MidSepBar}        {label}{签到}       {name}{sign}     }
+    { {place}{MidSepBar}        {label}{双倍}       {name}{double}   {countdown}{Auto} }
+    { {place}{MidSepBar}        {label}{铜雀台}     {name}{tqt}      }
+    { {place}{MidSepBar}        {label}{武经总要}   {name}{bookZeng} {countdown}{Auto} }
+
+    { {place}{MidSepBar}        {label}{衣钵传承}   {name}{yibo}     }
+    { {place}{MidSepBar}        {label}{药炉}       {name}{stove}    }
+
+    { {place}{MidSepBar}        {label}{亲戚}       {name}{renqin}   }
+    { {place}{MidSepBar}        {label}{燕青拳}     {name}{yanqing}  }
+
+    { {place}{MidSepBar}        {label}{保卫}       {name}{baowei}   }
+    { {place}{MidSepBar}        {label}{答题}       {name}{dati}     }
+    { {place}{MidSepBar}        {label}{比武}       {name}{biwu}     {countdown}{Auto} }
+    { {place}{MidSepBar}        {label}{福米}       {name}{fullme}   {cooldown}{600} }
+    { {place}{MidSepBar}        {label}{URL}        {name}{URL}      {cooldown}{180} }
+
+    { {place}{Bot} {line}{1}    {label}{经验}       {name}{exp}      {width}{8}  {visibility}{Always} }
+    { {place}{Bot} {line}{1}    {label}{本次新增}   {name}{expDelta} {width}{6}  {visibility}{HideLabel} {cooldown}{600} }
+    { {place}{Bot} {line}{1}    {label}{增速}       {name}{expSpd}   {width}{8}  {cooldown}{600} }
+    { {place}{Bot} {line}{1}    {label}{潜能}       {name}{pot}      {width}{8}  {visibility}{Always} }
+    { {place}{Bot} {line}{1}    {label}{本次新增}   {name}{potDelta} {width}{6}  {visibility}{HideLabel} {cooldown}{600} }
+    { {place}{Bot} {line}{1}    {label}{气血恢复}   {name}{yunqi}    {width}{5}  {cooldown}{60}  }
+    { {place}{Bot} {line}{1}    {label}{存款}       {name}{saving}   {width}{10} {cooldown}{1800}  }
+    { {place}{Bot} {line}{1}    {label}{现金}       {name}{cash}     {width}{10} {cooldown}{600}   }
+    { {place}{Bot} {line}{1}    {label}{收益速度}   {name}{profit}   {width}{10} {cooldown}{600}   }
+
+    { {place}{Bot} {line}{2}    {label}{不利战况}   {name}{chousui}  {visibility}{Always}    {cooldown}{60} }
+    { {place}{Bot} {line}{2}    {label}{透骨钉}     {name}{tougu}    {visibility}{HideLabel} {cooldown}{60} }
+    { {place}{Bot} {line}{2}    {label}{刺穴}       {name}{cixue}    {visibility}{HideLabel} {cooldown}{60} }
+    { {place}{Bot} {line}{2}    {label}{刺目}       {name}{cimu}     {visibility}{HideLabel} {cooldown}{10} {color}{<170><570>} }
+    { {place}{Bot} {line}{2}    {label}{刺腕}       {name}{ciwan}    {visibility}{HideLabel} {cooldown}{10} {color}{<510>} }
+    { {place}{Bot} {line}{2}    {label}{内力不济}   {name}{neili}    {visibility}{HideLabel} {cooldown}{10} {color}{<110><510>} }
+
+    { {place}{Bot} {line}{2}    {label}{中毒情况}   {name}{bingpo1}  {visibility}{Always}    {cooldown}{60} }
+    { {place}{Bot} {line}{2}    {label}{星宿毒掌}   {name}{duzhang1} {visibility}{HideLabel} {cooldown}{60} }
+    { {place}{Bot} {line}{2}    {label}{情毒}       {name}{qingdu1}  {visibility}{HideLabel} {cooldown}{60} }
+    { {place}{Bot} {line}{2}    {label}{凝血神爪毒} {name}{zhuadu1}  {visibility}{HideLabel} {cooldown}{60} }
+    { {place}{Bot} {line}{2}    {label}{生死符}     {name}{ssfu1}    {visibility}{HideLabel} {cooldown}{60} }
+
+    { {place}{Bot} {line}{2}    {label}{有利战况}   {name}{ssfu2}    {visibility}{Always}    {cooldown}{60} }
+    { {place}{Bot} {line}{2}    {label}{日魂激发}   {name}{rihun}    {visibility}{HideLabel} {cooldown}{60} }
+    { {place}{Bot} {line}{2}    {label}{毒免}       {name}{dumian}   {visibility}{HideLabel} {cooldown}{60} }
+
+    { {place}{Bot} {line}{3}    {label}{状态}       {name}{status}   {cooldown}{600} }
+    { {place}{Bot} {line}{3}    {label}{持续效果}   {name}{persist}  {countdown}{Seconds} }
+
+    { {place}{BotSepBar}        {label}{状态栏更新} {name}{disable}  {visibility}{HideLabel} }
+    { {place}{BotSepBar}        {label}{任务}       {name}{job}     }
+    { {place}{BotSepBar}        {label}{阶段}       {name}{stage}   {cooldown}{1200} {countdown}{Auto} }
+    { {place}{BotSepBar}        {label}{区域}       {name}{area}    {cooldown}{1200} }
+    { {place}{BotSepBar}        {label}{地点}       {name}{room}    {cooldown}{1200} }
+    { {place}{BotSepBar}        {label}{目标}       {name}{target}  }
+    { {place}{BotSepBar}        {label}{类型}       {name}{type}    }
+};
+
+#nop 配色主题，注意这里不要直接嵌入 SGR（ansi codes），否则计算宽度时会有问题。;
+#var prompt-theme {
+    {Disable}{<bbc>}
+    {BusyColor}{<030>}
+    {BattleColor}{<110>}
+    {BattleBusyColor}{<500><110>}
+    {TopSepBar}{<020>}
+    {MidSepBar}{<020>}
+    {BotSepBar}{<020>}
+    {HotLabel}{<100><F399>}
+    {CoolLabel}{<100>}
+    {Value}{<070>}
+};
+
+#nop 自定义图标;
+#var prompt-icon {
+    {DisableRefresh}{★}
+};
+
+#var prompt-prompt {命令};

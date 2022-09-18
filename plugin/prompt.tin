@@ -1,0 +1,871 @@
+#nop Plugin Prompt;
+
+/* =============关于本插件============
+
+原作者：dzp@pkuxkx
+注解人：xgg@pkuxkx
+
+请在使用本插件之前确保已掌握基本内容：《TinTin++ 中文手册》。
+
+为不影响阅读体验，注解将融入原文中。
+
+本插件用于在屏幕上定制多片区域来显示自定义内容。
+
+TinTin 自带的 #prompt 命令有一定的局限性，
+比如一行只能显示一个字段，不能自主更新等，
+可以使用本插件来解决这些问题。
+
+本插件特性如下：
+支持丰富的自定义选项。
+支持定制自己的 UI 界面。
+支持定制输入模式。
+自动适应宽度。
+字段拥有自动隐藏，自动过期等强大特性。
+
+示例文件请参考：ui-settings.tin。
+
+============= 功能说明 ==============
+
+本插件把整个屏幕划分为七个区域，如下所示：
+                
+|-------------------------------------|
+|             Top line1               |
+|             Top line2               |
+|                ...                  |
+|             Top lineN               |
+|------------ TopSepBar --------------|
+|                                     |
+|                                     |
+|            （游戏区）               |
+|                                     |
+|                                     |
+|------------ MidSepBar --------------|
+|             Bot line1               |
+|             Bot line2               |
+|                ...                  |
+|             Bot lineN               |
+|------------ BotSepBar --------------|
+|<提示符>:    （输入区）              |
+|-------------------------------------|
+
+从上到下依次为：
+Top、TopSepBar、游戏区、MidSepBar、Bot、BotSepBar、输入区。
+
+============API （接口）列表===========
+
+1）prompt.Change 修改输入区前面的提示符，{}为不显示。
+2）#list prompt-fields create {{{k1}{2} ...}} 定义标签
+3）prompt.Set 定义字段内容。
+3) prompt.d 删除已定义的标签，请选择性使用。
+
+=======================================
+
+除输入区和游戏区之外，
+剩下五个区域都可以定制，
+用来显示信息内容（以下称为字段）。
+
+每一行都可以有多个字段。
+
+字段在视觉上由两部分组成：
+1）字段标签。
+2）字段内容。
+
+其显示样式分别可以控制，
+并受到几个特性的影响，
+下面会分别予以介绍。
+
+字段的编排是高度可定制的，
+每个字段的标签、内容、颜色、显示风格、行为属性，
+都可以通过自己修改 #list prompt-fields 来修改。
+
+下面是对 #list prompt-fields 的格式说明，
+但不建议直接在此处修改变量，
+请通过预定义方案 ui-settings.tin 或自定义方案来修改。
+
+应在 prompt.Init 处加载 UI 方案。
+
+#list prompt-fields 是一个列表，
+其中每个元素是一个 tt++ table，代表一个字段。
+例如：#list prompt-fields create {{{k1}{2} ...}}。
+
+tt++ table 由一组选项和与之对应的选项值来组成，
+可以是多组键值对，用来说明想要定制的字段的选项。
+例如：{{k1}{v1} {k2}{v2} {k3}{v3}}。
+
+======= 可选的标签、字段及释义 =========
+
+1. place 枚举值 {Top|TopSepBar|MidSepBar|Bot|BotSepBar}
+  希望将字段显示在屏幕上的什么位置。
+  其中 {Top} 和 {Bot} 支持多行，其它三个只有一行。
+  默认为 BotSepBar。
+  
+  例如：{place}{BotSepBar}表示将字段显示在输入区上面的一行。
+
+2. line 自然数
+   只有 place={Top|Bot} 才支持 line。
+   代表第几行，最上面是第一行。
+   默认为 1。
+   
+   例如：{line}{2}表示显示在第二行。
+   要显示在 Top Bot 区必须设置此项。
+
+3. order 自然数
+   在同一行中的次序。
+   默认按照在 list 中出现的顺序来排序。
+   
+   例如：{order}{3}表示第三个出现。
+
+4. label 中英文字符串
+   字段标签。
+   每个字段都可以有一个标签，显示在内容前面。
+   默认为空白。
+   
+   例如：{lable}{经验}表示定义一个经验标签。
+
+5. color tintin 格式的颜色代码，例如 <ddd>
+   字段值的颜色。
+   通过该选项可以为字段值指定一个与配色主题不一样的颜色。
+   一般来说只有极个别选项才需要特别的颜色，
+   没必要为每个选项都指定颜色，
+   因为那样的话你还不如去设置配色主题，
+   参见下面配色主题的设置。
+   默认为空白，代表采用配色主题。
+
+6. name 英文字符串 不能为空
+   字段名称。
+   必须唯一，不能重复。
+   
+   例如：{name}{exp}表示与经验标签对应的 exp 字段。
+
+7. width 整数
+   字段内容的宽度。
+   如果字段内容长度变化较大，可以设置一个固定宽度，以免晃动。
+   默认为 0，表示按照内容长度自动适配。
+
+8. visibility 枚举值 {HideEmpty|HideCool|HideZero|HideLabel|Always}
+   含义如下：
+    * HideEmpty 如果字段内容为空则不予显示。
+    * HideCool  如果内容已陈旧则不予显示。
+                请参考 cooldown 选项。
+    * HideZero  如果倒计时归零则不予显示。
+                请参考 countdown 选项。
+    * HideLabel 仅显示字段内容，不显示字段标签。
+    * Always    总是显示该字段的标签和内容。
+    
+   所有的 Hide* 选项自动拥有 HideEmpty 语义。
+   默认为 HideEmpty。
+
+9. cooldown 非负整数
+   该字段的有效时间。
+   
+   超过有效时间没有更新的字段将在视觉上予以弱化显示，
+   以提醒用户。
+   
+   也就是说，如果 cooldown 不为 0，
+   则该字段被更新时其标签将会以颜色主题中 HotLabel 所指定的风格显示（意指新鲜的内容），
+   之后持续若干秒后，
+   转为由 CoolLabel 所指定的风格显示（意指陈旧的内容）。
+   
+   持续时间由 cooldown 字段的值来决定，单位为秒。
+   
+   陈旧的内容遇到 visibility=HideCool 时则不予显示。
+   
+   如果 cooldown 为 0，则不会以 CoolLabel 风格显示。
+   默认值为 0。
+
+10. countdown 枚举值 {Auto|Clock|Seconds}
+   倒计时类型的字段。
+   
+   其内容为一个非负整数，
+   代表需要倒计时的秒数，
+   或者也可以夹杂于文字内容当中，
+   此时文字内容中所有形如 (%d) 的内容将会被替换成倒计时显示。
+   
+   本插件会自动为该字段更新其内容，
+   使得用户能够看到倒计时的效果。
+   
+   倒计时有两种显示样式，
+   设置为 Clock 时，显示为时钟样式（N天HH:MM:SS），
+   设置为 Seconds 时，显示为读秒样式（N秒）。
+   设置为 Auto 时则根据剩余时间长短，自动切换两种显示效果。
+   
+   如果同时设置了 visibility=HideZero，
+   那么倒计时归零后会自动隐藏该字段。
+   
+   在倒计时存续期间，
+   该字段的 cooldown 属性将会被抑制，直到倒计时归零后才起作用。
+   这条规则确保倒计时字段即使设置了 visibility=HideCool，
+   也至少会完成倒计时，
+   而倒计时结束后，如果 cooldown 时间比倒计时时间还要长，
+   则还会继续显示一段时间之后才会被隐藏。
+   
+=============插件工作流程============
+
+1） prompt.Init 初始化插件
+2)  prompt.Enable 插件开始工作，开启定时刷新显示
+3） prompt.refresh 显示字段
+4） prompt.Disable 插件停止工作
+5） prompt.ToggleSwitch 开关插件，可关联热键
+
+===============使用示例================
+
+prompt.test 测试示例 ui-stettings.tin，prompt.d 清空标签。
+
+1）修改 prompt.Init 第一行加载自定义 UI 方案。
+2）自定义 UI 方案定制显示标签和字段属性：
+   #list prompt-fields create {
+      {
+        {place}{Bot}
+        {line}{1}
+        {order}{1}
+        {label}{经验}
+        {name}{exp}
+        {witdh}{8}
+        {visibility}{Always}
+      }
+   }；
+3）设置字段内容：
+   prompt.Set { 
+      {pot}{9999万}
+      {exp}{9999万}
+      
+   };
+   字段设置后立即显示，并根据其属性确定存活时间。
+   
+============== 说明结束 =================
+
+*/
+
+#nop ====以下为插件实现部分，勿随意修改====
+
+#list prompt-fields create {};
+
+#nop 清空标签;
+#alias {prompt.d} {#list prompt-fields create {}};
+
+#nop 配色主题，注意这里不要直接嵌入 SGR（ansi codes），否则计算宽度时会有问题。;
+#var prompt-theme {
+    {Disable}{<bbc>}
+    {BusyColor}{<130>}
+    {BattleColor}{<110>}
+    {BattleBusyColor}{<500><110>}
+    {TopSepBar}{<120>}
+    {MidSepBar}{<120>}
+    {BotSepBar}{<120>}
+    {HotLabel}{<100><F399>}
+    {CoolLabel}{<100>}
+    {Value}{<070>}
+};
+
+#nop 自定义图标，用于提示 prompt 插件停止状态;
+#var prompt-icon {
+    {DisableRefresh}{★}
+};
+
+#nop 热键绑定 ctrl-s，开关 prompt 插件;
+#list global-key-bindings create {
+    {{key}{\cs}    {action}{prompt.ToggleSwitch}}
+};
+
+#var prompt-top-max-line {0};
+#var prompt-bot-max-line {0};
+
+#nop 所有的字段值的字典;
+#var prompt-dict {};
+
+#nop 上次实际绘制屏幕的时间;
+#var prompt-refresh {
+    {global}{false}
+    {lines} {false}
+    {prompt}{false}
+};
+
+#nop 提示符;
+#var prompt-prompt {Input};
+
+#nop 初始化插件;
+#alias {prompt.Init} {
+    #nop #read {plugin/ui-settings.tin};
+    #read {plugin/ui-gmcp.tt};
+    prompt.Set {};
+    prompt.bindKey;
+};
+
+#nop 设置字段值，被设置的字段值将立即显示在屏幕上;
+#alias {prompt.Set} {
+    #local fields   {%1};
+
+    #local now {};
+    #format now {%T};
+
+    #local field    {};
+    #foreach {*fields[]} {field} {
+        #var prompt-dict[$field] {
+            {updateTime}{$now}
+            {showTime}{$now}
+            {value}{$fields[$field]}
+        };
+    };
+};
+
+#nop 设置提示符，提示符位于屏幕最下方输入区的首部，用作指示整个游戏所处的状态;
+#alias {prompt.Change} {
+    #local text {%1};
+
+    #var prompt-prompt {$text};
+
+    prompt.refresh;
+};
+
+#nop 设置字段值，被设置的字段值将立即显示在屏幕上，但会在一段时间后消失;
+#alias {prompt.SetAwhile} {
+    #local id    {%1};
+    #local value {%2};
+    #local secs  {%3};
+
+    #if { "$secs" == "" } {
+        #local secs {5};
+    };
+
+    prompt.Set {{$id}{$value}};
+
+    #line sub {VARIABLES} {
+        #delay prompt-set-awhile-$id {
+            prompt.Set {{$id}{}};
+        } {$secs};
+    };
+};
+
+#nop 显示字段值;
+#alias {prompt.refresh} {
+    #local topMaxLine   {0};
+    #local botMaxLine   {0};
+
+    #local topLines     {};
+    #local botLines     {};
+    #local topSepBar    {};
+    #local midSepBar    {};
+    #local botSepBar    {};
+
+    #foreach {*{prompt-fields[]}} {idx} {
+        #local field {${prompt-fields[$idx]}};
+        #if { "$field[visibility]" == "" } {
+            #local field[visibility] {HideEmpty};
+        };
+        #switch {"$field[place]"} {
+            #case {"Top"} {
+                #while {1} {
+                    #if { $field[line] <= $topMaxLine } {
+                        #break;
+                    };
+                    #math topMaxLine {$topMaxLine + 1};
+                    #local topLines[$topMaxLine] {};
+                };
+                #if { "$field[order]" == "" } {
+                    #local field[order] {@eval{ @max{0;*topLines[$field[line]][]} + 1 }};
+                };
+                #local topLines[$field[line]][$field[order]] {$field};
+            };
+            #case {"Bot"} {
+                #while {1} {
+                    #if { $field[line] <= $botMaxLine } {
+                        #break;
+                    };
+                    #math botMaxLine {$botMaxLine + 1};
+                    #local botLines[$botMaxLine] {};
+                };
+                #if { "$field[order]" == "" } {
+                    #local field[order] {@eval{ @max{0;*botLines[$field[line]][]} + 1 }};
+                };
+                #local botLines[$field[line]][$field[order]] {$field};
+            };
+            #case {"TopSepBar"} {
+                #if { "$field[order]" == "" } {
+                    #local field[order] {@eval{ @max{0;*topSepBar[]} + 1 }};
+                };
+                #local topSepBar[$field[order]] {$field};
+            };
+            #case {"MidSepBar"} {
+                #if { "$field[order]" == "" } {
+                    #local field[order] {@eval{ @max{0;*midSepBar[]} + 1 }};
+                };
+                #local midSepBar[$field[order]] {$field};
+            };
+            #case {"BotSepBar"} {
+                #if { "$field[order]" == "" } {
+                    #local field[order] {@eval{ @max{0;*botSepBar[]} + 1 }};
+                };
+                #local botSepBar[$field[order]] {$field};
+            };
+            #default {
+            };
+        };
+    };
+
+    #local allBarColor {};
+    #if { "${prompt-dict[busy][value]}" == "true" } {
+        #local allBarColor {${prompt-theme[BusyColor]}};
+    };
+    #if { "${prompt-dict[battle][value]}" == "true" } {
+        #local allBarColor {${prompt-theme[BattleColor]}};
+    };
+    #if { "${prompt-dict[battle][value]}" == "true" && "${prompt-dict[busy][value]}" == "true" } {
+        #local allBarColor {${prompt-theme[BattleBusyColor]}};
+    };
+    #if { "${prompt-dict[disable][value]}" != "" } {
+        #local allBarColor {${prompt-theme[Disable]}};
+    };
+
+    #if { "$topSepBar" != "" } {
+        #math topMaxLine {$topMaxLine + 1};
+    };
+
+    #if { $botMaxLine == 0 && ( "$midSepBar" == "" || "$botSepBar" == "" ) } {
+        #local botMaxLine {1};
+    };
+    #else {
+        #math botMaxLine {$botMaxLine + 2};
+    };
+
+    #local content {};
+    #list content create {};
+
+    #local line {};
+    #local delta {0};
+    #foreach {*topLines[]} {line} {
+        #local fields {$topLines[$line]};
+        #local text {@__prompt_build_line__{{$fields}}};
+        #if { $text[width] > 0 } {
+            #local realLine {};
+            #math realLine {$line - $delta};
+            #list content {add} {{{line}{$realLine}{text}{$text[text]}}};
+        };
+        #else {
+            #math delta {$delta + 1};
+            #math topMaxLine {$topMaxLine - 1};
+        };
+    };
+
+    #if { "$topSepBar" != "" } {
+        #local text {@__prompt_build_line__{{$topSepBar}}};
+        #if { $text[width] == 0 && $topMaxLine == 1 } {
+            #math topMaxLine {$topMaxLine - 1};
+        };
+        #else {
+            #local barColor {${prompt-theme[TopSepBar]}};
+            #if { "$allBarColor" != "" } {#local barColor {$allBarColor}};
+            #local text {@__prompt_fill_line__{{$text[text]};{$text[width]};$barColor}};
+            #list content {add} {{{line}{$topMaxLine}{text}{$text}}};
+        };
+    };
+
+    #if { "$botSepBar" != "" || $botMaxLine > 0 } {
+        #local text {@__prompt_build_line__{{$botSepBar}}};
+        #local barColor {${prompt-theme[BotSepBar]}};
+        #if { "$allBarColor" != "" } {#local barColor {$allBarColor}};
+        #local text {@__prompt_fill_line__{{$text[text]};{$text[width]};$barColor}};
+        #list content {add} {{{line}{-2}{text}{$text}}};
+    };
+
+    #local delta {0};
+    #local line {0};
+    #if { &botLines[] > 0 } {
+        #loop {&botLines[]} {1} {line} {
+            #local fields {$botLines[$line]};
+            #local text {@__prompt_build_line__{{$fields}}};
+            #if { $text[width] > 0 } {
+                #math realLine {$line - $botMaxLine - 1};
+                #list content {add} {{{line}{$realLine}{text}{$text[text]}}};
+            };
+            #else {
+                #math botMaxLine {$botMaxLine - 1};
+            };
+        };
+    };
+
+    #if { "$midSepBar" != "" || $botMaxLine > 0 } {
+        #local text {@__prompt_build_line__{{$midSepBar}}};
+        #local barColor {${prompt-theme[MidSepBar]}};
+        #if { "$allBarColor" != "" } {#local barColor {$allBarColor}};
+        #local text {@__prompt_fill_line__{{$text[text]};{$text[width]};$barColor}};
+        #math line {$botMaxLine + 1};
+        #list content {add} {{{line}{-$line}{text}{$text}}};
+    };
+
+    #if { 1 && ( "${prompt-top-max-line}" != "$topMaxLine" || "${prompt-bot-max-line}" != "$botMaxLine" ) } {
+        #local lineWidth {};
+        #screen get COLS lineWidth;
+        #format spaceLine {%-${lineWidth}s} {};
+
+        #local newMax {$topMaxLine};
+        #while { $newMax < ${prompt-top-max-line} } {
+            #math newMax {$newMax + 1};
+            #echo {{$spaceLine}{$newMax}};
+        };
+        #local newMax {$botMaxLine + 1};
+        #while { $newMax < ${prompt-bot-max-line} } {
+            #math newMax {$newMax + 1};
+            #echo {{$spaceLine}{-$newMax}};
+        };
+
+        #var prompt-top-max-line {$topMaxLine};
+        #var prompt-bot-max-line {$botMaxLine};
+        #split {$topMaxLine} {$botMaxLine};
+    };
+
+    #local idx {};
+    #foreach {*content[]} {idx} {
+        #local line {$content[$idx]};
+        #echo {{%s}{$line[line]}} {$line[text]};
+    };
+
+    #local prompt {${prompt-prompt}};
+    #if { "$prompt" != "" } {
+        #local prompt {$prompt: };
+        #echo {{$prompt}{-1}};
+    };
+};
+
+#nop ===========自定义函数============;
+
+#nop trim 剥离空格;
+#function {trim} {#format result {%p} {%1}};
+
+#nop strWidth 字符串宽度;
+#function {strWidth} {#format result {%L} {%1}};
+
+#nop eval 数学运算;
+#function {eval} {#math result {%1}};
+
+#nop max min 最大最小值;
+#function {max} {
+  #var result {%1};
+  #foreach {%0} {i} {
+    #if { $i > $result} {
+      #var result {$i}
+    }
+  }
+};
+#function {min} {
+  #var result {%1};
+  #foreach {%0} {i} {
+    #if { $i < $result} {
+      #var result {$i}
+    }
+  }
+};
+
+#nop ==================================;
+
+#function {__prompt_build_line__} {
+    #local fields       {%1};
+    #local text         {};
+    #local order        {};
+    #local lineWidth    {0};
+    #foreach {*fields[]} {order} {
+        #local field {$fields[$order]};
+        #local name  {$field[name]};
+        #local label {$field[label]};
+        #local color {$field[color]};
+        #local width {$field[width]};
+        #local value {${prompt-dict[$name]}};
+        #local now {};
+        #format now {%T};
+
+        #nop 所有的 Hide* 选项自动拥有 HideEmpty 语义。;
+        #if { "$field[visibility]" == "Hide%*" && "$value[value]" == "" } {
+            #continue;
+        };
+
+        #nop 检查是否是倒计时，以及倒计时是否已经归零;
+        #local zero {undef};
+        #if { "$field[countdown]" != "" } {
+            #local seconds {};
+            #math seconds {$now - ${prompt-dict[$name][showTime]}};
+            #replace value[value] {^%+1..d$} {@__prompt_countdown__{&1;$seconds}};
+            #replace value[value] {(%+1..d)} {(@__prompt_countdown__{&1;$seconds})};
+            #if { "$value[value]" != "{[1-9][0-9]*|.*\([1-9][0-9]*\).*}" } {
+                #local zero {true};
+            };
+            #else {
+                #local zero {false};
+            };
+            #var {prompt-dict[$name][showTime]} {$now};
+            #var {prompt-dict[$name][value]} {$value[value]};
+            #replace value[value] {^%+1..d$} {@__prompt_show_countdown__{$field[countdown];&1}};
+            #replace value[value] {(%+1..d)} {(@__prompt_show_countdown__{$field[countdown];&1})};
+        };
+
+        #nop 如果设置了 HideZero，那么倒计时归零时，不予显示该字段。;
+        #if { "$field[visibility]" == "HideZero" && "$zero" == "true" } {
+            #continue;
+        };
+
+        #nop 检查是否已经是冷却了的字段，倒计时字段当倒计时持续时不会变为冷却;
+        #local cool {false};
+        #if { $field[cooldown] > 0 && $now - $value[updateTime] > $field[cooldown] && "$zero" != "false" } {
+            #local cool {true};
+        };
+
+        #nop 如果设置了 HideCool，那么内容冷却之后则不予显示;
+        #if { "$field[visibility]" == "HideCool" && "$cool" == "true" } {
+            #continue;
+        };
+
+        #nop 如果设置了 HideLabel，那么不显示标签;
+        #if { "$field[visibility]" == "HideLabel" } {
+            #local label {};
+        };
+
+        #if { "$label" != "" } {
+            #nop 如果全局开关已经禁用，则忽略所有配色，全部显示为禁用色;
+            #if { "${prompt-dict[disable][value]}" != "" } {
+                #replace label {^<{[a-zA-Z0-9]+}>} {};
+                #local label {${prompt-theme[Disable]}$label};
+            };
+            #else {
+                #nop 否则根据内容的新鲜程度自动改变颜色;
+                #if { "$cool" == "true" } {
+                    #replace label {^<{[a-zA-Z0-9]+}>} {};
+                    #local label {${prompt-theme[CoolLabel]}$label};
+                };
+                #else {
+                    #local label {${prompt-theme[HotLabel]}$label};
+                };
+            };
+
+            #local label {$label<070> };
+        };
+
+        #if { "$field[visibility]" == "HideLabel" } {
+            #local label {};
+        };
+
+        #if { "$color" == "" } {
+            #local color {${prompt-theme[Value]}};
+        };
+
+        #format value {$color%-${width}s<070>} {$value[value]};
+        #math lineWidth {$lineWidth + @strWidth{$label} + @strWidth{$value}};
+        #if { "$text" == "" } {
+            #local text {$label$value};
+        };
+        #elseif { "$label$value" != "" } {
+            #local text {$text $label$value};
+            #math lineWidth {$lineWidth + 1};
+        };
+    };
+    #return {{width}{$lineWidth}{text}{$text}};
+};
+
+#function {__prompt_countdown__} {
+    #local value    {%1};
+    #local count    {%2};
+
+    #math value {$value - $count};
+    #if { $value < 0 } {
+        #local value {0};
+    };
+
+    #return {$value};
+};
+
+#function {__prompt_show_countdown__} {
+    #local type     {%1};
+    #local secs     {%2};
+    #local ret      {};
+
+    #if { "$type" == "Auto" } {
+        #if { $secs < 600 } {
+            #local type {Seconds};
+        };
+        #else {
+            #local type {Clock};
+        };
+    };
+
+    #if { "$type" == "Seconds" } {
+        #local ret {${secs}s};
+    };
+    #elseif { "$type" == "Clock" } {
+        #if { $secs > 86400 } {
+            #math ret {$secs / 86400};
+            #local ret {$ret天};
+            #math secs {$secs % 86400};
+        };
+
+        #local hour {};
+        #local mins {};
+        #math hour  {$secs / 3600};
+        #math secs  {$secs % 3600};
+        #math mins  {$secs / 60};
+        #math secs  {$secs % 60};
+        #format ret {%s%%02d:%%02d:%%02d} {$ret} {$hour} {$mins} {$secs};
+    };
+
+    #return {$ret};
+};
+
+#function {__prompt_fill_line__} {
+    #local text     {%1};
+    #local width    {%2};
+    #local color    {%3};
+
+    #local newText {@trim{$text}};
+    #math width {$width + @strWidth{$newText} - @strWidth{$text}};
+
+    #local screenWidth {0};
+    #screen get COLS screenWidth;
+
+    #local leftLen {0};
+    #local rightLen {0};
+    #math leftLen {($screenWidth - $width) / 2 - 1};
+    #math rightLen {$screenWidth - $leftLen - $width - 2};
+
+    #local left {};
+    #format {left} {%${leftLen}s} {};
+    #replace {left} { } {-};
+
+    #local right {};
+    #format {right} {%${rightLen}s} {};
+    #replace {right} { } {-};
+
+    #if { $leftLen < 0 } {
+        #format {newText} {%$screenWidth.${screenWidth}s} {$newText};
+        #return {$newText};
+    };
+    #elseif { "$newText" == "" } {
+        #return {$color$left----$right<070>};
+    };
+    #else {
+        #return {$color$left<070> $newText $color$right<070>};
+    };
+};
+
+#event {SCREEN RESIZE} {
+    #var prompt-top-max-line {0};
+    #var prompt-bot-max-line {0};
+    prompt.refresh;
+};
+
+#alias {prompt.UpdateHP} {
+    prompt.Set {
+        {exp}{$char[HP][经验显示]}
+        {pot}{$char[HP][潜能显示]}
+        {battle}{$char[HP][战斗中]}
+        {busy}{$char[HP][忙]}
+    }
+};
+
+#alias {prompt.UpdateSM} {
+    #local effect {$char[STATUS][持续效果]};
+    #replace effect {秒)} {)};
+
+    prompt.Set {
+        {yunqi}{$char[STATUS][气血恢复]}
+        {status}{$char[STATUS][健康状态]}
+        {persist}{$effect}
+    }
+};
+
+#nop 插件停止工作;
+#alias {prompt.Disable} {
+    prompt.Set {{disable}{${prompt-icon[DisableRefresh]}}};
+    prompt.refresh;
+    #untick prompt.refresh;
+};
+
+#nop 插件开始工作;
+#alias {prompt.Enable} {
+    prompt.Set {{disable}{}};
+    #Tick prompt.refresh {prompt.refresh} 1;
+};
+
+#nop 开关插件，可关联热键;
+#alias {prompt.ToggleSwitch} {
+    #if { "${prompt-dict[disable][value]}" == "" } {
+        prompt.Disable;
+    };
+    #else {
+        prompt.Enable;
+    };
+};
+
+#nop 热键绑定;
+#alias {prompt.bindKey} {
+    #local idx {};
+    #foreach {*{global-key-bindings[]}} {idx} {
+        #local key  {${global-key-bindings[$idx][key]}};
+        #local code {${global-key-bindings[$idx][action]}};
+        #line sub var #macro {$key} {$code};
+    };
+};
+
+/*  =====不用括号输入分号分隔的命令列表====
+
+#nop 输入模式切换;
+#var input-mode {};
+
+#nop 快捷键 ctrl-g 切换输入模式;
+#macro {\cg} {
+    switch-input-mode;
+};
+
+#nop 选择输入模式;
+#alias {switch-input-mode} {
+    #class input-mode open;
+
+    #if { "${input-mode}" == "SLOWDO" } {
+        #class input-mode kill;
+        prompt.Change Input;
+        #var input-mode {};
+        #return;
+    };
+    
+    prompt.Change SLOWDO;
+    #var input-mode {SLOWDO};
+
+    #macro {\n} {
+        #cursor get path;
+        #cursor clear;
+        #nop 去掉下面的注释命令就可以执行了;
+        #nop slowdo {$path};
+        #echo {CMD: %s} {slowdo {$path}};
+        #nop 也可以自动切换正常模式;
+        switch-input-mode;
+    };
+
+    #class input-mode close;
+};
+
+*/
+
+#nop 测试插件;
+#alias {prompt.test} {
+    #read {plugin/ui-settings.tin};
+    #local fullme {<010>很久没有进行机器人检查(fullme)了，任务奖励将受到影响。<070>};
+    #local fullme {http://pkuxkx.com/antirobot/robot.php?filename=1576762922984895};
+    prompt.Set { {URL}{$fullme} };
+    prompt.Set {
+        {pot}{357.75万}
+        {exp}{7510.56万}
+        {expSpd}{11.88万/小时}
+        {profit}{308金币/小时}
+    };
+    prompt.Set {
+        {job}{<171>乔峰}
+        {stage}{寻找NPC}
+        {area}{建康}
+        {room}{中城}
+        {npc}{庞九公}
+        {type}{杀死}
+    };
+    prompt.Set {
+        {status}{很好}
+    };
+};
+
+#nop 插件开始工作;
+
+prompt.Init;
+prompt.Enable;

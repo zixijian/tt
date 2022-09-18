@@ -15,6 +15,9 @@ BUFF(Buff)          〖开〗
 你接收 GMCP 信息的格式为 raw。
 你可以用 gmcp <channel> on/off 开关 GMCP 频道。
 
+gmcp format [raw|pretty] 接受GMCP是收到基础信息或者有自我描述的信息。
+比如{"qi":100}或者{"气血":100}，默认为raw。
+
 需要在连接服务器之前加载握手事件。
 
 */
@@ -36,6 +39,8 @@ BUFF(Buff)          〖开〗
   #send {$TELNET[IAC]$TELNET[DO]$TELNET[GMCP]\};
 };
 
+/*
+
 #nop GMCP 调试;
 
 #config {debug telnet} {on};
@@ -46,80 +51,97 @@ BUFF(Buff)          〖开〗
   #echo {<139>参数1:<099>%1};
   #echo {<139>参数2:<099>%2};
   #echo {%c%h} {light green};
+  #sys echo "" >>gmcp.log;
+  #sys echo "参数0:%0" >>gmcp.log;
+  #sys echo "参数1:%1" >>gmcp.log;
+  #sys echo "" >>gmcp.log;
 };
-
-/* ======= 数据示例 ============
-
-RCVD IAC SB GMCP
-IAC SB GMCP GMCP.Status IAC SE
-#########【GMCP 事件：GMCP.Status】#########
-参数0:GMCP.Status
-参数1:{qi}{497}{food}{218}{water}{259}{jing}{397}
-参数2:GMCP.Status {"qi":497,"food":218,"water":259,"jing":397}
-参数3:有
-参数4: northwest、north 和 east
-参数5:
-###########################################
-
-RCVD IAC SB GMCP
-IAC SB GMCP GMCP.Move IAC SE
-##########【GMCP 事件：GMCP.Move】#########
-参数0:GMCP.Move
-参数1:{1}{{result}{true}{dir}{{1}{south}{2}{north}{3}{east}{4}{west}}{short}{西大街}}
-参数2:GMCP.Move [{"result":"true","dir":["south","north","east","west"],"short":"西大街"}]
-参数3:有
-参数4: northwest、north 和 east
-参数5:
-###########################################
 
 */
 
-/*
 
 #nop GMCP 接收数据处理;
 #EVENT {IAC SB GMCP} {
+  #switch {"%0"} {
+    #case {"GMCP.Status"} {
+      #var gmcp_status {%1};
+      gmcp_status;
+    };
+    #case {"GMCP.Move"}{
+      #var gmcp_move {%1};
+      gmcp_move;
+    };
+    #case {"GMCP.Buff"}{
+      #var gmcp_move {%1};
+    };
+    #case {"GMCP.Combat"}{
+      #var gmcp_combat {%1};
+    };
+  };
+}; 
 
-	#if {$gmcpflag == 1}{
-		#if {$gmcpdebug == 1 } {
-			#nop 显示gmcp消息;
-			#sh =====%2=====;
-		};
-		#switch {"%0"} {
-			#case {"GMCP.Status"} {
-				#var chgst {%1};
-				#nop 战斗状态中包括敌人的信息，要做区分;
-				#if {"$chgst[id]"==""|"$chgst[id]"=="$myid"}{
-					#loop {1} {&chgst[]} {index} {#var myst[*chgst[+$index]] $chgst[+$index]};
-				} {
-					#loop {1} {&chgst[]} {index} {#var npcst[$chgst[id]][*chgst[+$index]] $chgst[+$index]};
-				};
-			};
-			#case {"GMCP.Move"}{
-				#var myroom {%1};
-			};
-			#case {"GMCP.Buff"}{
-				#var mybuff {%1};
-			};
-			#case {"GMCP.Combat"}{
-				#var mycombat {%1};
-			};
-		};
-	};	
+
+#nop 状态更新;
+#alias gmcp_status {
+  #if {&{gmcp_status[max_qi]}} {
+    #local eff_qi $gmcp_status[eff_qi];
+    #local qi $gmcp_status[qi];
+    #local eff_jing $gmcp_status[eff_jing];
+    #local jing $gmcp_status[jing];
+    #local max_jingli $gmcp_status[max_jingli];
+    #local jingli $gmcp_status[jingli];
+    #local max_neili $gmcp_status[max_neili];
+    #local neili $gmcp_status[neili];
+    #local food $gmcp_status[food];
+    #local water $gmcp_status[water];
+    #local id $gmcp_status[id];
+    #local name $gmcp_status[name];
+    #local title $gmcp_status[title];
+    #local combat_exp $gmcp_status[combat_exp];
+    #nop 调用 plugin/prompt.tin API;
+    prompt.Set {
+      {eff_qi}{/$eff_qi}
+      {qi}{$qi}
+      {eff_jing}{/$eff_jing}
+      {jing}{$jing}
+      {max_jingli}{/$max_jingli}
+      {jingli}{$jingli}
+      {max_neili}{/$max_neili}
+      {neili}{$neili}
+      {food}{$food}
+      {water}{$water}
+      {id}{【$id】}
+      {name}{【$name】}
+      {title}{【$title】}
+      {combat_exp} {$combat_exp}
+    };
+  };
+  #elseif {&{gmcp_status[id]}} {
+    #nop 敌方信息;
+  };
+  #else {
+    #loop 1 &{gmcp_status[]} cnt {
+      #local key *{gmcp_status[+$cnt]};
+      #local val ${gmcp_status[+$cnt]};
+      prompt.Set {{$key}{$val}};
+    };
+  };
+};
+
+#nop 位置更新;
+#alias gmcp_move {
+  #if {"${gmcp_move[1][result]}" == "true"} {
+    #local short $gmcp_move[1][short];
+    prompt.Set {{short}{<071>$short}};
+    #local dir ${gmcp_move[1][dir]};
+    #local exits {};
+    #loop 1 &{dir[]} ex {
+      #local exits {$exits\e[4m$dir[+$ex]\e[24m };
+    };
+    prompt.Set {{exits}{<130>$exits<099>}};
+  };
 };
 
 
-#TICKER {prompt_update}
-{
-	#nop 简单展示个人状态在顶部;
-    #format {prompt} {};
-	#math qi_p $myst[qi]*100/$myst[max_qi];
-	#math jing_p $myst[jing]*100/$myst[max_jing];
-    #format {prompt} {$prompt<038> 气血: $qi_p% 精神：$jing_p% $prompt<038> 内力: $myst[neili] 精力：$myst[jingli]};
-	#format {prompt} {$prompt<038> 食物: $myst[food] 水：$myst[water] 忙碌: $myst[is_busy]};
-	#if {$gmcpflag == 1 } {#line ignore #showme {$prompt} {1}};
-}
-{1};
-
-*/
 
 #class gmcp close;
