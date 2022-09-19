@@ -1,4 +1,4 @@
-#nop GMCP 更新;
+#nop 自定义 GMCP UI 界面;
 
 #nop 创建标签;
 #list prompt-fields create {
@@ -97,6 +97,12 @@
       {name}{combat_exp}  
       {visibility}{Always} 
     }
+    { 
+      {place}{BotSepBar}
+      {label}{状态栏更新}
+      {name}{disable}
+      {visibility}{HideLabel} 
+    }
     {
       {place}{BotSepBar}
       {label}{当前房间} 
@@ -112,5 +118,5 @@
     }
 };
 
-
+#nop 输入行提示符;
 #var prompt-prompt {指令};

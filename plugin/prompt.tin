@@ -21,6 +21,7 @@ TinTin 自带的 #prompt 命令有一定的局限性，
 支持定制输入模式。
 自动适应宽度。
 字段拥有自动隐藏，自动过期等强大特性。
+可以开启、停止插件，并使用鲜明的主题进行提示。
 
 示例文件请参考：ui-settings.tin。
 
@@ -54,7 +55,7 @@ Top、TopSepBar、游戏区、MidSepBar、Bot、BotSepBar、输入区。
 ============API （接口）列表===========
 
 1）prompt.Change 修改输入区前面的提示符，{}为不显示。
-2）#list prompt-fields create {{{k1}{2} ...}} 定义标签
+2）#list prompt-fields create {{{k1}{v1} ...}} 定义标签。
 3）prompt.Set 定义字段内容。
 3) prompt.d 删除已定义的标签，请选择性使用。
 
@@ -86,7 +87,7 @@ Top、TopSepBar、游戏区、MidSepBar、Bot、BotSepBar、输入区。
 
 #list prompt-fields 是一个列表，
 其中每个元素是一个 tt++ table，代表一个字段。
-例如：#list prompt-fields create {{{k1}{2} ...}}。
+例如：#list prompt-fields create {{{k1}{v1} ...}}。
 
 tt++ table 由一组选项和与之对应的选项值来组成，
 可以是多组键值对，用来说明想要定制的字段的选项。
@@ -107,7 +108,7 @@ tt++ table 由一组选项和与之对应的选项值来组成，
    默认为 1。
    
    例如：{line}{2}表示显示在第二行。
-   要显示在 Top Bot 区必须设置此项。
+   要显示在 Top/Bot 区必须设置此项。
 
 3. order 自然数
    在同一行中的次序。
@@ -120,7 +121,7 @@ tt++ table 由一组选项和与之对应的选项值来组成，
    每个字段都可以有一个标签，显示在内容前面。
    默认为空白。
    
-   例如：{lable}{经验}表示定义一个经验标签。
+   例如：{label}{经验}表示定义一个经验标签。
 
 5. color tintin 格式的颜色代码，例如 <ddd>
    字段值的颜色。
@@ -236,7 +237,7 @@ prompt.test 测试示例 ui-stettings.tin，prompt.d 清空标签。
 
 */
 
-#nop ====以下为插件实现部分，勿随意修改====
+#nop ====以下为插件实现部分，勿随意修改====;
 
 #list prompt-fields create {};
 
@@ -257,9 +258,9 @@ prompt.test 测试示例 ui-stettings.tin，prompt.d 清空标签。
     {Value}{<070>}
 };
 
-#nop 自定义图标，用于提示 prompt 插件停止状态;
+#nop 自定义图标，需定义 disable 标签。用于提示本插件停止状态;
 #var prompt-icon {
-    {DisableRefresh}{★}
+    {DisableRefresh}{<171>STOPPING}
 };
 
 #nop 热键绑定 ctrl-s，开关 prompt 插件;
@@ -532,7 +533,14 @@ prompt.test 测试示例 ui-stettings.tin，prompt.d 清空标签。
 #function {trim} {#format result {%p} {%1}};
 
 #nop strWidth 字符串宽度;
-#function {strWidth} {#format result {%L} {%1}};
+#function {strWidth} {
+    #local str {%1};
+    #replace {str} {<{[gG0-9A-Fa-f]{1,8}}>} {};
+    #replace {str} {{\e\[[0-9;]+m}} {};
+    #return {@len{$str}};
+};
+
+#function {len} {#format result {%L} {%1}};
 
 #nop eval 数学运算;
 #function {eval} {#math result {%1}};

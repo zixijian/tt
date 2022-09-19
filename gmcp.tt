@@ -83,7 +83,8 @@ gmcp format [raw|pretty] 接受GMCP是收到基础信息或者有自我描述的信息。
 
 #nop 状态更新;
 #alias gmcp_status {
-  #if {&{gmcp_status[max_qi]}} {
+  #if {&{gmcp_status[id]} && {${gmcp_status[id]}} == {%+3..12w}}
+  {
     #local eff_qi $gmcp_status[eff_qi];
     #local qi $gmcp_status[qi];
     #local eff_jing $gmcp_status[eff_jing];
@@ -132,7 +133,7 @@ gmcp format [raw|pretty] 接受GMCP是收到基础信息或者有自我描述的信息。
 #alias gmcp_move {
   #if {"${gmcp_move[1][result]}" == "true"} {
     #local short $gmcp_move[1][short];
-    prompt.Set {{short}{<071>$short}};
+    prompt.Set {{short}{<171>$short}};
     #local dir ${gmcp_move[1][dir]};
     #local exits {};
     #loop 1 &{dir[]} ex {
