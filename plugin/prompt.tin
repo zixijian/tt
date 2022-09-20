@@ -244,7 +244,7 @@ prompt.test 测试示例 ui-stettings.tin，prompt.d 清空标签。
 #nop 清空标签;
 #alias {prompt.d} {#list prompt-fields create {}};
 
-#nop 配色主题，注意这里不要直接嵌入 SGR（ansi codes），否则计算宽度时会有问题。;
+#nop 配色主题;
 #var prompt-theme {
     {Disable}{<bbc>}
     {BusyColor}{<130>}
@@ -533,12 +533,9 @@ prompt.test 测试示例 ui-stettings.tin，prompt.d 清空标签。
 #function {trim} {#format result {%p} {%1}};
 
 #nop strWidth 字符串宽度;
-#function {strWidth} {
-    #local str {%1};
-    #replace {str} {<{[gG0-9A-Fa-f]{1,8}}>} {};
-    #replace {str} {{\e\[[0-9;]+m}} {};
-    #return {@len{$str}};
-};
+#function {strWidth} {#format result {%L} {%1}};
+
+#function strip {#line sub var #line strip {#var result {%0}}};
 
 #function {len} {#format result {%L} {%1}};
 

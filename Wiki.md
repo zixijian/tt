@@ -2755,8 +2755,8 @@ ZMP 子协商上触发此事件。
 %x  |hex |打印相应的字符集字符
 %A	 |Char |打印对应的 ascii 值
 %D  |hex |将十六进制转换为十进制
-%H	 |String |打印参数的 64 位散列值
-%L	 |String |打印参数的长度
+%H	 |String |打印字符串的 64 位散列值
+%L	 |String |打印字符串的显示宽度
 %M  |Number |将数字转换为公制
 %S  |String |存储拼写错误的数量
 %T	 |Epochtime	|打印自epoch以来的秒数
@@ -3505,6 +3505,12 @@ macOS 终端要求在终端-> 窗口设置-> 仿真中启用 `strict vt100 keypa
 --替代所有转义字符  
 * secure(安全)  
 --避开所有大括号、变量、函数和命令分隔符  
+
+```
+示例：
+#function strip {#line sub var #line strip {#var result {%0}}};
+--使用该函数去除变量中的颜色代码。
+```
 
 ## 更改行的执行方式的子命令
 

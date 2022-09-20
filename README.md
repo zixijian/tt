@@ -17,31 +17,37 @@
 北大侠客行是一个 MUDs 文字游戏，  
 Termux 是一个安卓系统上的终端模拟器，  
 TinTin++ 是一个跨平台的 MUDs 客户端。  
+
 支持：  
 macOS,iOS,Android,Linux,Windows。  
 
 北大侠客行可使用 TinTin++ 客户端连接，  
 TinTin++ 可以运行在 Termux 上。
 
-So：TinTin++ on Termux for pkuxkx。
+__注：客户端命令和脚本用法与其他平台一致。__
 
-__注：客户端用法与其他平台一致。__
-
-### 安卓怎么进入MUDs游戏？
+### 安卓怎么进入 MUDs 游戏？
 
 - 1.安装 Termux
 
-style插件非必选，可配置字体和主题风格。  
-api插件可以帮助使用安卓硬件等资源。
+style 插件非必选，可配置字体和主题风格。
+
+api 插件可以帮助使用安卓软硬件等资源。
+
+gui 插件可调用安卓资源显示图片等。
 
 - 2.在 Termux 中安装必须软件及配置
 
-Termux需要安装 MUDs 客户端，如：TinTin++ 、Go-Mud ，
+Termux 需要安装 MUDs 客户端，  
+如：TinTin++ 、Go-Mud。
+
 环境配置可以帮助提升游戏体验(解决乱码和快速进入游戏)。
 
 - 3.配置文件管理
 
-对于没有图形界面的客户端，机器人脚本相当重要，初期建议先使用 xgg@pkuxkx 的机器人熟悉一下。
+对于没有图形界面的客户端，机器人脚本相当重要。
+
+初期建议先使用 xgg@pkuxkx 的机器人熟悉一下。
 
 - 4.启动游戏客户端
 
@@ -109,10 +115,10 @@ __安装完毕后，可跳转到screen转码部分。__
 TinTin++ 可在 [【Github】](https://github.com/scandum/tintin) 获取源码。
 
 
-Termux不用看下段内容。
+Termux 不用看下段内容。
 
 ```
-Debian9编译安装tt++
+Debian9 编译安装tt++
 
 1.安装编译环境
 apt install gcc libgnutls-dev zlib1g-dev libpcre3-dev make cmake git -y
@@ -125,10 +131,10 @@ make
 4.复制可执行文件到/bin目录
 cp tt++ /bin
 ```
-Termux一般不用编译，仅列出方法。
+Termux 一般不用编译，仅列出方法。
 
 ```
-Termux编译安装tt++
+Termux 编译安装tt++
 
 1.安装环境
 pkg install git make cmake libgnutls zlib pcre wget -y
@@ -152,7 +158,7 @@ __此步骤非必要__
 
 使用 style 样式插件则签名必须一致，
 
-建议使用 apk编辑器 签名后安装。
+建议使用 `apk编辑器``MT管理器` 签名后安装。
 
 __工具条配置编辑方法如下__
 
@@ -399,7 +405,7 @@ TinTin++可以写触发器获取链接：
 };
 
 #act {^http://fullme.pkuxkx.com/robot.php?filename=%1} {
-	#var link {http://fullme.pkuxkx.com/robot.php?filename=%1};
+  #var link {http://fullme.pkuxkx.com/robot.php?filename=%1};
   #nop mxp;
   #nop #system sh bot/fullme.sh %1;
 };
@@ -444,6 +450,12 @@ __详见：__|[TINTIN++中文手册](./Wiki.md)|
 
 __详见：__|[TINTIN++脚本指南](./Guide.md)|  
 
+- 《第一本 TinTin++ 编程书》
+
+由 dzp@pkuxkx 所著，包含了更多的进阶知识。
+
+__详见：__|[第一本 TinTin++ 编程书](https://dzp.gitbook.io/tt1book/)|  
+
 - 炮爷语录拾遗
 
 > 学莫便乎近其人。学之经莫速乎好其人，隆礼次之。  
@@ -452,7 +464,7 @@ __详见：__|[TINTIN++脚本指南](./Guide.md)|
 
 __详见：__|[炮爷语录拾遗](./Special.md)|  
 
-TINTIN++交流 QQ 群：951665549。
+TINTIN++ 技术交流 QQ 群：951665549。
 
 ## 6。天高任鸟飞
 
