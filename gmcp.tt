@@ -83,7 +83,7 @@ gmcp format [raw|pretty] 接受GMCP是收到基础信息或者有自我描述的信息。
 
 #nop 状态更新;
 #alias gmcp_status {
-  #if {&{gmcp_status[id]} && {${gmcp_status[id]}} == {%+3..12w}}
+  #if {&{gmcp_status[id]} && {${gmcp_status[id]}} == {{[A-Za-z]{3,12}}}}
   {
     #local eff_qi $gmcp_status[eff_qi];
     #local qi $gmcp_status[qi];

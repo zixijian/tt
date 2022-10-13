@@ -1074,7 +1074,7 @@
 #var s_save {?:[ ]+\[(存盘点)\]|};
 #var s_store {?:[ ]+\[(玩家储物柜)\]|};
 #var s_group {?:[ ]+\[(\S+)\]|};
-#var s_node {?:[ ]+★|};
+#var s_node {?:[ ]+(★|☆)|};
 #var s_path {?:[ ]+((/\w).+)|};
 #var SUF {%s-%s{$s_nation}{$s_terrain}{$s_save}{$s_store}{$s_group}{$s_node}{$s_path}%s};
 
@@ -1314,9 +1314,9 @@
 #nop  剥离前后空格;
 #function {trim} {#format result {%p} {%1}};
 #nop 屏幕宽度;
-#function {screenw} {#format result {%C}};
+#function {screenw} {#screen get rows result};
 #nop 屏幕高度;
-#function {screenh} {#format result {%R}};
+#function {screenh} {#screen get cols result};
 #nop 替换中文数字为阿拉伯数字;
 #function {replace} {#var result %1;#replace result {%2} {%3}};
 #function {ctd} {
