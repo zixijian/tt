@@ -274,7 +274,7 @@ w;u;look;say dzp我要买药！
 ## 连接至 MUDs 服务端
 
 > 命令: #session {会话名} {网址或 ip} {端口}  
-示例: #session pku mud.pkuxkx.com 8080
+示例: #session pku mud.pkuxkx.net 8080
 
 可以在上面示例的末尾添加 `;用户名;密码;` 来实现自动登录。
 
@@ -3632,7 +3632,7 @@ macOS 终端要求在终端-> 窗口设置-> 仿真中启用 `strict vt100 keypa
 #list {var} {order} {string}|按数字顺序插入 {item}
 #list {var} {shuffle}|重新排序列表
 #list {var} {set} {index} {string}|更改 {index} 处的项目
-#list {var} {simplify} {variable}|将列表转换为简单列表
+#list {var} {simplify} {string}|将列表转换为简单列表
 #list {var} {size} {variable}|将列表大小复制到 {variable}
 #list {var} {sort} {string}|按字母顺序插入 {item}
 #list {var} {tokenize} {string}|创建字符列表
@@ -3650,6 +3650,21 @@ macOS 终端要求在终端-> 窗口设置-> 仿真中启用 `strict vt100 keypa
 对于空列表或不存在的列表，返回长度为 0。
 
 您可以使用 `$var[+1]` 直接访问列表变量中的元素,例如：`$var[+2]`，`$var[-1]` 等。
+
+```
+示例：
+#list foo create {a;b;c};#var foo;
+#list foo simplify hello;#var foo;
+#VARIABLE {foo}
+{
+    {1} {a}
+    {2} {b}
+    {3} {c}
+}
+#VARIABLE {foo} {a;b;c;hello}
+
+注：转化简单列表时，<string> 参数是可选的。
+```
 
 另可参见：[Break](#break)，[Continue](#continue)，[Foreach](#foreach)，[Loop](#loop)，[Parse](#parse)，[Repeat](#repeat)，[Return](#return)，[While](#while).
 
@@ -3818,7 +3833,7 @@ TinTin 有几种不同类型的列表。
 这可能导致 crash，
 应使用 ${var[]}。
 
-来自dzp@pkuxkx的高级数据结构示例:
+来自 dzp@pkuxkx 的高级数据结构示例:
 
 #var {JMapData-rooms} {
 {26} {{id}{26}{name}{客店}{links}{up;west}{area}{扬州}{center}{45}{map}{客店二楼〓北大街-----客店}{desc}{这是一家价钱低廉的客栈，生意非常兴隆。外地游客多选择这里落脚，你可以在这里打听到各地的风土人情。店小二里里外外忙得团团转，接待着南腔北调的客人。客店的主人从不露面，他究竟是谁，有各种各样的猜测。墙上挂着一个牌子(paizi)。}{cost}{0}{exits}{{142}{q;u}{27}{q;w}}{objs}{{天神随从}{tianshen suicong}{店小二}{xiao er}{彭波}{peng bo}{扬州的客店留言板}{26}{酉鸡}{zodiac animal}}}}
@@ -3958,7 +3973,7 @@ foreach 将遍历列表中的每个项目并将值存储提供的变量中。
 }
 ```
 
-要按年龄对列表表进行排序，您可以使用：
+要按年龄对数组表进行排序，您可以使用：
 
 `#list friendlist indexate age`  
 `#list friendlist order`  
@@ -6730,7 +6745,7 @@ Actions，highlights，substitutions 等可以正常触发。
 
 ```
 示例: 
-#ses pku mud.pkuxkx.com 8080 init.tt
+#ses pku mud.pkuxkx.net 8080 init.tt
 ```
 
 如果您有多个会话，则可以使用以下命令:
@@ -6979,7 +6994,7 @@ Actions，highlights，substitutions 等可以正常触发。
 
 将以给定的名称开始安全套接字远程登录会话，连接到指定的地址和端口，加载文件（可选）。
 
-例如：`#ssl pku mud.pkuxkx.com 8080`。
+例如：`#ssl pku mud.pkuxkx.net 8080`。
 
 除了将 SSL (安全套接字层) 添加到会话之外，`#ssl` 命令类似于 `#session`。
 

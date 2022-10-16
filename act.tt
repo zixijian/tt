@@ -39,10 +39,7 @@
 
 #act {^卫士对你大吼一声：站住，干什么的？(answer)} {answer 送信};
 
-#act {^目前权限} {#delay 1 {hpbrief;sc}};
-
-#act {^重新连线完毕} {set wimpy 30;#delay 1 {hp;sc}};
-
+#act {^重新连线完毕} {set wimpy 30};
 
 #nop slink查看mxp链接，termux调用浏览器mxp;
 #alias {mxp} {#sys termux-open-url $link};
