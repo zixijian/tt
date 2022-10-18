@@ -3758,7 +3758,7 @@ TinTin 有几种不同类型的列表。
 
 您可以使用: `#list {bracelist} {create} {{a}{b}{c}}` 将大括号列表转换为表变量，这在内部看起来如下: `{{1}{a}{2}{b}{3}{c}}`。  
 
-然后，您可以使用: `#list {bracelist} {simplify} {simplelist}` 将此表转换为简单列表，该列表将在 `$simplelist` 变量中存储。
+然后，您可以使用: `#list {bracelist} {simplify}` 将此表转换为简单列表。
 
 在 TinTin++ 中，大括号很难被转义。使用 `\{` 或 `\}` 将不起作用。
 
@@ -4123,7 +4123,7 @@ Number 参数是要删除的项数，如果省略，索引第 1 项将被删除�
 
 **#list {\<list>} {simplify} {\<variable>}**
 
-#List simplify 将表保存为用分号分隔到的简单列表。
+#List simplify 将表保存为用分号分隔的简单列表。
 
 **#list {\<list>} {size} {\<variable>}**
 
@@ -5637,7 +5637,7 @@ Parse 将遍历访问给定字符串的每个字符，该字符存储在给定�
 create  | 将会清除路径并开始记录新路径。
 delete  | 移除最后的移动。
 describe| 描述路径信息和当前位置。
-destroy | 将会清除路径并开停止记录路径。
+destroy | 将会清除路径并停止记录路径。
 get     | 将得到长度或位置。
 goto    | 转到开始、结束或给定位置索引。
 insert  | 添加给定参数到路径。
