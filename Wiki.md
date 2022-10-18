@@ -3301,14 +3301,17 @@ TinTin++ 默认尝试绑定上箭头和下箭头键以滚动浏览历史命令�
 
 > 语法: #ignore {listname} {on|off}
 
-`#Ignore(忽略)` 命令将打开或关闭列表。
+`#Ignore(忽略)` 命令将启用或停止列表活动。
 
 如果没有参数，将显示当前设置，以及您可以忽略的列表名称。
 
 ```
 示例: 
-#ignore actions off
+#ignore actions on
 --暂时忽略所有触发器，触发器将不再被触发。
+
+#ignore all off
+--恢复所有列表活动。
 ```
 
 并非每个列表都可以忽略。
