@@ -3500,8 +3500,8 @@ macOS 终端要求在终端-> 窗口设置-> 仿真中启用 `strict vt100 keypa
 --替换所有大括号  
 * variables(变量)  
 --替换所有变量  
-* vunctions(功能)  
---替换所有功能  
+* functions(函数)  
+--替换所有函数  
 * colors(颜色)  
 --替换所有 TinTin 颜色代码  
 * escapes(转义)  
