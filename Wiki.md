@@ -1056,7 +1056,7 @@ TinTin++ 定义了以下特殊字符:
 
 > #chat {send} {user|all} {text}
 
-此命令向另一个人发送原始数据字符串，这需要了解聊天协议[「Mud Master Chat Protocol」](https://tintin.sourceforge.io/manual/chatprotocol.php)才能使用。
+此命令向另一个人发送原始数据字符串，这需要了解聊天协议[「Mud Master Chat Protocol」](https://tintin.mudhalla.net/protocols/mmcp/)才能使用。
 
 > #chat dnd
 
@@ -1142,7 +1142,7 @@ DND 代表 “不打扰”，此命令切换 DND 状态。启用后，所有新�
 
 此命令设置新的下载目录。
 
-有关更多信息，请参见描述 `#chat` 使用的基础协议 MMCP 规范：[「MMCP Specification」](https://tintin.sourceforge.io/manual/chatprotocol.php)。
+有关更多信息，请参见描述 `#chat` 使用的基础协议 MMCP 规范：[「MMCP Specification」](https://tintin.mudhalla.net/protocols/mmcp/)。
 
 另可参见：[Port](#port)。
 
@@ -2516,7 +2516,7 @@ JSON 数据被转换为 TinTin 的内部变量系统，因此可以使用 `#vari
 
 **IAC SB MSDP [VARIABLE]**
 
-此事件触发 [MSDP](https://tintin.sourceforge.io/scripts/msdp.php) (Mud Server 数据协议) 子协商。  
+此事件触发 [MSDP](https://tintin.mudhalla.net/scripts/msdp.php) (Mud Server 数据协议) 子协商。  
 
 %0 参数包含变量的名称，%1 参数包含变量的值。  
 
@@ -2524,7 +2524,7 @@ JSON 数据被转换为 TinTin 的内部变量系统，因此可以使用 `#vari
 
 **IAC [DO|DON'T|WILL|DON'T] MSP**
 
-此事件在 [MSP](https://tintin.sourceforge.io/scripts/msp.php) (MUD 声音协议) 子协商上触发。
+此事件在 [MSP](https://tintin.mudhalla.net/scripts/msp.php) (MUD 声音协议) 子协商上触发。
 
 **IAC SB MSSP [VARIABLE]**
 
@@ -2918,7 +2918,7 @@ GMCP 使用 JSON 语法定义类型化数据。
 
 通过 GMCP over MSDP 的服务器将能够同时使用 MSDP 和 JSON 标准来定义结构化数据，并以任何一种格式执行 MSDP 事件处理。
 
-GMCP 实现为 Telnet 选项：[RFC854](https://tintin.mudhalla.net/rfc/rfc854)、[RFC855](https://tintin.mudhalla.net/rfc/rfc855)。
+GMCP 实现为 Telnet 选项：[RFC854](https://tintin.mudhalla.net/rfc/rfc854/)、[RFC855](https://tintin.mudhalla.net/rfc/rfc855/)。
 
 服务器和客户端像协商任何其他 telnet 选项一样协商 GMCP 的使用。
 
@@ -2950,9 +2950,9 @@ GMCP 实现为 Telnet 选项：[RFC854](https://tintin.mudhalla.net/rfc/rfc854)�
 
 客户端不应发起协商，如果发生这种情况，服务器应遵守状态更改。
 
-为了避免触发循环，服务器不应响应来自客户端的协商，除非它正确实现了 [RFC1143](https://tintin.mudhalla.net/rfc/rfc1143.html) 中的 Q 方法。
+为了避免触发循环，服务器不应响应来自客户端的协商，除非它正确实现了 [RFC1143](https://tintin.mudhalla.net/rfc/rfc1143/) 中的 Q 方法。
 
-更多信息请查看 [「GMCP 协议」](https://tintin.sourceforge.io/protocols/gmcp)。
+更多信息请查看 [「GMCP 协议」](https://tintin.mudhalla.net/protocols/gmcp/)。
 
 要查看 Telnet 协商信息，请使用：`#config telnet info`。
 
@@ -4790,9 +4790,9 @@ ROOMWEIGHT.
 
 默认情况下，MUDFONT 字符映射到从 U+E000 开始的第一个 Unicode 专用区域。
 
-在 Windows 上，这将在下面下载的两个 EUDC (最终用户定义字符) 文件一起使用。
+在 Windows 上，这将在下面两个 EUDC (最终用户定义字符) 文件一起使用。
 
-[EUDC.EUF](https://tintin.sourceforge.io/download/EUDC.EUF) 和 [EUDC.TTE](https://tintin.sourceforge.io/download/EUDC.TTE)
+`EUDC.EUF` 和 `EUDC.TTE`
 
 必须使用 7zip 或类似的实用程序将这些文件复制到 `C:/Windows/Fonts` 目录中。  
 
@@ -5380,13 +5380,13 @@ MSDP（Mud 服务器数据协议） 是 `#port` 功能的一部分。
 
 请参阅 `#help event` 附加文档，所有 MSDP 事件都可以作为常规事件。
 
-可以访问[「MSDP 协议」](https://tintin.sourceforge.io/protocols/msdp) 查询可用的 MSDP 事件。
+可以访问[「MSDP 协议」](https://tintin.mudhalla.net/protocols/msdp/) 查询可用的 MSDP 事件。
 
 MUD 服务器通常希望向 MUD 客户端发送不一定需要显示的附加数据，以及需要一种方法来识别支持带外数据的客户端。
 
 MSDP 协议旨在通过为 MUD 服务器提供透明且直接的带外协议来解决这些问题，以将变量及其值发送给 MUD 客户端（针对有问题的 MUD 可以是通用的和特定的）。使用通用变量将允许通用客户端接口脚本适用于所有 MSDP MUDs。
 
-MSDP 实现为 Telnet 选项：[RFC854](https://tintin.mudhalla.net/rfc/rfc854)、[RFC855](https://tintin.mudhalla.net/rfc/rfc855)。
+MSDP 实现为 Telnet 选项：[RFC854](https://tintin.mudhalla.net/rfc/rfc854/)、[RFC855](https://tintin.mudhalla.net/rfc/rfc855/)。
 
 服务器和客户端像协商任何其他 telnet 选项一样协商 MSDP 的使用。
 
@@ -5418,9 +5418,9 @@ MSDP 实现为 Telnet 选项：[RFC854](https://tintin.mudhalla.net/rfc/rfc854)�
 
 客户端不应发起协商，如果发生这种情况，服务器应遵守状态更改。
 
-为了避免触发循环，服务器不应响应来自客户端的协商，除非它正确实现了 [RFC1143](https://tintin.mudhalla.net/rfc/rfc1143.html) 中的 Q 方法。
+为了避免触发循环，服务器不应响应来自客户端的协商，除非它正确实现了 [RFC1143](https://tintin.mudhalla.net/rfc/rfc1143/) 中的 Q 方法。
 
-更多信息请查看 [「MSDP 协议」](https://tintin.sourceforge.io/protocols/msdp)。
+更多信息请查看 [「MSDP 协议」](https://tintin.sourceforge.io/protocols/msdp/)。
 
 另可参见：[Event](#event)，[Port](#port)，[GMCP](#gmcp)。
 
@@ -5501,7 +5501,7 @@ MSLP（Mud 服务器链接协议）需要启用 `#config mouse on`，并创建�
 
 请参阅 `#help event` 附加文档，所有 MSLP 事件都可以作为常规事件使用。
 
-可以访问[「MSLP 协议」](https://tintin.mudhalla.net/protocols/mslp) 查询可用的 MSLP 事件。
+可以访问[「MSLP 协议」](https://tintin.mudhalla.net/protocols/mslp/) 查询可用的 MSLP 事件。
 
 另可参见：[Event](#event)，[Port](#port)。
 
@@ -7457,7 +7457,7 @@ TinTin++ 理解以下语句。
 # 关于
 
 ***
-**文档来自[「TinTin++ 官网」](https://tintin.sourceforge.io/)**  
+**文档来自[「TinTin++ 官网」](https://tintin.mudhalla.net/)**  
 
 **本手册最新地址[「Github」](https://github.com/zixijian/tt/blob/master/Wiki.md)**
 
