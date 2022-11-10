@@ -5750,7 +5750,7 @@ $A2B
 
 ```
 示例: 
-#tick {slowwalk} {#walk f} {0.5};
+#tick {slowwalk} {#path walk f} {0.5};
 #event {END OF PATH} {#untick slowwalk}
 ```
 
