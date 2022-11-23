@@ -24,7 +24,7 @@
 
 #act {你的内力修为似乎已经达到了瓶颈。} {
     #if {$dzaa == dz}
-          {dz}
+          {dz};
     #else
           {dzx;#untic dza;tna}
 };

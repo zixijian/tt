@@ -87,9 +87,13 @@ Termux 需要安装 MUDs 客户端，
 ### 一键初始化 Termux 环境
 
 复制并执行下列命令：
+
 ```
 bash <(curl -s -L https://raw.fastgit.org/zixijian/shell/master/shell/tt4t.sh)
 ```
+
+注：脚本执行中出现暂停选择请直接按回车键。  
+
 然后将逍遥行等插件脚本放入内存卡（内部存储）根目录 tintin 文件夹即可开始游戏。  
 
 注意：以下步骤可以不用做了，qaq 。
@@ -106,14 +110,13 @@ __安装完毕后，可跳转到screen转码部分。__
 
 --- 
 
-注：Linuxdeploy 是一款能在安卓手机上利用 chroot 命令部署任意 linux 发行版的 app（需要 root 权限、比 Termux 更强大）。  
-使用 Linuxdeploy 在手机上部署的 Debian 系统安装 `tintin++` 的路径在 `/usr/games/tt++`。
+注：Linuxdeploy 能在安卓手机上利用 chroot 命令部署任意 Linux 发行版（需要 root 权限、比 Termux 更强大）。
 
-由于 Debian 上 tintin++ 版本比较老，    
 也可以使用源码进行编译安装。
 
 TinTin++ 可在 [【Github】](https://github.com/scandum/tintin) 获取源码。
 
+最新 Beta 版本源码地址：`http://www.mudhalla.net/tintin-beta.tar.gz`。
 
 Termux 不用看下段内容。
 
@@ -158,7 +161,7 @@ __此步骤非必要__
 
 使用 style 样式插件则签名必须一致，
 
-建议使用 `apk编辑器``MT管理器` 签名后安装。
+建议使用 `MT管理器` 签名后安装。
 
 __工具条配置编辑方法如下__
 
@@ -309,7 +312,7 @@ cd ~ && git clone https://github.com/LokiChaos/vim-tintin.git .vim
 vim init.tt
 2.添加如下内容后保存
 #split
-#config charset big5
+#config charset gbk
 #ses pku mud.pkuxkx.com 8080
 ```
 ### 进入游戏
@@ -323,7 +326,7 @@ vim init.tt
 
 - 或者安装 ssh 使用 sftp 或 scp 传输。
 
-- TinTin++ 官网提供了从电脑端 wintin++ 使用 `chat` 传输配置的方法。
+- TinTin++ 官网提供了从电脑端 Wintin++ 使用 `chat` 传输配置的方法。
 
 - Termux 内建的 `termux-setup-storage` 接口可以在 `$HOME` 用户目录中创建一个对内部存储的符号链接，  
 我们可以直接访问内存卡（内部存储）或者建立相应目录的符号链接。
@@ -366,9 +369,9 @@ git pull
 
 ### screen 管理进程
 
-- 组合键 `ctrl+a+d` 后台运行；
-- `screen -list` 显示后台列表；
-- `screen -r <进程id或名称>` 恢复进程到前台；
+- 组合键 `ctrl+a+d` 后台运行
+- `screen -list` 显示后台列表
+- `screen -r <进程id或名称>` 恢复进程到前台
 
 注：screen还能指定名称管理。
 
