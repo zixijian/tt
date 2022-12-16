@@ -2912,11 +2912,11 @@ GMCP 使用 JSON 语法定义类型化数据。
 
 2011 年 mudstandards.org 失效。
 
-此处提供了 GMCP 协议和 GMCP over MSDP 的技术描述。
+此处提供了 GMCP 协议和 MSDP over GMCP 的技术描述。
 
 除了发送结构化数据之外，MSDP over GMCP 还提供标准化的事件处理。
 
-通过 GMCP over MSDP 的服务器将能够同时使用 MSDP 和 JSON 标准来定义结构化数据，并以任何一种格式执行 MSDP 事件处理。
+通过 MSDP over GMCP 的服务器将能够同时使用 MSDP 和 JSON 标准来定义结构化数据，并以任何一种格式执行 MSDP 事件处理。
 
 GMCP 实现为 Telnet 选项：[RFC854](https://tintin.mudhalla.net/rfc/rfc854/)、[RFC855](https://tintin.mudhalla.net/rfc/rfc855/)。
 
@@ -4837,7 +4837,7 @@ EUDC 文件是概念功能。
 
 所有参数都是可选的。
 
-如果 {rows} 或 {cols} 设置为 {} 或 {0}，它们将使用滚动窗口大小作为默认值。
+如果 {rows} 或 {cols} 设置为 `{}` 或 {0}，它们将使用滚动窗口大小作为默认值。
 
 如果 {rows} 或 {cols} 为负数，则该数字为从滚动窗口大小中减去。
 

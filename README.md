@@ -1,9 +1,10 @@
 # START
 
 |[TinTin++](https://tintin.sourceforge.io/)
-|[Termux](https://github.com/termux/termux-app)|  
-|[TinTin++ • Github](https://github.com/scandum/tintin)
-|[TinTin++中文手册](./Wiki.md)|  
+|[Termux](https://github.com/termux/termux-app)
+|[TinTin++ • Github](https://github.com/scandum/tintin)|  
+|[TinTin++中文手册](./Wiki.md)
+|[PaoTin++ • Github](https://github.com/mudclient/paotin)|  
 |[北侠官网](http://pkuxkx.net/)
 |[北侠Wiki](http://pkuxkx.net/wiki/)
 |[北侠论坛](http://pkuxkx.net/forum/)
@@ -28,29 +29,21 @@ __注：客户端命令和脚本用法与其他平台一致。__
 
 ### 安卓怎么进入 MUDs 游戏？
 
-- 1.安装 Termux
-
-style 插件非必选，可配置字体和主题风格。
-
-api 插件可以帮助使用安卓软硬件等资源。
-
+- 1.安装 Termux  
+style 插件非必选，可配置字体和主题风格。  
+api 插件可以帮助使用安卓软硬件等资源。  
 gui 插件可调用安卓资源显示图片等。
 
-- 2.在 Termux 中安装必须软件及配置
-
+- 2.在 Termux 中安装必须软件及配置  
 Termux 需要安装 MUDs 客户端，  
-如：TinTin++ 、Go-Mud。
-
+如：TinTin++ 、Go-Mud。  
 环境配置可以帮助提升游戏体验(解决乱码和快速进入游戏)。
 
-- 3.配置文件管理
-
-对于没有图形界面的客户端，机器人脚本相当重要。
-
+- 3.配置文件管理  
+对于没有图形界面的客户端，机器人脚本相当重要。  
 初期建议先使用 xgg@pkuxkx 的机器人熟悉一下。
 
-- 4.启动游戏客户端
-
+- 4.启动游戏客户端  
 这时候启动客户端进入游戏即可。
 
 注：其他平台安装使用可访问[官网](https://tintin.mudhalla.net/install.php)。
@@ -295,7 +288,7 @@ cd ~ && git clone https://github.com/LokiChaos/vim-tintin.git .vim
 
 ```
 例:
-#ses pku mud.pkuxkx.com 8080;username;password;
+#ses pku mud.pkuxkx.net 8080;username;password;
 ```
 
 ### 分屏
@@ -313,7 +306,7 @@ vim init.tt
 2.添加如下内容后保存
 #split
 #config charset gbk
-#ses pku mud.pkuxkx.com 8080
+#ses pku mud.pkuxkx.net 8080
 ```
 ### 进入游戏
 
@@ -407,8 +400,8 @@ TinTin++可以写触发器获取链接：
   #nop #system sh bot/fullme.sh %1;
 };
 
-#act {^http://fullme.pkuxkx.com/robot.php?filename=%1} {
-  #var link {http://fullme.pkuxkx.com/robot.php?filename=%1};
+#act {^http://fullme.pkuxkx.net/robot.php?filename=%1} {
+  #var link {http://fullme.pkuxkx.net/robot.php?filename=%1};
   #nop mxp;
   #nop #system sh bot/fullme.sh %1;
 };
@@ -429,43 +422,37 @@ __新手推荐丐帮污衣派__
 
 ## 5。机器人使用
 
-- 逍遥行：
-
+- 逍遥行：  
 逍遥行是一个非常实用的代步工具，  
-内置了各个区域地标地点的连接路径。 
-
-学习 tintin++ 语法时，   
-推荐以[「逍遥行」](https://github.com/zixijian/tt/blob/master/goto.tt)为范例。
-
-__指令必须从地标地点出发。__
-
-注:地标地点自动触发并显示节点信息。
-
+内置了各个区域地标地点的连接路径。  
+学习 tintin++ 语法时，  
+推荐以[「逍遥行」](https://github.com/zixijian/tt/blob/master/goto.tt)为范例。  
+__指令必须从地标地点出发。__  
+注:地标地点自动触发并显示节点信息。  
 __命令 `gt` 查看逍遥行帮助，  
 命令  `gt list` 查看可去地点信息，  
 命令 `inquire list` 查看地标房间信息。__
 
-- 更多语法及实例：
-
+- 更多语法及实例：  
 __详见：__|[TINTIN++中文手册](./Wiki.md)|  
 
-- TINTIN++脚本指南
-
+- TINTIN++脚本指南  
 __详见：__|[TINTIN++脚本指南](./Guide.md)|  
 
-- 《第一本 TinTin++ 编程书》
-
-由 dzp@pkuxkx 所著，包含了更多的进阶知识。
-
+- 《第一本 TinTin++ 编程书》  
+由 dzp@pkuxkx 所著，包含了更多的进阶知识。  
 __详见：__|[第一本 TinTin++ 编程书](https://dzp.gitbook.io/tt1book/)|  
 
-- 炮爷语录拾遗
+- PaoTin套件  
+由 dzp@pkuxkx 开发的基于 TinTin++ 的增强定制发行版（强烈推荐）。  
+__详见：__|[PaoTin++增强框架](https://github.com/mudclient/paotin)|  
+
+- 炮爷语录拾遗  
+__详见：__|[炮爷语录拾遗](./Special.md)|  
 
 > 学莫便乎近其人。学之经莫速乎好其人，隆礼次之。  
 
 快速学习一门知识，一个好的老师能事半功倍。  
-
-__详见：__|[炮爷语录拾遗](./Special.md)|  
 
 TINTIN++ 技术交流 QQ 群：951665549。
 
