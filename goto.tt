@@ -1074,9 +1074,10 @@
 #var s_save {?:[ ]+\[(´æÅÌµã)\]|};
 #var s_store {?:[ ]+\[(Íæ¼Ò´¢Îï¹ñ)\]|};
 #var s_group {?:[ ]+\[(\S+)\]|};
+#var s_zzz {?:[ ]+(©I)|};
 #var s_node {?:[ ]+(¡ï|¡î)|};
 #var s_path {?:[ ]+((/\w).+)|};
-#var SUF {%s-%s{$s_nation}{$s_terrain}{$s_save}{$s_store}{$s_group}{$s_node}{$s_path}%s};
+#var SUF {%s-%s{$s_nation}{$s_terrain}{$s_save}{$s_store}{$s_group}{$s_zzz}{$s_node}{$s_path}%s};
 
 #action {^¸ê±Ú${SUF}$} {set_position {bt}};
 #action {^×íÏÉÂ¥¶þÂ¥${SUF}$} {set_position {bxs}};

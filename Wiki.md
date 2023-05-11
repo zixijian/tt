@@ -105,7 +105,8 @@
 |[ Tab ](#tab)
 |[ Textin ](#textin)
 |[ Ticker ](#ticker)
-|[ Time ](#time)|  
+|[ Time ](#time)
+|[ Triggers ](#triggers)|  
 |[ Variable ](#variable)|  
 |[ While ](#while)
 |[ WildCards ](#wildcards)
@@ -576,6 +577,8 @@ TinTin++ 有一个强大的高度可配置的自动地图绘制器。
  
 如果你在没有参数的情况下键入 `#help`，你会看到所有的命令列表，其中大部分在快速上手部分没有描述，因为这里只涵盖了开始的基本知识，也可以通过下面更详细的手册部分进行学习和了解。
 
+另可参见：[Characters](#characters)，[Colors](#colors)，[Coordinates](#coordinates)，[Editing](#editing)，[Escape Codes](#escape-codes)，[Greeting](#greeting)，[Keypad](#keypad)，[Lists](#lists)，[Mapping](#map)， [Mathematics](#mathematics)，[Screen Reader](#screen-reader)，[Session Name](#session-name)，[Speedwalk](#speedwalk)，[Statements](#statements)，[Suspend](#suspend)，[Time](#time)。
+
 ***
 **享受 MUDs 带来的乐趣吧！**
 ***
@@ -662,7 +665,7 @@ RECEIVED AAA
 
 注: 您可以使用 `#unaction` 命令删除触发器。  
 
-另可参见: [Gag](#gag)， [Highlight](#highlight)，[Prompt](#prompt)， [Substitute](#substitude)。
+另可参见: [Gag](#gag)，[Highlight](#highlight)，[Prompt](#prompt)， [Substitute](#substitude)。
 
 # Alias
 
@@ -2456,11 +2459,11 @@ IAC 事件                  | 参数
 
 **HOUR [HOUR]**
 
-在一天中的每小时或给定时间触发。
+在某一天中的每小时或给定时间触发。
 
 **MINUTE [MINUTE]**
 
-在一小时的每一分钟或每一分钟触发。
+在某小时的每一分钟或每一分钟触发。
 
 **MONTH [MONTH]**
 
@@ -2468,7 +2471,7 @@ IAC 事件                  | 参数
 
 **SECOND [SECOND]**
 
-在一分钟的每一秒或每一秒触发一次。
+在某分钟的每一秒或每一秒触发一次。
 
 **TIME \<HOUR:MINUTE\>**
 
@@ -2706,9 +2709,9 @@ ZMP 子协商上触发此事件。
 
 `#Foreach(遍历数组)` 命令就像一个简化的循环。  
 
-列表中的每个项目将在执行时存储在变量中，并可以在命令部分中使用。
+列表中的每个元素将在执行时存储在变量中，并可以在命令部分中使用。
 
-所提供列表中的项目必须使用分号 `;` 分隔，或者用大括号将它们括起来。
+所提供列表中的元素必须使用分号 `;` 分隔，或者用大括号将它们括起来。
 
 ```
 示例: 
@@ -2717,7 +2720,7 @@ ZMP 子协商上触发此事件。
 --相当于：hello Bob!hello Jim!hello Tom!
 ```
 
-要使用 foreach 命令循环遍历列表 (或嵌套变量) 中的所有项目，请使用 `$<list>[%*]`，新版本中请用 `*<list>[]`。
+要使用 foreach 命令循环遍历列表 (或嵌套变量) 中的所有元素，请使用 `$<list>[%*]`，新版本中请用 `*<list>[]`。
 
 另可参见: [Break](#break)，[Continue](#continue)，[List](#list)， [Loop](#loop)，[Parse](#parse)，[Repeat](#repeat)，[Return](#return)，[While](#while)。
 
@@ -3624,17 +3627,17 @@ macOS 终端要求在终端-> 窗口设置-> 仿真中启用 `strict vt100 keypa
 #list {var} {clear}|清空给定列表
 #list {var} {collapse} {separator}|将列表转换为变量
 #list {var} {create} {item}|使用 {item} 创建列表
-#list {var} {delete} {index} {amount}|删除位于 {index} 的项目,{amount} 是可选的。
+#list {var} {delete} {index} {amount}|删除位于 {index} 的 {item} ,{amount} 是可选的。
 #list {var} {explode}{separator}|将变量转换为列表
 #list {var} {indexate}|索引排序列表
 #list {var} {insert} {index} {string}|在给定索引处插入 {string}
 #list {var} {filter} {keep} {remove}|保留/删除正则表达式进行过滤
 #list {var} {find} {regex} {variable}|返回找到的索引
-#list {var} {get} {index} {variable}|将 {item} 复制到 {variable}
+#list {var} {get} {index} {variable}|将通过 {index} 指定的 {item} 复制到 {variable} 中
 #list {var} {numerate}|将表转换为列表
 #list {var} {order} {string}|按数字顺序插入 {item}
 #list {var} {shuffle}|重新排序列表
-#list {var} {set} {index} {string}|更改 {index} 处的项目
+#list {var} {set} {index} {string}|更改 {index} 处的 {item}
 #list {var} {simplify} {string}|将列表转换为简单列表
 #list {var} {size} {variable}|将列表大小复制到 {variable}
 #list {var} {sort} {string}|按字母顺序插入 {item}
@@ -3646,9 +3649,9 @@ macOS 终端要求在终端-> 窗口设置-> 仿真中启用 `strict vt100 keypa
 
 你也可以给出负值，在这种情况下 `-1` 等于列表中的最后一项，`-2` 为倒数第二个，依次类推。
 
-插入项目（item）时，正索引将在给定索引处插入，而负索引将附加到列表尾部。
+插入 `item(元素)` 时，正索引将在给定索引处插入，而负索引将附加到列表尾部。
 
-添加和创建选项也允许使用多个项目，最好是用分号分隔。
+添加和创建选项也允许使用多个元素，最好是用分号分隔。
 
 对于空列表或不存在的列表，返回长度为 0。
 
@@ -3902,7 +3905,7 @@ loop 计数器的值存储在提供的变量中。
 
 `#foreach` 首先采用简单列表或大括号列表参数。
 
-foreach 将遍历列表中的每个项目并将值存储提供的变量中。
+foreach 将遍历列表中的每个元素并将值存储提供的变量中。
 
 * #while
 
@@ -3998,16 +4001,16 @@ foreach 将遍历列表中的每个项目并将值存储提供的变量中。
 }
 ```
 
-要将项目添加到数组表中，有两个选项:
+要将元素添加到数组表中，有两个选项:
 
 `#list friendlist add {{{name}{hobo} {age}{42}}}`  
 `#list friendlist insert -1 {{name}{hobo} {age}{42}}`  
 
 ## Optimization
 
-TinTin++ 表在 100 个项目下时速度非常快。
+TinTin++ 表在 100 个元素下时速度非常快。
 
-一旦表的长度超过 10000 个项目，插入和删除文件开头或中间的项目时可能会出现性能问题。
+一旦表的长度超过 10000 个元素，插入和删除文件开头或中间的元素时可能会出现性能问题。
 
 如果从文件中加载一个大型表，确保它被排序是很重要的，当使用 `#write` 保存一个表时，它会自动排序。
 
@@ -4040,7 +4043,7 @@ TinTin++ 表在 100 个项目下时速度非常快。
 }
 ```
 
-以上脚本将快速存储和检索超过 100 万个项目。遍历哈希表也相对容易。
+以上脚本将快速存储和检索超过 100 万个元素。遍历哈希表也相对容易。
 
 ```
 示例:
@@ -4062,21 +4065,21 @@ TinTin++ 表在 100 个项目下时速度非常快。
 
 TinTin++ 中的列表是具有数字索引的表 (又名关联数组)。
 
-`#List` 命令通过在删除或插入项目时自动重新编号项目来更容易模拟数组行为。
+`#List` 命令通过在删除或插入元素时自动重新编号元素来更容易模拟数组行为。
 
 当 list 命令需要索引时，应该提供 1 到列表大小之间的值。
 
 也可以给出负值，在这种情况下，-1 等于列表中的最后一项，-2 等于倒数第二项等。
 
-您可以使用索引直接显示列表中的项目，例如: `$var[+1] 、$var[+2] 、$var[-1]` 等。
+您可以使用索引直接显示列表中的元素，例如: `$var[+1] 、$var[+2] 、$var[-1]` 等。
 
-要使用 [foreach](#foreach) 命令循环遍历列表中的所有项目，请使用 `$<list>[%*]`。
+要使用 [foreach](#foreach) 命令循环遍历列表中的所有元素，请使用 `$<list>[%*]`。
 
 ***
 
 **#list {\<list>} {add} {\<argument1>} {\<argument2>} {...}**
 
-#List add 将为提供的每个参数向给定列表添加一个项目。
+#List add 将为提供的每个参数向给定列表添加一个元素。
 
 **#list {\<list>} {clear}**
 
@@ -4086,23 +4089,23 @@ TinTin++ 中的列表是具有数字索引的表 (又名关联数组)。
 
 **#list {\<list>} {create} {\<argument1>} {\<argument2>} {...}**
 
-#List create 将清除给定的列表，并为提供的每个参数添加一个项目。
+#List create 将清除给定的列表，并为提供的每个参数添加一个元素。
 
 **#list {\<list>} {delete} {\<index>} {[number]**
 
-#List delete 将删除给定索引处的项目。  
+#List delete 将删除给定索引处的元素。  
 
 Number 参数是要删除的项数，如果省略，索引第 1 项将被删除。
 
 **#list {\<list>} {find} {\<argument>} {\<variable>}**
 
-#List find 允许搜索与提供的参数匹配的项目。  
+#List find 允许搜索与提供的参数匹配的元素。  
 
 如果找不到匹配项，则将目标变量设置为 0，否则将变量设置为包含匹配项的索引。
 
 **#list {\<list>} {get} {\<indext>} {\<variable>}**
 
-#List get 将在提供的索引中检索列表的项目。  
+#List get 将在提供的索引中检索列表的元素。  
 
 如果索引不存在，则目标变量设置为 0，否则目标变量设置为包含找到的索引的值。
 
@@ -4110,11 +4113,11 @@ Number 参数是要删除的项数，如果省略，索引第 1 项将被删除�
 
 **#list {\<list>} {insert} {\<index>} {\<argument>}**
 
-#List insert 将在给定索引处插入项目。
+#List insert 将在给定索引处插入元素。
 
-如果索引是正数，则在给定索引处创建项目。
+如果索引是正数，则在给定索引处创建元素。
 
-如果索引是负数，则在下一个索引处创建项目。
+如果索引是负数，则在下一个索引处创建元素。
 
 因此，使用 -1 将在列表的末尾附加一个新项，使用 +1 将在列表的开头添加一个新项。
 
@@ -4130,9 +4133,9 @@ Number 参数是要删除的项数，如果省略，索引第 1 项将被删除�
 
 **#list {\<list>} {size} {\<variable>}**
 
-#List size 将检索列表中的项目数，并将其存储在提供的目标变量中。  
+#List size 将检索列表中的元素数，并将其存储在提供的目标变量中。  
 
-或者，您可以使用: `&list[]` 使用表的接口检索列表中的项目数。
+或者，您可以使用: `&list[]` 使用表的接口检索列表中的元素数。
 
 **#list {\<list>} {sort} {\<argument>}**
 
@@ -7242,6 +7245,108 @@ TinTin++ 理解以下语句。
 ```
 
 另可参见：[Echo](#echo)，[Event](#event)，[Format](#format)。
+
+# Triggers
+
+触发（trigger）一词的含义非常广泛。  
+
+#action、#alias、#gag、#substitute 等等都算触发。  
+
+但是在中文用户圈子中，通常只将 #action 称为触发（文本触发）。  
+
+通常提到触发时，仅指代 #action，如果想要表达所有种类的 trigger，则仍将其称为 trigger。
+
+***
+
+当您不带参数使用 `#info` 命令时，会显示 TinTin++ 中的所有可用 triggers。
+
+当您使用 `#write` 命令时，所有上述 triggers 信息都会被写入文件（命令、历史记录和路径除外）。
+
+可以使用 `#ignore` 命令禁用 triggers 活动。
+
+命令 `#message` 可用于禁用相应 triggers 生成或相关的信息，尽管通常不需要这样做。
+
+命令 `#debug` 将为相应 triggers（启用时）输出调试信息。
+
+命令 `#info` 可以用于为 triggers 生成可能有用的额外信息。
+
+```
+例如：#info event on
+
+当 #info 事件设置为 on 时，您将看到大多数事件何时引发。
+
+正常一些不会输出消息的事件会产生大量冗杂信息，除非您在同一类别中设置中已经有了一个事件。
+```
+
+## Text triggers
+
+当一个文本块从主机到达时，它被分成单独的行。
+
+所有 action、prompt、gag、substitute、highlight 等类型的 triggers 会在每一行被检出。
+
+每行只能触发一个动作，而其他 triggers 可以多次触发。
+
+## Packet fragmentation
+
+当 MUDs 没有 MCCP 支持、发送长文本、有不好的连接，或三种情况同时出现将会传递损坏的数据包。
+
+这可能导致 tiggers 不触发，以及在 #split 拆分命令行中出现显示问题。
+
+要缓解此问题，您可以使用 `#config packet_patch 0.5`。
+
+如果 `IAC GA` 或 `IAC EOR` telnet 序列用于标记结尾，TinTin++ 将自动启用数据包修补。
+
+[【 A MUD can negotiate the EOR option 】](https://tintin.mudhalla.net/protocols/eor)
+
+此外，`#prompt` 可用于使数据包修补不太明显。
+
+## Multi-line triggers
+
+如果一个 action 触发包含 `\n` 序列，它将变成一个多行触发器。
+
+在来自 MUD 的文本块上执行多行触发，如果正则表达式跨越多个块则不会被触发。
+
+使用：`#event {RECEIVED OUTPUT} {#echo <058>%+80h BLOCK}` 可以将传入块变得可视化。
+
+由于 `%*` 表达式不捕获 `\n` 序列，因此需要使用 `%a` 捕获多行。
+
+捕获块的开始使用 `\A` ，结尾使用 `\Z`。
+
+您可以使用 `^` 和 `$` 来捕获一行的开始和结束。
+
+多行触发在常规触发之前动作。
+
+多个多行触发可以触发每个块，每个多行触发可以触发多次每个块。
+
+目前未处理 `Packet fragmentation`。
+
+多行触发为实验性功能，可能会改变。
+
+## Input triggers
+
+输入的每一行会检查 alias、history、pathdir 等 triggers。
+
+Macro 和 tab 等 triggers 会被检查是否按下键。
+
+## Time triggers
+
+Delay、path、ticker 等 triggers 将在设定的时间间隔执行。
+
+## Substitution triggers
+
+Function 和 variable 等 triggers 通常在处理最后一行文本之前正确执行。
+
+## Mouse triggers
+
+Button trigger 会检查所有鼠标输入。
+
+#config mouse 必须设置为 on 才能启用鼠标跟踪。
+
+## Event triggers
+
+Event 可用于各种预定义的 triggers。
+
+另可参见：[PCRE](#pcre)，[Substitutions](#substitute)，[Escape Codes](#escape-codes)。
 
 # Variable
 
