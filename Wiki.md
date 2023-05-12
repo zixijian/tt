@@ -4353,9 +4353,9 @@ DESTROY   | 摧毁区域或地图
 DIG       | 在给定方向创建新房间
 ENTRANCE  | 改变给定出口的入口
 EXIT      | 改变给定出口
-EXITFLAG  | 改变给定出的的标签
+EXITFLAG  | 改变给定出的标签
 EXPLORE   | 保存探测到的路径到 #path
-FIND      | 保存寻找到到位路径到 #path
+FIND      | 保存寻找到的路径到 #path
 FLAG      | 改变地图标志
 GET       | 获取各种房间相关值
 GLOBAL    | 设置全局出口
@@ -5211,7 +5211,7 @@ True 是任何非零数字，False 是零。
 示例：
 #action {^You receive %0 experience} {updatexp %0}
 #alias updatexp {#math {xpneed} {$xpneed - %0}
---变量 $xpnewd 存储了升到下一级所需的经验值，每次击杀后修改还需要多少经验值。
+--变量 $xpneed 存储了升到下一级所需的经验值，每次击杀后修改还需要多少经验值。
 
 示例：
 #action {%0 tells %1} {
