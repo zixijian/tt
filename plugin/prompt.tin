@@ -517,9 +517,13 @@ prompt.test 测试示例 ui-stettings.tin，prompt.d 清空标签。
     #local idx {};
     #foreach {*content[]} {idx} {
         #local line {$content[$idx]};
-        #echo {{%s}{$line[line]}} {$line[text]};
+        #local line_c {$line_cache[$idx]};
+        #if {{$line_c[text]} != {$line[text]}} {
+	    #echo {{%s}{$line[line]}} {$line[text]};
+	};
+	#nop #else {#echo 无变化;};
+	#var line_cache[$idx]  {$line};
     };
-
     #local prompt {${prompt-prompt}};
     #if { "$prompt" != "" } {
         #local prompt {$prompt: };
@@ -750,6 +754,7 @@ prompt.test 测试示例 ui-stettings.tin，prompt.d 清空标签。
 #event {SCREEN RESIZE} {
     #var prompt-top-max-line {0};
     #var prompt-bot-max-line {0};
+    #list line_cache create {};
     prompt.refresh;
 };
 
@@ -783,6 +788,7 @@ prompt.test 测试示例 ui-stettings.tin，prompt.d 清空标签。
 #nop 插件开始工作;
 #alias {prompt.Enable} {
     prompt.Set {{disable}{}};
+    #list line_cache create {};
     #Tick prompt.refresh {prompt.refresh} 1;
 };
 
