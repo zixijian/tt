@@ -46,7 +46,7 @@
 |[ Gag ](#gag)
 |[ GMCP ](#gmcp)
 |[ Greeting ](#greeting)
-|[ Grep ](#Grep)|  
+|[ Grep ](#grep)|  
 |[ Help ](#help)
 |[ Highlight ](#highlight)
 |[ History](#history)|  
@@ -2505,7 +2505,7 @@ IAC 事件                  | 参数
 
 **IAC [DO|DON'T|WILL|DON'T] [OPTION]**
 
-当触发 `DO, DON'T, WILL or WON't` 选项时，这将阻止 TinTin 自动处理该选项，你必须自己处理。
+当触发 `DO, DON'T, WILL or WON'T` 选项时，这将阻止 TinTin 自动处理该选项，你必须自己处理。
 
 **IAC SB GMCP <MODULE> IAC SE**
 
