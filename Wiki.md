@@ -977,7 +977,7 @@ k blue smurf with battle axe
 
 这个函数返回相反的方向。`@reverse_direction{north}` 将返回 `south`。
 
-另可参见: [Default](#default)， [Else](#else)，[Elseif](#elseif)，[If](#if)，[Switch](#switch)，[Regex](#regex)。
+另可参见: [Default](#default)， [Else](#else)，[Elseif](#elseif)，[If](#if)，[Switch](#switch)，[Regex](#regexp)。
 
 # Cat
 
@@ -1763,7 +1763,7 @@ FORWARD     |指定自动补全向前
 }
 ```
 
-另可参见: [Case](#case)，[Else](#else)，[Elseif](#elseif)，[If](#if)，[Switch](#switch)，[Regex](#regex)。
+另可参见: [Case](#case)，[Else](#else)，[Elseif](#elseif)，[If](#if)，[Switch](#switch)，[Regex](#regexp)。
 
 # Delay
 
@@ -2040,7 +2040,7 @@ shift-tab       | 向前补全单词
   cry
 };
 ```
-另可参见: [Case](#case)，[Default](#default)，[Elseif](#elseif)，[If](#if)，[Switch](#switch)，[Regex](#regex)。
+另可参见: [Case](#case)，[Default](#default)，[Elseif](#elseif)，[If](#if)，[Switch](#switch)，[Regex](#regexp)。
 
 # Elseif
 
@@ -2061,7 +2061,7 @@ shift-tab       | 向前补全单词
 };
 ```
 
-另可参见: [Case](#case)，[Default](#default)，[Else](#else)，[If](#if)，[Switch](#switch)，[Regex](#regex)。
+另可参见: [Case](#case)，[Default](#default)，[Else](#else)，[If](#if)，[Switch](#switch)，[Regex](#regexp)。
 
 # End
 
@@ -3287,7 +3287,7 @@ TinTin++ 默认尝试绑定上箭头和下箭头键以滚动浏览历史命令�
 
 当使用 `<`  `>` 或 `<=`  `>=` 时，会执行基本的字符串比较。
 
-有关更多信息，请参见 [Mathexp](#mathematics) 和 [Regexp](#regex) 上的帮助文件。
+有关更多信息，请参见 [Mathexp](#mathematics) 和 [Regexp](#regexp) 上的帮助文件。
 
 ```
 来自 man@pkuxkx 的疑惑：
@@ -3298,7 +3298,7 @@ TinTin++ 默认尝试绑定上箭头和下箭头键以滚动浏览历史命令�
 #if {"$a"=="好的"}
 ```
 
-另可参见: [Case](#case)，[Default](#default)，[Else](#else)，[Elseif](#elseif)，[Switch](#switch)，[Regex](#regex)，[While](#while)。
+另可参见: [Case](#case)，[Default](#default)，[Else](#else)，[Elseif](#elseif)，[Switch](#switch)，[Regex](#regexp)，[While](#while)。
 
 # Ignore
 
@@ -7117,7 +7117,7 @@ TinTin++ 理解以下语句。
 }
 ```
 
-另可参见: [Case](#case)，[Default](#default)，[Else](#else)，[Elseif](#elseif)，[If](#if)，[Regex](#regex)，[Statements](#statements)。
+另可参见: [Case](#case)，[Default](#default)，[Else](#else)，[Elseif](#elseif)，[If](#if)，[Regex](#regexp)，[Statements](#statements)。
 
 # System
 
