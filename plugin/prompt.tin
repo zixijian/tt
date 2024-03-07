@@ -398,7 +398,7 @@ prompt.test ≤‚ ‘ æ¿˝ ui-stettings.tin£¨prompt.d «Âø’±Í«©°£
                 };
                 #local botSepBar[$field[order]] {$field};
             };
-            #default {
+            #default {#0
             };
         };
     };
