@@ -3186,13 +3186,16 @@ IAC SB GMCP GMCP.Move IAC SE
 
 # History
 
-> 语法：#history {delete}        
+> 语法：#history {delete}  
 --删除最后一个命令。
+
+> 语法：#history {get} {variable} {range}  
+--获取指定索引或范围存储到给定变量。
 
 > 语法：#history {insert} {command}  
 --插入一个命令。
 
-> 语法：#history {list}      
+> 语法：#history {list}  
 -- 显示整个历史命令记录。
 
 > 语法：#history {read} {filename}  
@@ -3236,6 +3239,10 @@ TinTin++ 默认尝试绑定上箭头和下箭头键以滚动浏览历史命令�
 ```
 来自 xgg@pkuxkx 的说明：
 这里的 ~/.tintin 目录在当前登录终端的默认用户目录中
+
+示例：
+#history get lastcmd -1
+--获取最后一条历史命令存储到变量lastcmd。
 ```
 
 另可参见: [Alias](#alias)，[Cursor](#cursor)，[Keypad](#keypad)， [Macro](#macro)，[Speedwalk](#speedwalk)，[Tab](#tab)。
