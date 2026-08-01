@@ -3,7 +3,7 @@
 
 #alias {colorpad} {
   #echo @color_radom{==============调色板==============};
-  #echo @color_radom{『大慈大悲入凡尘，普度苍生怜世人』};
+  #echo @color_jb{『大慈大悲入凡尘，普度苍生怜世人』};
   #var color_dic {A;B;C;D;E;F};
   #var color_bg {};
   #var color_str {};
@@ -31,7 +31,7 @@
    #local color_radom {};
    #parse %1 char {
      #local ccolor {<$color_dic2[+1d6]$color_dic2[+1d6]$color_dic2[+1d6]>};
-     #local color_radom {$color_radom$ccolor$char};
+     #local color_radom {$color_radom$ccolor<588>$char};
    };
   #return $color_radom;
 };
@@ -47,5 +47,55 @@
    };
    #return $color_r2;
 }
+
+#nop 渐变色;
+#function color_jb {
+  #local color_r3 {};
+  #local H @rnd{0;360};
+  #local S  0.8;
+  #local V  1;
+  #local h {};
+  #local i {};
+  #local f {};
+  #local p {};
+  #local q {};
+  #local t {};
+  #parse %1 char {
+    #math H {$H + 10};
+    #local H @fmod{$H;360};
+    #format h {%f} {$H / 60};
+    #format i {%d} {$h};
+    #format f {%f} {$h - $i};
+    #math p {$V * (1 - $S)};
+    #math q {$V * (1 - $S * $f)};
+    #math t {$V * (1 - $S * (1 - $f))};
+    #switch {"$i"} {
+      #case {"0"} {#local R $V;#local G $t;#local B $p};
+      #case {"1"} {#local R $q;#local G $V;#local B $p};
+      #case {"2"} {#local R $p;#local G $V;#local B $t};
+      #case {"3"} {#local R $p;#local G $q;#local B $V};
+      #case {"4"} {#local R $t;#local G $p;#local B $V};
+      #case {"5"} {#local R $V;#local G $p;#local B $q};
+      #default {#echo <171>ERROR};
+    };
+    #format R {%d} {($R * 255) / 16};
+    #format G {%d} {($G * 255) / 16};
+    #format B {%d} {($B * 255) / 16};
+    #format a {%X} {$R};
+    #format b {%X} {$G};
+    #format c {%X} {$B};
+    #local ccolor {<F$a$b$c>};
+    #local color_r3 {$color_r3$ccolor$char};
+  };
+  #return $color_r3;
+};
+
+#function {rnd} {#math {result} {1 d (%2 - %1 + 1) + %1 - 1}};
+
+#function fmod {
+  #local x %1;
+  #local mod %2;
+  #math result {$x % $mod};
+};
 
 #class colorpad close;
